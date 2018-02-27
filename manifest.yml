@@ -4,5 +4,6 @@ applications:
   memory: 128MB
   instances: 1
   buildpack: java_buildpack
-  path: build/libs/api-0.0.1-SNAPSHOT.jar
+  path: ./build/libs/api-0.0.1-SNAPSHOT.jar
+
 
