@@ -1,12 +1,12 @@
-package ch.fhnw.edu.wodss.wodsstippspielapi;
+package ch.fhnw.edu.wodss.tippspielapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WodssTippspielApiApplication {
+public class TippspielApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WodssTippspielApiApplication.class, args);
+		SpringApplication.run(TippspielApiApplication.class, args);
 	}
 }
