@@ -1,9 +1,7 @@
 ---
 applications:
 - name: wodss-tippspiel-api
-  memory: 256MB
+  memory: 128MB
   instances: 1
-  buildpack: java-buildpack
+  buildpack: java_buildpack
 
-  env:
-    FORCE_HTTPS: true
