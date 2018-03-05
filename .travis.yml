@@ -11,7 +11,7 @@ before_install:
 install: true
 
 env:
-  - spring.profiles.active=cloud
+  - SPRING_PROFILE_APPLICATION=cloud
 
 script:
   - ./gradlew check --debug
