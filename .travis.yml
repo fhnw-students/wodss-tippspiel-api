@@ -14,7 +14,7 @@ env:
   - SPRING_PROFILE_APPLICATION=cloud
 
 script:
-  - ./gradlew check --debug
+  - ./gradlew check
 
 notifications:
   email: false
