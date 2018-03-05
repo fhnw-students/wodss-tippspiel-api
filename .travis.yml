@@ -11,10 +11,10 @@ before_install:
 install: true
 
 env:
-  - spring.profiles.active=local
+  - spring.profiles.active=cloud
 
 script:
-  - ./gradlew check --stacktrace
+  - ./gradlew check --debug
 
 notifications:
   email: false
