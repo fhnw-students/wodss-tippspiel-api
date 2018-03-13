@@ -10,6 +10,9 @@ before_install:
 
 install: true
 
+env:
+  - SPRING_PROFILE_APPLICATION=cloud
+
 notifications:
   email: false
   slack: fhnw-wodss:2eK9ca6usY3orK9hBDdV8vvA
