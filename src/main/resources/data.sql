@@ -6,6 +6,8 @@ insert into `user` ( `id`, `username`, `email`, `first_name`, `last_name`, `pass
           (3, 'ken', 'ken.iseli@students.fhnw.ch', 'Ken', 'Iseli', '1234');
 
 insert into `user_role` ( `user_id`, `role_id`) values  (1, 1);
+insert into `user_role` ( `user_id`, `role_id`) values  (2, 1);
+insert into `user_role` ( `user_id`, `role_id`) values  (3, 1);
 
 insert into `nation` ( `id`, `name`, `tournament_Group` )
   values  ( 'RUS', 'Russia', 'A' ),
