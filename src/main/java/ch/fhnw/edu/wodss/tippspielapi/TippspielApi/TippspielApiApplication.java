@@ -1,8 +1,7 @@
-package ch.fhnw.edu.wodss.tippspielapi;
+package ch.fhnw.edu.wodss.tippspielapi.TippspielApi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 
 @SpringBootApplication
 public class TippspielApiApplication {

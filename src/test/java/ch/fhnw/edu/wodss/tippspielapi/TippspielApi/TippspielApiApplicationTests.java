@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi;
+package ch.fhnw.edu.wodss.tippspielapi.TippspielApi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
