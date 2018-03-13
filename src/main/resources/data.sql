@@ -1,7 +1,11 @@
-insert into `user` ( `id`, `username`, `email`, `first_name`, `last_name`, `password`, `is_admin`)
-  values  (1, 'hirsch', 'gerhard.hirschfeld@students.fhnw.ch', 'Gery', 'Hirschfeld', '1234', true),
-          (2, 'davu', 'david.heimgartner@students.fhnw.ch', 'David', 'Heimgartner', '1234', true),
-          (3, 'ken', 'ken.iseli@students.fhnw.ch', 'Ken', 'Iseli', '1234', true);
+insert into `role` ( `id`, `role`) values  (1, 'ADMIN');
+
+insert into `user` ( `id`, `username`, `email`, `first_name`, `last_name`, `password`)
+  values  (1, 'hirsch', 'gerhard.hirschfeld@students.fhnw.ch', 'Gery', 'Hirschfeld', '1234'),
+          (2, 'davu', 'david.heimgartner@students.fhnw.ch', 'David', 'Heimgartner', '1234'),
+          (3, 'ken', 'ken.iseli@students.fhnw.ch', 'Ken', 'Iseli', '1234');
+
+insert into `user_role` ( `user_id`, `role_id`) values  (1, 1);
 
 insert into `nation` ( `id`, `name`, `tournament_Group` )
   values  ( 'RUS', 'Russia', 'A' ),
