@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class APIController {
 
     @CrossOrigin
-    @GetMapping("")
+    @GetMapping
     public APIInfo getAPIInfo() {
         return new APIInfo("wodss-tippspiel-api","0.0.0");
     }

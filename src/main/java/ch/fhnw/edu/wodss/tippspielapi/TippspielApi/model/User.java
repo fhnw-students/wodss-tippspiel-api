@@ -10,23 +10,72 @@ import java.util.Set;
 @Data
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String username;
+  @Column(nullable = false, unique = true)
+  private String username;
 
-    @Column(nullable = false, unique = true)
-    private String email;
+  @Column(nullable = false, unique = true)
+  private String email;
 
-    @Column(nullable = false)
-    private String password;
+  @Column(nullable = false)
+  private String password;
 
-    @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
-    private Boolean isAdmin;
+  @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
+  private Boolean isAdmin;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    Set<TeamMate> teamMates = new HashSet<>();
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  Set<TeamMate> teamMates = new HashSet<>();
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public Boolean getAdmin() {
+    return isAdmin;
+  }
+
+  public void setAdmin(Boolean admin) {
+    isAdmin = admin;
+  }
+
+  public Set<TeamMate> getTeamMates() {
+    return teamMates;
+  }
+
+  public void setTeamMates(
+      Set<TeamMate> teamMates) {
+    this.teamMates = teamMates;
+  }
 
 }
