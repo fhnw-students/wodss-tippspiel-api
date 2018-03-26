@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Stadium {
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

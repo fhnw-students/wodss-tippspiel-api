@@ -22,7 +22,7 @@ public class Tip {
     @JoinColumn(name = "game_id", nullable = false)
     private Game game;
 
-    private Integer homeScore;
+    private Integer hostScore;
     private Integer guestScore;
 
 }
