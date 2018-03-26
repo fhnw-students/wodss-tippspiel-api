@@ -26,7 +26,7 @@ public class Game {
     private GamePhase phase;
 
     @ManyToOne
-    @JoinColumn(name = "home_nation_id", nullable = false)
+    @JoinColumn(name = "host_nation_id", nullable = false)
     private Nation home;
 
     @ManyToOne
