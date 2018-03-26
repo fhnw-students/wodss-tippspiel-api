@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Data
-public class TeamMates {
+public class TeamMate {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

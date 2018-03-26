@@ -13,27 +13,27 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "game_type_id", nullable = false)
-    private GameType type;
+    @Column(nullable = false, columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     @ManyToOne
-    @JoinColumn(name = "home_nation_id", nullable = false)
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
+
+    @ManyToOne
+    @JoinColumn(name = "game_phase_id", nullable = false)
+    private GamePhase phase;
+
+    @ManyToOne
+    @JoinColumn(name = "host_nation_id", nullable = false)
     private Nation home;
 
     @ManyToOne
     @JoinColumn(name = "guest_nation_id", nullable = false)
     private Nation guest;
 
-    private Integer homeScore;
+    private Integer hostScore;
     private Integer guestScore;
-
-    @ManyToOne
-    @JoinColumn(name = "stadium_id", nullable = false)
-    private Stadium stadium;
-
-    @Column(nullable = false, columnDefinition="DATETIME")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
 
 }

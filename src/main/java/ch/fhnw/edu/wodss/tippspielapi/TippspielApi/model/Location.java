@@ -8,13 +8,16 @@ import java.util.Set;
 
 @Entity
 @Data
-public class Role {
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String role;
+    private String name;
+
+    @Column(nullable = false)
+    private Integer utcDiff;
 
 }

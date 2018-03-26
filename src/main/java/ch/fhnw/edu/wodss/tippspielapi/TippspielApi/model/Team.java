@@ -18,6 +18,6 @@ public class Team {
     private String name;
 
     @OneToMany(mappedBy = "team", fetch = FetchType.EAGER)
-    private Set<TeamMates> teamMates = new HashSet<>();
+    private Set<TeamMate> teamMates = new HashSet<>();
 
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class GameType {
+public class GamePhase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
