@@ -33,18 +33,14 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
     return username -> {
       User user = userRepository.findByUsername(username);
       if (user != null) {
-        List<String> roles = new ArrayList<>();
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        roles.add("USER");
         if (user.getAdmin()) {
-          roles.add("ADMIN");
           grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
         UserDetails builtUser = org.springframework.security.core.userdetails.User.builder()
             .username(user.getUsername())
             .password(user.getPassword())
-            .roles(convertToArray(roles))
             .authorities(grantedAuthorities)
             .build();
         return builtUser;
@@ -54,7 +50,4 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
     };
   }
 
-  private String[] convertToArray(List<String> roles) {
-    return roles.toArray(new String[roles.size()]);
-  }
 }
