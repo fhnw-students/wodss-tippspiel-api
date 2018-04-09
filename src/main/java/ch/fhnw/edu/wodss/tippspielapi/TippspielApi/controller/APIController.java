@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Role;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +26,13 @@ public class APIController {
   @GetMapping("2")
   public APIInfo getAPIInfo2() {
     return new APIInfo("wodss-tippspiel-api2", "0.0.0");
+  }
+
+  @Secured("ROLE_USER")
+  @CrossOrigin
+  @PostMapping
+  public APIInfo createAnything() {
+    return new APIInfo("wodss-tippspiel-api3", "0.0.0");
   }
 
 }
