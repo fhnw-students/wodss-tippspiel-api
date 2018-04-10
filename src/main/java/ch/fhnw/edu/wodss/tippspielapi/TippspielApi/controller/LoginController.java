@@ -30,13 +30,13 @@ public class LoginController {
   @Data
   private class LoginResponse {
     private String token;
-    private String formattedExpiration;
+    private String expiration;
 
     public LoginResponse(User user) {
       token = user.getToken();
       final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
-      Date expiration = user.getExpiration();
-      formattedExpiration = simpleDateFormat.format(expiration);
+      Date expirationDate = user.getExpiration();
+      expiration = simpleDateFormat.format(expirationDate);
     }
   }
 }
