@@ -1,0 +1,18 @@
+language: java
+jdk:
+ - oraclejdk8
+
+services:
+ - mysql
+
+before_install:
+  - mysql -e 'CREATE DATABASE IF NOT EXISTS wodss_tippspiel;'
+
+install: true
+
+env:
+  - SPRING_PROFILE_APPLICATION=cloud
+
+notifications:
+  email: false
+  slack: fhnw-wodss:2eK9ca6usY3orK9hBDdV8vvA

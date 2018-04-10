@@ -21,5 +21,7 @@ nbproject/private/
 build/
 nbbuild/
 dist/
+out/
 nbdist/
 .nb-gradle/
+src/main/resources/application-local.properties

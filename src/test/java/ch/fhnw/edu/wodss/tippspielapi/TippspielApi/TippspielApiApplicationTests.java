@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.wodsstippspielapi;
+package ch.fhnw.edu.wodss.tippspielapi.TippspielApi;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class WodssTippspielApiApplicationTests {
+public class TippspielApiApplicationTests {
 
 	@Test
 	public void contextLoads() {
