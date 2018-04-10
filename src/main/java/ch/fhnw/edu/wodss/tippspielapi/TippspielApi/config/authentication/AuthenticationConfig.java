@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi.TippspielApi.config;
+package ch.fhnw.edu.wodss.tippspielapi.TippspielApi.config.authentication;
 
 import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.persistence.UserRepository;

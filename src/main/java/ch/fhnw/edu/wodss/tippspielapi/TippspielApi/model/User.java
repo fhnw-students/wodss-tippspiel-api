@@ -1,5 +1,8 @@
 package ch.fhnw.edu.wodss.tippspielapi.TippspielApi.model;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.UUID;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -26,8 +29,33 @@ public class User {
   @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
   private Boolean isAdmin;
 
+  @Column(unique = true)
+  private String token;
+
+  @Column
+  @Temporal(TemporalType.TIMESTAMP)
+  private Date expiration;
+
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   Set<TeamMate> teamMates = new HashSet<>();
+
+  /**
+   * Creates a new token that expires in an hour.
+   */
+  public void generateNewToken() {
+    this.token = UUID.randomUUID().toString();
+    Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.HOUR, 1);
+    this.expiration = calendar.getTime();
+  }
+
+  /**
+   * Determines whether this user's token has expired.
+   */
+  public boolean hasTokenExpired() {
+    Calendar now = Calendar.getInstance();
+    return expiration == null || expiration.before(now.getTime());
+  }
 
   public Long getId() {
     return id;
@@ -73,9 +101,15 @@ public class User {
     return teamMates;
   }
 
-  public void setTeamMates(
-      Set<TeamMate> teamMates) {
+  public void setTeamMates(Set<TeamMate> teamMates) {
     this.teamMates = teamMates;
   }
 
+  public String getToken() {
+    return token;
+  }
+
+  public Date getExpiration() {
+    return expiration;
+  }
 }

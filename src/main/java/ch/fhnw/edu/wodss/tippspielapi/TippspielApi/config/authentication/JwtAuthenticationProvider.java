@@ -1,8 +1,7 @@
-package ch.fhnw.edu.wodss.tippspielapi.TippspielApi.config;
+package ch.fhnw.edu.wodss.tippspielapi.TippspielApi.config.authentication;
 
-import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.model.JwtAuthentication;
 import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.model.User;
-import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.persistence.JwtAuthenticationRepository;
+import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.persistence.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -15,15 +14,15 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
   public static final String ADMIN_ROLE_NAME = "ROLE_ADMIN";
   public static final String USER_ROLE_NAME = "ROLE_USER";
+
   @Autowired
-  private JwtAuthenticationRepository jwtAuthenticationRepository;
+  private UserRepository userRepository;
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String token = authentication.getCredentials().toString();
-    JwtAuthentication jwtAuthentication = jwtAuthenticationRepository.findByToken(token);
-    if (jwtAuthentication != null) {
-      User user = jwtAuthentication.getUser();
+    User user = userRepository.findByToken(token);
+    if (user != null && !user.hasTokenExpired()) {
       JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(token);
       jwtAuthenticationToken.addAuthority(new SimpleGrantedAuthority(USER_ROLE_NAME));
       if (user.getAdmin()) {

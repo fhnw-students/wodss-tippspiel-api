@@ -1,9 +1,9 @@
 package ch.fhnw.edu.wodss.tippspielapi.TippspielApi.controller;
 
-import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.model.JwtAuthentication;
+import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.TippspielApi.service.LoginService;
 import java.text.SimpleDateFormat;
-import java.util.TimeZone;
+import java.util.Date;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/auth/login")
 public class LoginController {
+  private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
   @Autowired
   private LoginService loginService;
@@ -23,21 +24,19 @@ public class LoginController {
   @CrossOrigin
   @PostMapping
   public LoginResponse login() {
-    JwtAuthentication jwtAuthentication = loginService.login();
-    return new LoginResponse(jwtAuthentication);
+    User user = loginService.login();
+    return new LoginResponse(user);
   }
-
   @Data
   private class LoginResponse {
-    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-
     private String token;
     private String formattedExpiration;
 
-    public LoginResponse(JwtAuthentication authentication) {
-      token = authentication.getToken();
+    public LoginResponse(User user) {
+      token = user.getToken();
       final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
-      formattedExpiration = simpleDateFormat.format(authentication.getExpiration());
+      Date expiration = user.getExpiration();
+      formattedExpiration = simpleDateFormat.format(expiration);
     }
   }
 }
