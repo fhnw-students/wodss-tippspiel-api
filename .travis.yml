@@ -26,7 +26,7 @@ env:
 
 
 script:
-  - ./gradlew check --scan
+  - ./gradlew check --debug
 
 notifications:
   email: false
