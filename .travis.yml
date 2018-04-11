@@ -24,6 +24,7 @@ install: true
 env:
   - SPRING_PROFILE_APPLICATION=cloud
 
+
 script:
   - ./gradlew check --stacktrace
 
