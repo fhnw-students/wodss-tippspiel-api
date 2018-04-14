@@ -11,6 +11,7 @@ public class TippspielApiApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		// checks spring boot configuration
 	}
 
 }
