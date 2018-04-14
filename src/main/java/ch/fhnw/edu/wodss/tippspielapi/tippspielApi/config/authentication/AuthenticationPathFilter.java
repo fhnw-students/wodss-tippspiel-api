@@ -17,6 +17,7 @@ public class AuthenticationPathFilter implements Filter {
   public static final String BEARER = "Bearer";
   public static final String AUTHORIZATION = "Authorization";
   public static final String AUTH_LOGIN_PATH = "/auth/login";
+  public static final String API_PATH = "/api";
   public static final String BASIC = "Basic";
 
   @Override
@@ -29,16 +30,22 @@ public class AuthenticationPathFilter implements Filter {
     HttpServletRequest servletRequest = (HttpServletRequest) request;
     String authorization = servletRequest.getHeader(AUTHORIZATION);
     String contextPath = servletRequest.getServletPath();
-    boolean servletPathIsAuthLogin =
-        contextPath.contains(AUTH_LOGIN_PATH) || contextPath.contains(AUTH_LOGIN_PATH + "/");
-    boolean isTokenAuth = authorization.contains(BEARER);
-    boolean isAuthLoginPathWithBearerToken = servletPathIsAuthLogin && isTokenAuth;
-    boolean isBasicAuth = authorization.contains(BASIC);
-    boolean isNotAuthLoginPathWithBasicAuth = !servletPathIsAuthLogin && isBasicAuth;
-    if (isAuthLoginPathWithBearerToken || isNotAuthLoginPathWithBasicAuth) {
+    if (!canAccess(contextPath, authorization)) {
       ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
     chain.doFilter(request, response);
+  }
+
+  private boolean canAccess(String contextPath, String authorization) {
+    boolean isApiRequested = contextPath.contains(API_PATH);
+    boolean isLoginRequested = contextPath.contains(AUTH_LOGIN_PATH);
+    if (authorization == null || isApiRequested) {
+      return isApiRequested;
+    } else if (authorization.contains(BASIC)) {
+      return isLoginRequested;
+    } else {
+      return authorization.contains(BEARER) && !isLoginRequested;
+    }
   }
 
   @Override

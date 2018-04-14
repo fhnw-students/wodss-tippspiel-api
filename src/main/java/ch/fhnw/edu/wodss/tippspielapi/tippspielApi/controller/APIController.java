@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 public class APIController {
 
-  @Secured({"ROLE_USER"})
   @CrossOrigin
   @GetMapping
   public APIInfo getAPIInfo() {

@@ -47,12 +47,12 @@ public class AuthenticationPathFilterTest {
   }
 
   @Test
-  public void testFilterApiWithBasicAuth() throws IOException, ServletException {
+  public void testFilterUserPathWithBasicAuth() throws IOException, ServletException {
     MockHttpServletRequest request = new MockHttpServletRequest();
     HttpServletResponse response = new MockHttpServletResponse();
     FilterChain chain = new MockFilterChain();
 
-    request.setServletPath("/api/");
+    request.setServletPath("/user");
     request.addHeader(AuthenticationPathFilter.AUTHORIZATION, "Basic a2VuOj1yMzQ=");
 
     AuthenticationPathFilter filter = new AuthenticationPathFilter();
@@ -62,7 +62,7 @@ public class AuthenticationPathFilterTest {
   }
 
   @Test
-  public void testFilterApiWithBearerToken() throws IOException, ServletException {
+  public void testFilterUserPathWithBearerToken() throws IOException, ServletException {
     MockHttpServletRequest request = new MockHttpServletRequest();
     HttpServletResponse response = new MockHttpServletResponse();
     FilterChain chain = new MockFilterChain();
@@ -70,6 +70,53 @@ public class AuthenticationPathFilterTest {
     request.setServletPath("/user");
     request.addHeader(AuthenticationPathFilter.AUTHORIZATION,
         "Bearer 13469239-506e-4b49-8edc-4cdaba39ee83");
+
+    AuthenticationPathFilter filter = new AuthenticationPathFilter();
+    filter.doFilter(request, response, chain);
+
+    Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+  }
+
+  @Test
+  public void testFilterApiPathAnonymous() throws IOException, ServletException {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    HttpServletResponse response = new MockHttpServletResponse();
+    FilterChain chain = new MockFilterChain();
+
+    request.setServletPath("/api");
+
+    AuthenticationPathFilter filter = new AuthenticationPathFilter();
+    filter.doFilter(request, response, chain);
+
+    Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+  }
+
+
+  @Test
+  public void testFilterApiPathWithBearerToken() throws IOException, ServletException {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    HttpServletResponse response = new MockHttpServletResponse();
+    FilterChain chain = new MockFilterChain();
+
+    request.setServletPath("/api");
+    request.addHeader(AuthenticationPathFilter.AUTHORIZATION,
+        "Bearer 13469239-506e-4b49-8edc-4cdaba39ee83");
+
+    AuthenticationPathFilter filter = new AuthenticationPathFilter();
+    filter.doFilter(request, response, chain);
+
+    Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatus());
+  }
+
+
+  @Test
+  public void testFilterApiPathWithBasicAuth() throws IOException, ServletException {
+    MockHttpServletRequest request = new MockHttpServletRequest();
+    HttpServletResponse response = new MockHttpServletResponse();
+    FilterChain chain = new MockFilterChain();
+
+    request.setServletPath("/api");
+    request.addHeader(AuthenticationPathFilter.AUTHORIZATION, "Basic a2VuOj1yMzQ=");
 
     AuthenticationPathFilter filter = new AuthenticationPathFilter();
     filter.doFilter(request, response, chain);
