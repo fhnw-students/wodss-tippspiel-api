@@ -12,7 +12,7 @@ public class APIController {
     @CrossOrigin
     @GetMapping("")
     public APIInfo getAPIInfo() {
-        return new APIInfo("wodss-tippspiel-web","0.0.0");
+        return new APIInfo("wodss-tippspiel-api","0.0.1");
     }
 
 }
