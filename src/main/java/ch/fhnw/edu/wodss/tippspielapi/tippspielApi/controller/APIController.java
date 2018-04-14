@@ -16,21 +16,14 @@ public class APIController {
   @CrossOrigin
   @GetMapping
   public APIInfo getAPIInfo() {
-    return new APIInfo("wodss-tippspiel-api", "0.0.0");
+    return new APIInfo("wodss-tippspiel-api", "0.0.1");
   }
 
   @Secured({"ROLE_ADMIN"})
   @CrossOrigin
   @GetMapping("2")
   public APIInfo getAPIInfo2() {
-    return new APIInfo("wodss-tippspiel-api2", "0.0.0");
-  }
-
-  @Secured("ROLE_USER")
-  @CrossOrigin
-  @PostMapping
-  public APIInfo createAnything() {
-    return new APIInfo("wodss-tippspiel-api3", "0.0.0");
+    return new APIInfo("wodss-tippspiel-api2", "0.0.1");
   }
 
 }
