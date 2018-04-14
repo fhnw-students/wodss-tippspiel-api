@@ -1,7 +1,7 @@
-insert into `user` ( `id`, `username`, `email`, `password`, `is_admin`)
-  values  (1, 'hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '1234', 1),
-          (2, 'davu', 'david.heimgartner@students.fhnw.ch', '1234', 1),
-          (3, 'ken', 'ken.iseli@students.fhnw.ch', '1234', 1);
+insert into `user` (`username`, `email`, `password`, `is_admin`)
+  values  ('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '1234', 1),
+          ('davu', 'david.heimgartner@students.fhnw.ch', '1234', 1),
+          ('ken', 'ken.iseli@students.fhnw.ch', '1234', 0);
 
 
 insert into `nation` ( `id`, `name`, `tournament_Group` )
