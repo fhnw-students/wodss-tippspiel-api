@@ -34,22 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
-  // TODO this is potentially dangerous, remove for deplyoment!
-/*  @Bean
-  CorsConfigurationSource corsConfigurationSource() {
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    CorsConfiguration config = new CorsConfiguration();
-    config.setAllowCredentials(false); //updated to false
-    config.addAllowedOrigin("*");
-    config.addAllowedHeader("*");
-    config.addAllowedMethod("GET");
-    config.addAllowedMethod("PUT");
-    config.addAllowedMethod("POST");
-    config.addAllowedMethod("DELETE");
-    source.registerCorsConfiguration("/**", config);
-    return source;
-  }*/
-
   @Bean
   // TODO use argon to store passwords
   public static NoOpPasswordEncoder passwordEncoder() {
