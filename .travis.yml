@@ -21,20 +21,8 @@ before_install:
 install: true
 
 script:
-  - ./gradlew check --debug
+  - ./gradlew check
 
 notifications:
   email: false
   slack: fhnw-wodss:2eK9ca6usY3orK9hBDdV8vvA
-
-#deploy:
-#  provider: cloudfoundry
-#  api: https://api.lyra-836.appcloud.swisscom.com
-#  username: gery.hirschfeld@w3tec.ch
-#  password:
-#    secure: boMcAW9rw8HMnpRaezyLgtHsu6F/YcwutDaY/TQgrwgVymsBN/mivrOhK6zMX67nT0ir5R2LrsSLBbxxQ1Txdmh9G8gKj6eZnN7bMqV8mPUiPXirqm+Yl/5mRl4Gyv/o6yrAusKxn13cjTIhXFukjbibRuOL9cgGajIEUK895DxcLaxg4KS8ed7XZCiaApi1Hra9JylyHv1U4EqrjpgfQRSih88bxf7UFmux6OtlYrBNSiJ1oc4ZleGdyDds5Fs+c5cpzbnyzr3oVxarzTX/MnDRYPGfiVWiexlx8IGWmdfBFg1HnRZExy1iMyRjP15W1XcJ1I9q2uqZjqcJ3q1wFrCJZagiO0TOyJnHOWQdDz7xmMsTBkeN6GHWOicRB1vwmOSIntXxebcg7Eo4f+7botNyB05vpbKXkUH+U6xcqU+yZqa5jVw37lyVbTWG3+BC0VwEIVgNB4cpbr/Zmjr+Pf9iuCo5VzBf7BQyIggorvWyg2tNq4ppIC0peBpuMj9u3oI1qEfko61sWga6bfw9WxtVu/yFqG399VR74ycr0Y0uhgJ6iM8hzSfceS+bRj5GNSPm1XviToDq2hO/lUmNxELGZrSQx7hzsA4HVdxHvWVILX4Kavvnqh5pH3FOUbSEeicFDiw5BmMA7gag0LCoRAnB35MD8sj2jh4pOnWUmVY=
-#  organization: fhnw
-#  space: wodss
-#  on:
-#    repo: fhnw-students/wodss-tippspiel-api
-#    branch: develop
