@@ -21,7 +21,7 @@ before_install:
 install: true
 
 script:
-  - ./gradlew check --stacktrace
+  - ./gradlew check --debug
 
 notifications:
   email: false
