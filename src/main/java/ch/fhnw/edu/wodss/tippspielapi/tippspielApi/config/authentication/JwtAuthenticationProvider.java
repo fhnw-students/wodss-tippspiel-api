@@ -23,7 +23,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     String token = authentication.getCredentials().toString();
     User user = userRepository.findByToken(token);
     if (user != null && !user.hasTokenExpired()) {
-      JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(token);
+      JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
       jwtAuthenticationToken.addAuthority(new SimpleGrantedAuthority(USER_ROLE_NAME));
       if (user.getAdmin()) {
         jwtAuthenticationToken.addAuthority(new SimpleGrantedAuthority(ADMIN_ROLE_NAME));
