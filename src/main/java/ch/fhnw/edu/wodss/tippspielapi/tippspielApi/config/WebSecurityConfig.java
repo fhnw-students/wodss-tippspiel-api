@@ -35,7 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   // TODO this is potentially dangerous, remove for deplyoment!
-  @Bean
+/*  @Bean
   CorsConfigurationSource corsConfigurationSource() {
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     CorsConfiguration config = new CorsConfiguration();
@@ -45,9 +45,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     config.addAllowedMethod("GET");
     config.addAllowedMethod("PUT");
     config.addAllowedMethod("POST");
+    config.addAllowedMethod("DELETE");
     source.registerCorsConfiguration("/**", config);
     return source;
-  }
+  }*/
 
   @Bean
   // TODO use argon to store passwords
