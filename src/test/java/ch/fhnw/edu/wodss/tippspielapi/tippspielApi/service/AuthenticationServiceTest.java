@@ -1,7 +1,9 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthenticationToken;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
+import java.util.Date;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -9,6 +11,7 @@ import mockit.Tested;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,10 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @RunWith(JMockit.class)
-public class LoginServiceTest {
+public class AuthenticationServiceTest {
 
   @Tested
-  LoginService loginService;
+  AuthenticationService authenticationService;
 
   @Injectable
   SecurityContext securityContextMock;
@@ -56,7 +59,7 @@ public class LoginServiceTest {
       result = user;
     }};
 
-    loginService.login();
+    authenticationService.login();
 
     new Verifications() {{
       securityContextMock.getAuthentication();
@@ -95,7 +98,7 @@ public class LoginServiceTest {
       result = "dba4d610-8113-4a40-81d4-e5d53d1f55d9";
     }};
 
-    loginService.login();
+    authenticationService.login();
 
     Assert.assertEquals("dba4d610-8113-4a40-81d4-e5d53d1f55d9", user.getToken());
 
@@ -104,6 +107,40 @@ public class LoginServiceTest {
       times = 1;
 
       userRepository.findByUsername("david");
+      times = 1;
+    }};
+  }
+
+  @Test
+  public void testLogoutLoggedInUser(@Mocked SecurityContextHolder anyInstance) {
+
+    new Expectations() {{
+      SecurityContextHolder.getContext();
+      result = securityContextMock;
+
+      JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(
+          "dba4d610-8113-4a40-81d4-e5d53d1f55d9");
+      jwtAuthenticationToken.setPrincipal("hirsch");
+      securityContextMock.getAuthentication();
+      this.result = jwtAuthenticationToken;
+
+      userRepository.findByUsername("hirsch");
+      this.result = user;
+    }};
+
+    authenticationService.logout();
+
+    new Verifications() {{
+      securityContextMock.getAuthentication();
+      times = 1;
+
+      userRepository.findByUsername("hirsch");
+      times = 1;
+
+      user.clearToken();
+      times = 1;
+
+      userRepository.save(user);
       times = 1;
     }};
   }

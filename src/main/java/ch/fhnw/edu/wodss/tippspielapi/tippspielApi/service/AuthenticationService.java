@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class LoginService {
+public class AuthenticationService {
 
   @Autowired
   private UserRepository userRepository;
@@ -24,6 +24,15 @@ public class LoginService {
       user = userRepository.save(user);
     }
     return user;
+  }
+
+  public void logout() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    Object principal = authentication.getPrincipal();
+    String username = principal.toString();
+    User user = userRepository.findByUsername(username);
+    user.clearToken();
+    userRepository.save(user);
   }
 
 }

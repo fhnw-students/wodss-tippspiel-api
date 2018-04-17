@@ -57,6 +57,11 @@ public class User {
     return expiration == null || expiration.before(now.getTime());
   }
 
+  public void clearToken() {
+    this.token = null;
+    this.expiration = null;
+  }
+
   public Long getId() {
     return id;
   }
