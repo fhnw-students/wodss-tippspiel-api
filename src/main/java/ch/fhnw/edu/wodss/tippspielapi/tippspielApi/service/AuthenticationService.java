@@ -1,8 +1,11 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.JwtAuthenticationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -33,6 +36,22 @@ public class AuthenticationService {
     User user = userRepository.findByUsername(username);
     user.clearToken();
     userRepository.save(user);
+  }
+
+  public User register(NewUserDto newUserDto) {
+    User user = userRepository.findByEmail(newUserDto.getEmail());
+    if (user == null) {
+      User newUser = new User();
+      newUser.setUsername(newUserDto.getUsername());
+      newUser.setPassword(ArgonPasswordEncoder.getInstance().encode(newUserDto.getPassword()));
+      newUser.setEmail(newUserDto.getEmail());
+      newUser.setAdmin(false);
+      newUser.generateVerificationToken();
+      newUser = userRepository.save(newUser);
+      return newUser;
+    } else {
+      return null;
+    }
   }
 
 }

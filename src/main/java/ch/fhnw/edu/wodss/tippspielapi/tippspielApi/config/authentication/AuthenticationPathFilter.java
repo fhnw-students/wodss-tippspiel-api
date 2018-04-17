@@ -19,6 +19,7 @@ public class AuthenticationPathFilter implements Filter {
   public static final String AUTH_LOGIN_PATH = "/auth/login";
   public static final String API_PATH = "/api";
   public static final String BASIC = "Basic";
+  private static final String AUTH_REGISTRATION_PATH = "/auth/register";
 
   @Override
   public void init(FilterConfig filterConfig) throws ServletException {
@@ -39,8 +40,9 @@ public class AuthenticationPathFilter implements Filter {
   private boolean canAccess(String contextPath, String authorization) {
     boolean isApiRequested = contextPath.contains(API_PATH);
     boolean isLoginRequested = contextPath.contains(AUTH_LOGIN_PATH);
-    if (authorization == null || isApiRequested) {
-      return isApiRequested;
+    boolean isRegistrationRequested = contextPath.contains(AUTH_REGISTRATION_PATH);
+    if (authorization == null || isApiRequested || isRegistrationRequested) {
+      return true;
     } else if (authorization.contains(BASIC)) {
       return isLoginRequested;
     } else {

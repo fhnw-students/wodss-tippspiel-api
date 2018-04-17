@@ -33,11 +33,15 @@ public class User {
   private String token;
 
   @Column
+  private String verificationToken;
+
+  @Column
   @Temporal(TemporalType.TIMESTAMP)
   private Date expiration;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   Set<TeamMate> teamMates = new HashSet<>();
+
 
   /**
    * Creates a new token that expires in an hour.
@@ -60,6 +64,10 @@ public class User {
   public void clearToken() {
     this.token = null;
     this.expiration = null;
+  }
+
+  public void generateVerificationToken() {
+    this.verificationToken = UUID.randomUUID().toString();
   }
 
   public Long getId() {
@@ -116,6 +124,10 @@ public class User {
 
   public Date getExpiration() {
     return (Date) expiration.clone();
+  }
+
+  public String getVerificationToken() {
+    return verificationToken;
   }
 
 }

@@ -1,6 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthFilter;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.ArgonPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -33,8 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   // TODO use argon to store passwords
-  public static NoOpPasswordEncoder passwordEncoder() {
-    return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+  public static PasswordEncoder passwordEncoder() {
+    return ArgonPasswordEncoder.getInstance();
   }
 
 }
