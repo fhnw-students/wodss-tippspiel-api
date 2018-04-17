@@ -11,6 +11,7 @@ import mockit.Mocked;
 import mockit.Tested;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
+import net.bytebuddy.pool.TypePool.Resolution.Illegal;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -112,6 +113,44 @@ public class AuthenticationServiceTest {
     }};
   }
 
+  @Test (expected = IllegalStateException.class)
+  public void testLoginWithNotVerifiedUser(@Mocked SecurityContextHolder anyInstance) {
+    UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
+        .username("david")
+        .password("anyPassword")
+        .authorities("ROLE_USER", "ROLE_ADMIN")
+        .build();
+
+    User user = new User();
+    user.setUsername("david");
+    user.setPassword("1234");
+    user.setEmail("david@students.ch");
+    user.setAdmin(true);
+    user.setId(27L);
+    user.generateVerificationToken();
+
+    new Expectations() {{
+      SecurityContextHolder.getContext();
+      result = securityContextMock;
+
+      securityContextMock.getAuthentication();
+      result = new UsernamePasswordAuthenticationToken(userDetails, "1234");
+
+      userRepository.findByUsername("david");
+      result = user;
+    }};
+
+    authenticationService.login();
+
+    new Verifications() {{
+      securityContextMock.getAuthentication();
+      times = 1;
+
+      userRepository.findByUsername("david");
+      times = 1;
+    }};
+  }
+
   @Test
   public void testLogoutLoggedInUser(@Mocked SecurityContextHolder anyInstance) {
 
@@ -182,7 +221,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void testRegisterUserWithExistingEmail(@Mocked SecurityContextHolder anyInstance) {
+  public void testRegisterUserWithExistingEmail() {
     User user = new User();
     user.setId(27L);
     user.setEmail("davu@students.ch");
@@ -205,6 +244,50 @@ public class AuthenticationServiceTest {
 
     new Verifications() {{
       userRepository.findByEmail("davu@students.ch");
+      times = 1;
+    }};
+  }
+
+  @Test
+  public void testVerifyNewUser() {
+    User user = new User();
+    user.setId(27L);
+    user.setEmail("davu@students.ch");
+    user.setUsername("davu");
+    user.setPassword("1234");
+    user.setAdmin(false);
+    user.generateVerificationToken();
+
+    new Expectations() {{
+      userRepository.findByVerificationToken("9938d833-c3be-4b79-aea6-3adc180075d0");
+      result = user;
+    }};
+
+    authenticationService.verify("9938d833-c3be-4b79-aea6-3adc180075d0");
+
+    new Verifications() {{
+      userRepository.findByVerificationToken("9938d833-c3be-4b79-aea6-3adc180075d0");
+      times = 1;
+
+      user.clearVerificationToken();
+      times = 1;
+
+      userRepository.save(user);
+      times = 1;
+    }};
+  }
+
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testVerifyVerifiedUser() {
+    new Expectations() {{
+      userRepository.findByVerificationToken("9938d833-c3be-4b79-aea6-3adc180075d0");
+      result = null;
+    }};
+    authenticationService.verify("9938d833-c3be-4b79-aea6-3adc180075d0");
+
+    new Verifications() {{
+      userRepository.findByVerificationToken("9938d833-c3be-4b79-aea6-3adc180075d0");
       times = 1;
     }};
   }

@@ -20,9 +20,10 @@ public class AuthenticationService {
   public User login() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
-
     User user = userRepository.findByUsername(username);
-    if (user.hasTokenExpired()) {
+    if (user.isNotVerified()) {
+      throw new IllegalStateException("User [" + user.getUsername() + "] has not been verified.");
+    } else if (user.hasTokenExpired()) {
       user.generateNewToken();
       user = userRepository.save(user);
     }
@@ -54,4 +55,14 @@ public class AuthenticationService {
     }
   }
 
+  public void verify(String token) {
+    User user = userRepository.findByVerificationToken(token);
+    if (user != null) {
+      user.clearVerificationToken();
+      userRepository.save(user);
+    } else {
+      throw new IllegalArgumentException(
+          "An unknown verification token [" + token + "] was provided.");
+    }
+  }
 }

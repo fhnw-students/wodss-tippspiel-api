@@ -12,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,9 +34,13 @@ public class AuthenticationController {
   @Secured({"ROLE_USER"})
   @CrossOrigin
   @PostMapping(path = "/login")
-  public LoginResponse login() {
-    User user = authenticationService.login();
-    return new LoginResponse(user);
+  public ResponseEntity login() {
+    try {
+      User user = authenticationService.login();
+      return ResponseEntity.ok(new LoginResponse(user));
+    } catch(IllegalStateException e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @Secured({"ROLE_USER"})
@@ -60,6 +66,17 @@ public class AuthenticationController {
       }
     } catch (IllegalStateException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+  }
+
+  @CrossOrigin
+  @PutMapping(path = "/verify/{verifyToken}")
+  public ResponseEntity register(@PathVariable("verifyToken") String token) {
+    try {
+      authenticationService.verify(token);
+      return ResponseEntity.ok().build();
+    } catch (IllegalArgumentException e) {
+      return ResponseEntity.badRequest().build();
     }
   }
 

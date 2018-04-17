@@ -71,6 +71,14 @@ public class User {
     this.verificationToken = UUID.randomUUID().toString();
   }
 
+  public void clearVerificationToken() {
+    verificationToken = null;
+  }
+
+  public boolean isNotVerified() {
+    return !(verificationToken == null || verificationToken.isEmpty());
+  }
+
   public Long getId() {
     return id;
   }
