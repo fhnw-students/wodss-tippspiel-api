@@ -1,6 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthenticationToken;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
 import java.util.Date;
@@ -141,6 +142,69 @@ public class AuthenticationServiceTest {
       times = 1;
 
       userRepository.save(user);
+      times = 1;
+    }};
+  }
+
+  @Test
+  public void testRegisterNewUser(@Mocked SecurityContextHolder anyInstance) {
+    User user = new User();
+    user.setId(27L);
+    user.setEmail("davu@students.ch");
+    user.setUsername("davu");
+    user.setPassword("1234");
+    user.setAdmin(false);
+
+    new Expectations() {{
+      userRepository.findByEmail("davu@students.ch");
+      result = null;
+
+      userRepository.save((User) any);
+      result = user;
+
+    }};
+
+    NewUserDto newUserDto = new NewUserDto();
+    newUserDto.setEmail("davu@students.ch");
+    newUserDto.setUsername("davu");
+    newUserDto.setPassword("1234");
+    User registeredUser = authenticationService.register(newUserDto);
+
+    Assert.assertEquals(user, registeredUser);
+
+    new Verifications() {{
+      userRepository.findByEmail("davu@students.ch");
+      times = 1;
+
+      userRepository.save((User) any);
+      times = 1;
+    }};
+  }
+
+  @Test
+  public void testRegisterUserWithExistingEmail(@Mocked SecurityContextHolder anyInstance) {
+    User user = new User();
+    user.setId(27L);
+    user.setEmail("davu@students.ch");
+    user.setUsername("davu");
+    user.setPassword("1234");
+    user.setAdmin(false);
+
+    new Expectations() {{
+      userRepository.findByEmail("davu@students.ch");
+      result = user;
+    }};
+
+    NewUserDto newUserDto = new NewUserDto();
+    newUserDto.setEmail("davu@students.ch");
+    newUserDto.setUsername("davu");
+    newUserDto.setPassword("1234");
+    User registeredUser = authenticationService.register(newUserDto);
+
+    Assert.assertNull(registeredUser);
+
+    new Verifications() {{
+      userRepository.findByEmail("davu@students.ch");
       times = 1;
     }};
   }
