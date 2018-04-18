@@ -1,5 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller;
 
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.ResetDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.AuthenticationService;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.EmailService;
@@ -38,7 +40,7 @@ public class AuthenticationController {
     try {
       User user = authenticationService.login();
       return ResponseEntity.ok(new LoginResponse(user));
-    } catch(IllegalStateException e) {
+    } catch (IllegalStateException e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
@@ -81,6 +83,17 @@ public class AuthenticationController {
     }
   }
 
+  @CrossOrigin
+  @PutMapping(path = "/reset")
+  public ResponseEntity reset(Locale locale, @RequestBody ResetDto resetDto) {
+    try {
+      authenticationService.reset(resetDto.getEmail(), locale);
+    } catch (Exception e) {
+      // Security: never return anything different than a 200 for a reset request
+    }
+    return ResponseEntity.ok().build();
+  }
+
   @Data
   private class LoginResponse {
 
@@ -108,4 +121,5 @@ public class AuthenticationController {
       email = user.getEmail();
     }
   }
+
 }

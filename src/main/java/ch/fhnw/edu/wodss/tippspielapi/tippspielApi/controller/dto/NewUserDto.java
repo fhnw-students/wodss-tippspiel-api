@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller;
+package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto;
 
 public class NewUserDto {
 

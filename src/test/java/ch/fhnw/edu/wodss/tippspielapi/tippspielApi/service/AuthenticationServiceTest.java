@@ -1,10 +1,10 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthenticationToken;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.NewUserDto;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
-import java.util.Date;
+import java.util.Locale;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -13,7 +13,6 @@ import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 import net.bytebuddy.pool.TypePool.Resolution.Illegal;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +31,9 @@ public class AuthenticationServiceTest {
 
   @Injectable
   UserRepository userRepository;
+
+  @Injectable
+  EmailService emailService;
 
   @Injectable
   User user;
@@ -54,7 +56,7 @@ public class AuthenticationServiceTest {
       userRepository.findByUsername("david");
       result = user;
 
-      user.hasTokenExpired();
+      user.hasAuthenticationTokenExpired();
       result = true;
 
       userRepository.save(user);
@@ -93,7 +95,7 @@ public class AuthenticationServiceTest {
       userRepository.findByUsername("david");
       result = user;
 
-      user.hasTokenExpired();
+      user.hasAuthenticationTokenExpired();
       result = false;
 
       user.getToken();
@@ -113,7 +115,7 @@ public class AuthenticationServiceTest {
     }};
   }
 
-  @Test (expected = IllegalStateException.class)
+  @Test(expected = IllegalStateException.class)
   public void testLoginWithNotVerifiedUser(@Mocked SecurityContextHolder anyInstance) {
     UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
         .username("david")
@@ -277,7 +279,6 @@ public class AuthenticationServiceTest {
     }};
   }
 
-
   @Test(expected = IllegalArgumentException.class)
   public void testVerifyVerifiedUser() {
     new Expectations() {{
@@ -289,6 +290,129 @@ public class AuthenticationServiceTest {
     new Verifications() {{
       userRepository.findByVerificationToken("9938d833-c3be-4b79-aea6-3adc180075d0");
       times = 1;
+    }};
+  }
+
+  @Test
+  public void resetVerifiedUser() {
+    User user = new User();
+    user.setId(2947L);
+    user.setAdmin(false);
+    user.setEmail("any@email.com");
+    user.setUsername("jimmyhendrix");
+    Assert.assertNull(user.getVerificationToken());
+    Assert.assertNull(user.getResetToken());
+
+    new Expectations() {{
+      userRepository.findByEmail("any@email.com");
+      result = user;
+
+      userRepository.save(user);
+      result = user;
+    }};
+    authenticationService.reset("any@email.com", Locale.ENGLISH);
+
+    new Verifications() {{
+      userRepository.findByEmail("any@email.com");
+      times = 1;
+
+      emailService.sendResetEmail(user, Locale.ENGLISH);
+      times = 1;
+
+      userRepository.save(user);
+      times = 1;
+    }};
+  }
+
+  @Test
+  public void resetNotVerifiedUser() {
+    User user = new User();
+    user.setId(7045L);
+    user.setAdmin(false);
+    user.setEmail("tom@hanks.com");
+    user.setUsername("tomhanks");
+    user.generateVerificationToken();
+    Assert.assertNotNull(user.getVerificationToken());
+    Assert.assertNull(user.getResetToken());
+
+    new Expectations() {{
+      userRepository.findByEmail("any@email.com");
+      result = user;
+    }};
+    authenticationService.reset("any@email.com", Locale.ENGLISH);
+
+    new Verifications() {{
+      userRepository.findByEmail("any@email.com");
+      times = 1;
+
+      emailService.sendVerificationEmail(user, Locale.ENGLISH);
+      times = 1;
+
+      emailService.sendResetEmail((User) any, (Locale) any);
+      times = 0;
+
+      userRepository.save(user);
+      times = 0;
+    }};
+  }
+
+  @Test
+  public void resetNotExistingUser() {
+    new Expectations() {{
+      userRepository.findByEmail("any@email.com");
+      result = null;
+    }};
+    try {
+      authenticationService.reset("any@email.com", Locale.ENGLISH);
+      Assert.fail();
+    } catch (IllegalArgumentException e) {
+      // expected
+    }
+
+    new Verifications() {{
+      userRepository.findByEmail("any@email.com");
+      times = 1;
+
+      emailService.sendVerificationEmail(user, Locale.ENGLISH);
+      times = 0;
+
+      emailService.sendResetEmail((User) any, (Locale) any);
+      times = 0;
+
+      userRepository.save(user);
+      times = 0;
+    }};
+  }
+
+  @Test
+  public void resetResettingUser() {
+    User user = new User();
+    user.setId(2947L);
+    user.setAdmin(false);
+    user.setEmail("any@email.com");
+    user.setUsername("alicecooper");
+    user.generateResetToken();
+    Assert.assertNull(user.getVerificationToken());
+    Assert.assertNotNull(user.getResetToken());
+
+    new Expectations() {{
+      userRepository.findByEmail("alice@cooper.com");
+      result = user;
+    }};
+    authenticationService.reset("alice@cooper.com", Locale.ENGLISH);
+
+    new Verifications() {{
+      userRepository.findByEmail("alice@cooper.com");
+      times = 1;
+
+      emailService.sendResetEmail(user, Locale.ENGLISH);
+      times = 1;
+
+      emailService.sendVerificationEmail((User) any, (Locale) any);
+      times = 0;
+
+      userRepository.save((User) any);
+      times = 0;
     }};
   }
 

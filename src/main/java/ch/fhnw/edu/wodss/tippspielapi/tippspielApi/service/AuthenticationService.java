@@ -1,11 +1,9 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.NewUserDto;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.JwtAuthenticationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,14 +15,17 @@ public class AuthenticationService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private EmailService emailService;
+
   public User login() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
     User user = userRepository.findByUsername(username);
     if (user.isNotVerified()) {
       throw new IllegalStateException("User [" + user.getUsername() + "] has not been verified.");
-    } else if (user.hasTokenExpired()) {
-      user.generateNewToken();
+    } else if (user.hasAuthenticationTokenExpired()) {
+      user.generateNewAuthenticationToken();
       user = userRepository.save(user);
     }
     return user;
@@ -64,5 +65,25 @@ public class AuthenticationService {
       throw new IllegalArgumentException(
           "An unknown verification token [" + token + "] was provided.");
     }
+  }
+
+  /**
+   * Resets the user of the given email address and sends an email in the given language. In case
+   * the user was not verified as user yet, send a verification instead.
+   */
+  public void reset(String email, Locale locale) {
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+      throw new IllegalArgumentException("unknown email provided: [" + email + "].");
+    } else if (user.isVerified()) {
+      if (user.isResetting()) {
+        user.generateResetToken();
+        userRepository.save(user);
+      }
+      emailService.sendResetEmail(user, locale);
+    } else {
+      emailService.sendVerificationEmail(user, locale);
+    }
+
   }
 }

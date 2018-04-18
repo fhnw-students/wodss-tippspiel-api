@@ -22,7 +22,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     String token = authentication.getCredentials().toString();
     User user = userRepository.findByToken(token);
-    if (user != null && !user.hasTokenExpired()) {
+    if (user != null && !user.hasAuthenticationTokenExpired()) {
       JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
       jwtAuthenticationToken.addAuthority(new SimpleGrantedAuthority(USER_ROLE_NAME));
       if (user.getAdmin()) {

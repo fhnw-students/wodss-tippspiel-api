@@ -26,7 +26,7 @@ public class JwtAuthenticationProviderTest {
   public void testAuthenticationWithStandardUser() {
     User user = new User();
     user.setUsername("hirsch");
-    user.generateNewToken();
+    user.generateNewAuthenticationToken();
     user.setAdmin(false);
 
     new Expectations() {{
@@ -66,7 +66,7 @@ public class JwtAuthenticationProviderTest {
   public void testAuthenticationWithAdminUser() {
     User user = new User();
     user.setUsername("david");
-    user.generateNewToken();
+    user.generateNewAuthenticationToken();
     user.setAdmin(true);
 
     new Expectations() {{

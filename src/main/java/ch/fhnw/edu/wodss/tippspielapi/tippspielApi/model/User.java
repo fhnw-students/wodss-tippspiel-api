@@ -10,8 +10,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
-@Data
 public class User {
 
   @Id
@@ -37,6 +37,9 @@ public class User {
   private String verificationToken;
 
   @Column
+  private String resetToken;
+
+  @Column
   @Temporal(TemporalType.TIMESTAMP)
   private Date expiration;
 
@@ -47,28 +50,28 @@ public class User {
   /**
    * Creates a new token that expires in an hour.
    */
-  public void generateNewToken() {
-    this.token = UUID.randomUUID().toString();
+  public void generateNewAuthenticationToken() {
+    token = UUID.randomUUID().toString();
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.HOUR, 1);
-    this.expiration = calendar.getTime();
+    expiration = calendar.getTime();
   }
 
   /**
    * Determines whether this user's token has expired.
    */
-  public boolean hasTokenExpired() {
+  public boolean hasAuthenticationTokenExpired() {
     Calendar now = Calendar.getInstance();
     return expiration == null || expiration.before(now.getTime());
   }
 
   public void clearToken() {
-    this.token = null;
-    this.expiration = null;
+    token = null;
+    expiration = null;
   }
 
   public void generateVerificationToken() {
-    this.verificationToken = UUID.randomUUID().toString();
+    verificationToken = UUID.randomUUID().toString();
   }
 
   public void clearVerificationToken() {
@@ -76,7 +79,23 @@ public class User {
   }
 
   public boolean isNotVerified() {
-    return !(verificationToken == null || verificationToken.isEmpty());
+    return !isVerified();
+  }
+
+  public boolean isVerified() {
+    return verificationToken == null || verificationToken.isEmpty();
+  }
+
+  public void generateResetToken() {
+    resetToken = UUID.randomUUID().toString();
+  }
+
+  public void clearResetToken() {
+    resetToken = null;
+  }
+
+  public boolean isResetting() {
+    return resetToken == null || resetToken.isEmpty();
   }
 
   public Long getId() {
@@ -139,6 +158,10 @@ public class User {
     return verificationToken;
   }
 
+  public String getResetToken() {
+    return resetToken;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -157,7 +180,6 @@ public class User {
 
   @Override
   public int hashCode() {
-
     return Objects.hash(id, username, email, password, isAdmin);
   }
 }
