@@ -4,8 +4,10 @@ import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import com.sun.mail.smtp.SMTPTransport;
 import java.text.MessageFormat;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.ResourceBundle;
+import java.util.ResourceBundle.Control;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -52,7 +54,7 @@ public class EmailService {
     } catch (MessagingException e) {
       LOGGER.error(
           "An error occurred when sending the registration verification email to user [" + user
-              .getUsername() + "" + user.getEmail() + "].");
+              .getUsername() + " " + user.getEmail() + "].");
       e.printStackTrace();
       throw new IllegalStateException("Email could not be sent.");
     }
@@ -76,6 +78,7 @@ public class EmailService {
 
     ResourceBundle resourceBundle = ResourceBundle
         .getBundle("ch.fhnw.edu.wodss.tipspielapi.MessageBundle", locale);
+
     String subject = resourceBundle.getString(VERIFICATION_EMAIL_SUBJECT);
     message.setSubject(subject);
 

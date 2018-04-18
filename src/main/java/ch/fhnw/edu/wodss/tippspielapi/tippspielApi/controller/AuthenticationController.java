@@ -57,14 +57,15 @@ public class AuthenticationController {
       @RequestBody NewUserDto newUserDto) {
     try {
       User registeredUser = authenticationService.register(newUserDto);
-      RegistrationResponse responseBody = new RegistrationResponse(registeredUser);
       if (registeredUser != null) {
         emailService.sendVerificationEmail(registeredUser, locale);
+        RegistrationResponse responseBody = new RegistrationResponse(registeredUser);
         return ResponseEntity.ok().body(responseBody);
       } else {
         return ResponseEntity.badRequest().build();
       }
     } catch (IllegalStateException e) {
+      // TODO: remove user again - probably didn't get the email
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
