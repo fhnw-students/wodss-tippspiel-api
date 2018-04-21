@@ -17,6 +17,9 @@ public class Nation {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Column
+    private String code;
+
     public enum TournamentGroup {
         A, B, C, D, E, F, G, H
     }
