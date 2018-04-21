@@ -1,6 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.PasswordResetDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.ResetDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.AuthenticationService;
@@ -90,6 +91,18 @@ public class AuthenticationController {
       authenticationService.reset(resetDto.getEmail(), locale);
     } catch (Exception e) {
       // Security: never return anything different than a 200 for a reset request
+    }
+    return ResponseEntity.ok().build();
+  }
+
+  @CrossOrigin
+  @PutMapping(path = "/reset/{resetToken}")
+  public ResponseEntity newPassword(@PathVariable String resetToken,
+      @RequestBody PasswordResetDto passwordResetDto) {
+    try {
+      authenticationService.saveNewPassword(resetToken, passwordResetDto.getPassword());
+    } catch (IllegalPasswordException | IllegalArgumentException e) {
+      return ResponseEntity.badRequest().build();
     }
     return ResponseEntity.ok().build();
   }

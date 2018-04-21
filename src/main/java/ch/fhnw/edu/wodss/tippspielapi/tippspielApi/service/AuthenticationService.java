@@ -1,9 +1,12 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.IllegalPasswordException;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
 import java.util.Locale;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
 
   @Autowired
   private UserRepository userRepository;
@@ -76,7 +81,7 @@ public class AuthenticationService {
     if (user == null) {
       throw new IllegalArgumentException("unknown email provided: [" + email + "].");
     } else if (user.isVerified()) {
-      if (user.isResetting()) {
+      if (user.isNotResetting()) {
         user.generateResetToken();
         userRepository.save(user);
       }
@@ -85,5 +90,31 @@ public class AuthenticationService {
       emailService.sendVerificationEmail(user, locale);
     }
 
+  }
+
+  /**
+   * Set the given password as new password for the user representing the given reset token. The
+   * to-be-set password will also be validated.
+   */
+  public void saveNewPassword(String resetToken, String password) {
+    User user = userRepository.findByResetToken(resetToken);
+    if (user != null) {
+      validatePassword(password);
+      user.setPassword(password);
+      user.clearResetToken();
+      userRepository.save(user);
+    } else {
+      String message = "unknown reset token provided: [" + resetToken + "]";
+      LOGGER.error(message);
+      throw new IllegalArgumentException(message);
+    }
+  }
+
+  // Extend this method for more validation if desired.
+  private void validatePassword(String password) throws IllegalPasswordException {
+    if (password == null || password.length() < 4) {
+      LOGGER.error("Length of new password was too small.");
+      throw new IllegalPasswordException("The password must have a length of 4 characters!");
+    }
   }
 }

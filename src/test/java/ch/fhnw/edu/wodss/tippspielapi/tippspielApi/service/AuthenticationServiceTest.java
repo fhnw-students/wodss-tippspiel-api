@@ -1,10 +1,12 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthenticationToken;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.IllegalPasswordException;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
 import java.util.Locale;
+import java.util.UUID;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
@@ -293,8 +295,7 @@ public class AuthenticationServiceTest {
     }};
   }
 
-  @Test
-  public void resetVerifiedUser() {
+  public void testResetVerifiedUser() {
     User user = new User();
     user.setId(2947L);
     user.setAdmin(false);
@@ -325,7 +326,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void resetNotVerifiedUser() {
+  public void testResetNotVerifiedUser() {
     User user = new User();
     user.setId(7045L);
     user.setAdmin(false);
@@ -357,7 +358,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void resetNotExistingUser() {
+  public void testResetNotExistingUser() {
     new Expectations() {{
       userRepository.findByEmail("any@email.com");
       result = null;
@@ -385,7 +386,7 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void resetResettingUser() {
+  public void testResetResettingUser() {
     User user = new User();
     user.setId(2947L);
     user.setAdmin(false);
@@ -410,6 +411,98 @@ public class AuthenticationServiceTest {
 
       emailService.sendVerificationEmail((User) any, (Locale) any);
       times = 0;
+
+      userRepository.save((User) any);
+      times = 0;
+    }};
+  }
+
+  @Test
+  public void testNewPasswordOnExistingUser() {
+    User user = new User();
+    user.setId(2947L);
+    user.setAdmin(false);
+    user.setEmail("any@email.com");
+    user.setUsername("jimmyhendrix");
+    user.setPassword("thisIsAPassword");
+    user.generateResetToken();
+    Assert.assertNull(user.getToken());
+    Assert.assertNull(user.getVerificationToken());
+    final String resetToken = user.getResetToken();
+    Assert.assertNotNull(resetToken);
+
+    new Expectations() {{
+      userRepository.findByResetToken(resetToken);
+      result = user;
+
+      userRepository.save(user);
+      result = user;
+    }};
+
+    authenticationService.saveNewPassword(resetToken, "thisIsANewPassword");
+    Assert.assertNull(user.getResetToken());
+
+    new Verifications() {{
+      userRepository.findByResetToken(resetToken);
+      times = 1;
+
+      userRepository.save(user);
+      times = 1;
+    }};
+  }
+
+
+  @Test
+  public void testNewInvalidPasswordOnExistingUser() {
+    User user = new User();
+    user.setId(2947L);
+    user.setAdmin(false);
+    user.setEmail("any@email.com");
+    user.setUsername("jimmyhendrix");
+    user.setPassword("thisIsAPassword");
+    user.generateResetToken();
+    Assert.assertNull(user.getToken());
+    Assert.assertNull(user.getVerificationToken());
+    final String resetToken = user.getResetToken();
+    Assert.assertNotNull(resetToken);
+
+    new Expectations() {{
+      userRepository.findByResetToken(resetToken);
+      result = user;
+    }};
+
+    try {
+      authenticationService.saveNewPassword(resetToken, "tsp");
+      Assert.fail();
+    } catch (IllegalPasswordException e) {
+      // Everything is good, this is expected as tsp is a too short password
+    }
+    Assert.assertEquals(resetToken, user.getResetToken());
+    Assert.assertEquals("thisIsAPassword", user.getPassword());
+
+    new Verifications() {{
+      userRepository.findByResetToken(resetToken);
+      times = 1;
+
+      userRepository.save(user);
+      times = 0;
+    }};
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void testNewPasswordOnNotExistingUser() {
+    String resetToken = UUID.randomUUID().toString();
+
+    new Expectations() {{
+      userRepository.findByResetToken(resetToken);
+      result = null;
+
+    }};
+    authenticationService.saveNewPassword(resetToken, "thisIsANewPassword");
+
+    new Verifications() {{
+      userRepository.findByResetToken(resetToken);
+      times = 1;
 
       userRepository.save((User) any);
       times = 0;

@@ -94,7 +94,7 @@ public class User {
     resetToken = null;
   }
 
-  public boolean isResetting() {
+  public boolean isNotResetting() {
     return resetToken == null || resetToken.isEmpty();
   }
 
