@@ -4,7 +4,7 @@ insert into `user` (`username`, `email`, `password`, `is_admin`)
           ('ken', 'ken.iseli@students.fhnw.ch', '1234', 0);
 
 
-insert into `nation` ( `id`, `name`, `tournament_Group` )
+insert into `nation` ( `id`, `name`, `tournament_Group`, `code` )
   values  ( 'RUS', 'Russia', 'A', 'ru'),
           ( 'KSA', 'Saudi Arabia', 'A', 'sa'),
           ( 'EGY', 'Egypt', 'A', 'eg'),
@@ -32,21 +32,21 @@ insert into `nation` ( `id`, `name`, `tournament_Group` )
           ( 'BEL', 'Belgium', 'G', 'be'),
           ( 'PAN', 'Panama', 'G', 'pa'),
           ( 'TUN', 'Tunisia', 'G', 'tn'),
-          ( 'ENG', 'England', 'G', 'gb'),
+          ( 'ENG', 'England', 'G', 'gb-eng'),
           ( 'POL', 'Poland', 'H', 'pl'),
           ( 'SEN', 'Senegal', 'H', 'sn'),
           ( 'COL', 'Colombia', 'H', 'co'),
           ( 'JPN', 'Japan', 'H', 'jp');
 
 insert into `game_phase` ( `id`, `name` )
-  values  ( 1, 'Groupphase 1', 'asdf'),
-          ( 2, 'Groupphase 2', 'asdf'),
-          ( 3, 'Groupphase 3', 'asdf'),
-          ( 4, 'Round of 16', 'asdf'),
-          ( 5, 'Quarter-finals', 'asdf'),
-          ( 6, 'Semi-finals', 'asdf'),
-          ( 7, 'Match for third place', 'asdf'),
-          ( 8, 'Final', 'asdf');
+  values  ( 1, 'Groupphase 1'),
+          ( 2, 'Groupphase 2'),
+          ( 3, 'Groupphase 3'),
+          ( 4, 'Round of 16'),
+          ( 5, 'Quarter-finals'),
+          ( 6, 'Semi-finals'),
+          ( 7, 'Match for third place'),
+          ( 8, 'Final');
 
 insert into `location` ( `id`, `name`, `utc_diff` )
 values  ( 1, 'Luzhniki Stadium, Moscow', 3),
