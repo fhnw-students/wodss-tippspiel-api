@@ -38,29 +38,29 @@ insert into `nation` ( `id`, `tournament_Group`, `code` )
           ( 'COL', 'H', 'co'),
           ( 'JPN', 'H', 'jp');
 
-insert into `game_phase` ( `id`, `name` )
-  values  ( 1, 'Groupphase 1'),
-          ( 2, 'Groupphase 2'),
-          ( 3, 'Groupphase 3'),
-          ( 4, 'Round of 16'),
-          ( 5, 'Quarter-finals'),
-          ( 6, 'Semi-finals'),
-          ( 7, 'Match for third place'),
-          ( 8, 'Final');
+insert into `game_phase` ( `id`, `code` )
+  values  ( 1, 'phase.name.group1'),
+          ( 2, 'phase.name.group2'),
+          ( 3, 'phase.name.group3'),
+          ( 4, 'phase.name.round16'),
+          ( 5, 'phase.name.quarters'),
+          ( 6, 'phase.name.semis'),
+          ( 7, 'phase.name.third'),
+          ( 8, 'phase.name.finals');
 
-insert into `location` ( `id`, `name`, `utc_diff` )
-values  ( 1, 'Luzhniki Stadium, Moscow', 3),
-        ( 2, 'Central Stadium, Yekaterinburg', 5),
-        ( 3, 'Krestovsky Stadium, Saint Petersburg', 3),
-        ( 4, 'Rostov Arena, Rostov-on-Don', 3),
-        ( 5, 'Cosmos Arena, Samara', 4),
-        ( 6, 'Volgograd Arena, Volgograd', 3),
-        ( 7, 'Fisht Olympic Stadium, Sochi', 3),
-        ( 8, 'Kazan Arena, Kazan', 3),
-        ( 9, 'Mordovia Arena, Saransk', 3),
-        ( 10, 'Kaliningrad Stadium, Kaliningrad', 2),
-        ( 11, 'Otkrytiye Arena, Moscow', 3),
-        ( 12, 'Nizhny Novgorod Stadium, Nizhny Novgorod', 3);
+insert into `location` ( `id`, `code`, `utc_diff` )
+values  ( 1, 'location.name.Moscow.Luzhniki', 3),
+        ( 2, 'location.name.Yekaterinburg.Central', 5),
+        ( 3, 'location.name.SaintPetersburg.Krestovsky', 3),
+        ( 4, 'location.name.Rostov-on-Don.Rostov', 3),
+        ( 5, 'location.name.Samara.Cosmos', 4),
+        ( 6, 'location.name.Volgograd.Volgograd', 3),
+        ( 7, 'location.name.Sochi.Fisht', 3),
+        ( 8, 'location.name.Kazan.Kazan', 3),
+        ( 9, 'location.name.Saransk.Mordovia', 3),
+        ( 10, 'location.name.Kaliningrad.Kaliningrad', 2),
+        ( 11, 'location.name.Moscow.Otkrytiye', 3),
+        ( 12, 'location.name.NizhnyNovgorod.Nizhny', 3);
 
 insert into `game` ( `id`, `date`, `host_nation_id`, `guest_nation_id`, `game_phase_id`, `location_id` )
 values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
