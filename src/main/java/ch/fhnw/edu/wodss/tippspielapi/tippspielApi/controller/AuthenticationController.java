@@ -6,10 +6,13 @@ import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.ResetDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.AuthenticationService;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.EmailService;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.exception.IllegalPasswordException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import lombok.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
   private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+  private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationController.class);
 
   @Autowired
   private AuthenticationService authenticationService;
@@ -42,7 +46,8 @@ public class AuthenticationController {
       User user = authenticationService.login();
       return ResponseEntity.ok(new LoginResponse(user));
     } catch (IllegalStateException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      LOGGER.error("An error occurred while loggin in: " + e.getMessage(), e);
+      return ResponseEntity.badRequest().build();
     }
   }
 
@@ -59,27 +64,27 @@ public class AuthenticationController {
   public ResponseEntity<RegistrationResponse> register(Locale locale,
       @RequestBody NewUserDto newUserDto) {
     try {
-      User registeredUser = authenticationService.register(newUserDto);
+      User registeredUser = authenticationService.register(newUserDto, locale);
       if (registeredUser != null) {
-        emailService.sendVerificationEmail(registeredUser, locale);
         RegistrationResponse responseBody = new RegistrationResponse(registeredUser);
         return ResponseEntity.ok().body(responseBody);
       } else {
         return ResponseEntity.badRequest().build();
       }
-    } catch (IllegalStateException e) {
-      // TODO: remove user again - probably didn't get the email
+    } catch (Exception e) {
+      LOGGER.error("An error occurred while registering: " + e.getMessage(), e);
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 
   @CrossOrigin
   @PutMapping(path = "/verify/{verifyToken}")
-  public ResponseEntity register(@PathVariable("verifyToken") String token) {
+  public ResponseEntity verify(@PathVariable("verifyToken") String token) {
     try {
       authenticationService.verify(token);
       return ResponseEntity.ok().build();
     } catch (IllegalArgumentException e) {
+      LOGGER.error("An error occurred while verifying a new user: " + e.getMessage(), e);
       return ResponseEntity.badRequest().build();
     }
   }
@@ -91,6 +96,7 @@ public class AuthenticationController {
       authenticationService.reset(resetDto.getEmail(), locale);
     } catch (Exception e) {
       // Security: never return anything different than a 200 for a reset request
+      LOGGER.error("An error occurred while resetting a user's password: " + e.getMessage(), e);
     }
     return ResponseEntity.ok().build();
   }
@@ -102,6 +108,7 @@ public class AuthenticationController {
     try {
       authenticationService.saveNewPassword(resetToken, passwordResetDto.getPassword());
     } catch (IllegalPasswordException | IllegalArgumentException e) {
+      LOGGER.error("An error occurred while saving the new password: " + e.getMessage(), e);
       return ResponseEntity.badRequest().build();
     }
     return ResponseEntity.ok().build();
