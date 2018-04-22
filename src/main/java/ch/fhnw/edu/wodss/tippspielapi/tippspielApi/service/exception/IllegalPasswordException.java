@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller;
+package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.exception;
 
 /**
  * This class represents a {@link RuntimeException} that is thrown whenever somebody tries to set a

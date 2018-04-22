@@ -1,20 +1,19 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.exception.EmailSendingException;
 import com.sun.mail.smtp.SMTPTransport;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +26,10 @@ public class EmailService {
   public static final String VERIFICATION_EMAIL_CONTENT = "email.verification.content";
   private static final String RESET_EMAIL_SUBJECT = "email.reset.subject";
   private static final String RESET_EMAIL_CONTENT = "email.reset.content";
+  public static final String CONTENT_TYPE = "text/html; charset=ISO-8859-1";
+
+  @Autowired
+  private I18NService i18nService;
 
   @Value("${email.smtp.server}")
   private String host;
@@ -46,8 +49,8 @@ public class EmailService {
   @Value("${frontend.host}")
   private String frontendHost;
 
-  /**s
-   * Sends a registration verification email with link to the given user in the given language.
+  /**
+   * s Sends a registration verification email with link to the given user in the given language.
    */
   public void sendVerificationEmail(User user, Locale locale) {
     Session session = prepareSession();
@@ -88,17 +91,15 @@ public class EmailService {
   }
 
   private MimeMessage createMessage(String recipientAddress, Locale locale, Session session,
-      String subjectKey, String messageKey, Object... contentParameters) {
+      String subjectKey, String messageKey, String... contentParameters) {
 
     MimeMessage message = new MimeMessage(session);
 
     addSender(message);
     addRecipient(recipientAddress, message);
 
-    ResourceBundle resourceBundle = ResourceBundle
-        .getBundle("ch.fhnw.edu.wodss.tipspielapi.MessageBundle", locale);
-    addSubject(subjectKey, message, resourceBundle);
-    addContent(messageKey, message, resourceBundle, contentParameters);
+    addSubject(subjectKey, message, locale);
+    addContent(messageKey, message, locale, contentParameters);
 
     return message;
   }
@@ -107,7 +108,7 @@ public class EmailService {
     try {
       message.setFrom(new InternetAddress(sender));
     } catch (MessagingException e) {
-      throw new IllegalStateException("Email cannot be sent using sender: [" + sender + "].");
+      throw new EmailSendingException("Email cannot be sent using sender: [" + sender + "].");
     }
   }
 
@@ -115,32 +116,31 @@ public class EmailService {
     try {
       message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
     } catch (MessagingException e) {
-      throw new IllegalStateException(
+      throw new EmailSendingException(
           "Email cannot be sent using recipient: [" + recipientAddress + "].");
     }
   }
 
-  private void addSubject(String subjectKey, MimeMessage message, ResourceBundle resourceBundle) {
+  private void addSubject(String subjectKey, MimeMessage message, Locale locale) {
     String subject = "";
     try {
-      subject = resourceBundle.getString(subjectKey);
+      subject = i18nService.getLocalizedString(subjectKey, locale);
       message.setSubject(subject);
-    } catch (MessagingException e1) {
-      throw new IllegalStateException(
-          "Email cannot be sent with subject [" + subject + "].");
+    } catch (MessagingException e) {
+      throw new EmailSendingException("Email cannot be sent with subject [" + subject + "].");
     }
   }
 
-  private void addContent(String messageKey, MimeMessage message, ResourceBundle resourceBundle,
-      Object[] contentParameters) {
+  private void addContent(String messageKey, MimeMessage message, Locale locale,
+      String[] contentParameters) {
     String content = "";
     try {
-      String rawContent = resourceBundle.getString(messageKey);
+      String rawContent = i18nService
+          .getParameterizedLocalizedString(messageKey, locale, contentParameters);
       content = MessageFormat.format(rawContent, contentParameters);
-      message.setContent(content, "text/html; charset=ISO-8859-1");
+      message.setContent(content, CONTENT_TYPE);
     } catch (MessagingException e) {
-      throw new IllegalStateException(
-          "Email cannot be sent with content [" + content + "].");
+      throw new EmailSendingException("Email cannot be sent with content [" + content + "].");
     }
   }
 
@@ -153,7 +153,7 @@ public class EmailService {
     } catch (MessagingException e) {
       LOGGER.error("Failed to send email.");
       e.printStackTrace();
-      throw new IllegalStateException("Could not send email");
+      throw new EmailSendingException("Could not send email");
     } finally {
       try {
         transport.close();
@@ -161,7 +161,7 @@ public class EmailService {
         e.printStackTrace();
         LOGGER
             .error("Could not close the transport object. This is likely to create a memory leak!");
-        throw new IllegalStateException("Could not close the transport object.");
+        throw new EmailSendingException("Could not close the transport object.");
       }
 
     }

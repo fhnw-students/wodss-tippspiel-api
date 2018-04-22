@@ -1,10 +1,11 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.IllegalPasswordException;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.exception.IllegalPasswordException;
 import java.util.Locale;
+import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class AuthenticationService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationService.class);
@@ -45,20 +47,27 @@ public class AuthenticationService {
     userRepository.save(user);
   }
 
-  public User register(NewUserDto newUserDto) {
-    User user = userRepository.findByEmail(newUserDto.getEmail());
-    if (user == null) {
-      User newUser = new User();
-      newUser.setUsername(newUserDto.getUsername());
-      newUser.setPassword(ArgonPasswordEncoder.getInstance().encode(newUserDto.getPassword()));
-      newUser.setEmail(newUserDto.getEmail());
-      newUser.setAdmin(false);
-      newUser.generateVerificationToken();
+  public User register(NewUserDto newUserDto, Locale locale) {
+    User newUser = userRepository.findByEmail(newUserDto.getEmail());
+    if (newUser == null) {
+      newUser = mapDtoToUser(newUserDto);
       newUser = userRepository.save(newUser);
+      emailService.sendVerificationEmail(newUser, locale);
       return newUser;
     } else {
       return null;
     }
+  }
+
+  private User mapDtoToUser(NewUserDto newUserDto) {
+    User newUser;
+    newUser = new User();
+    newUser.setUsername(newUserDto.getUsername());
+    newUser.setPassword(ArgonPasswordEncoder.getInstance().encode(newUserDto.getPassword()));
+    newUser.setEmail(newUserDto.getEmail());
+    newUser.setAdmin(false);
+    newUser.generateVerificationToken();
+    return newUser;
   }
 
   public void verify(String token) {

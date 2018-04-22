@@ -1,7 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthenticationToken;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.IllegalPasswordException;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.exception.IllegalPasswordException;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
@@ -13,7 +13,6 @@ import mockit.Mocked;
 import mockit.Tested;
 import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
-import net.bytebuddy.pool.TypePool.Resolution.Illegal;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -211,7 +210,7 @@ public class AuthenticationServiceTest {
     newUserDto.setEmail("davu@students.ch");
     newUserDto.setUsername("davu");
     newUserDto.setPassword("1234");
-    User registeredUser = authenticationService.register(newUserDto);
+    User registeredUser = authenticationService.register(newUserDto, Locale.ENGLISH);
 
     Assert.assertEquals(user, registeredUser);
 
@@ -242,7 +241,7 @@ public class AuthenticationServiceTest {
     newUserDto.setEmail("davu@students.ch");
     newUserDto.setUsername("davu");
     newUserDto.setPassword("1234");
-    User registeredUser = authenticationService.register(newUserDto);
+    User registeredUser = authenticationService.register(newUserDto, Locale.ENGLISH);
 
     Assert.assertNull(registeredUser);
 

@@ -14,14 +14,14 @@ public class ArgonPasswordEncoder implements PasswordEncoder {
     return instance;
   }
 
-  // TODO: implement this.
-  @Override
-  public String encode(CharSequence rawPassword) {
-    return String.valueOf(rawPassword);
-  }
-
   @Override
   public boolean matches(CharSequence rawPassword, String encodedPassword) {
     return encode(rawPassword).equals(encodedPassword);
+  }
+
+  @Override
+  public String encode(CharSequence rawPassword) {
+    // TODO: implement this.
+    return String.valueOf(rawPassword);
   }
 }
