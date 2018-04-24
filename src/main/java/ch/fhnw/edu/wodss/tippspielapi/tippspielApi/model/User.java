@@ -12,6 +12,7 @@ import java.util.Set;
 
 
 @Entity
+@Data
 public class User {
 
   @Id
