@@ -32,13 +32,20 @@ public class UserController {
         return userDto;
     }
 
-
     @Secured({"ROLE_USER"})
     @CrossOrigin
     @GetMapping(path = "/me/games")
     public ResponseEntity getGamesOfCurrentUser() {
         User user = authenticationService.getCurrentUser();
         List<UserGameDto> games = gameService.getGamesByUserId(user.getId());
+        return ResponseEntity.ok().body(games);
+    }
+
+    @Secured({"ROLE_USER"})
+    @CrossOrigin
+    @GetMapping(path = "/{userId}/games")
+    public ResponseEntity getGamesOfUser(@PathVariable String userId) {
+        List<UserGameDto> games = gameService.getGamesByUserId(Long.parseLong(userId));
         return ResponseEntity.ok().body(games);
     }
     
