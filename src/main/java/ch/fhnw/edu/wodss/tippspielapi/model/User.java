@@ -44,7 +44,7 @@ public class User {
   @Temporal(TemporalType.TIMESTAMP)
   private Date expiration;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
   Set<TeamMate> teamMates = new HashSet<>();
 
 
