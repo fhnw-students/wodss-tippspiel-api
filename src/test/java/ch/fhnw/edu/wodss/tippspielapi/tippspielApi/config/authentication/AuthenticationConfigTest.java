@@ -1,7 +1,9 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication;
 
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
+import ch.fhnw.edu.wodss.tippspielapi.config.authentication.AuthenticationConfig;
+import ch.fhnw.edu.wodss.tippspielapi.config.authentication.JwtAuthenticationProvider;
+import ch.fhnw.edu.wodss.tippspielapi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;

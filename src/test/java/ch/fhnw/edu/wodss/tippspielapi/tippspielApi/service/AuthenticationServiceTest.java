@@ -1,10 +1,12 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthenticationToken;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.exception.IllegalPasswordException;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.controller.dto.NewUserDto;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
+import ch.fhnw.edu.wodss.tippspielapi.config.authentication.JwtAuthenticationToken;
+import ch.fhnw.edu.wodss.tippspielapi.service.AuthenticationService;
+import ch.fhnw.edu.wodss.tippspielapi.service.EmailService;
+import ch.fhnw.edu.wodss.tippspielapi.service.exception.IllegalPasswordException;
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewUserDto;
+import ch.fhnw.edu.wodss.tippspielapi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
 import java.util.Locale;
 import java.util.UUID;
 import mockit.Expectations;

@@ -3,10 +3,9 @@ package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import ch.fhnw.edu.wodss.tippspielapi.config.authentication.AuthenticationPathFilter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.mock.web.MockFilterChain;

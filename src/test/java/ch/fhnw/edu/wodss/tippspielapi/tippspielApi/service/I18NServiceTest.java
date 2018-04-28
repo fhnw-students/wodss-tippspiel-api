@@ -1,6 +1,8 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
 
 import java.util.Locale;
+
+import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

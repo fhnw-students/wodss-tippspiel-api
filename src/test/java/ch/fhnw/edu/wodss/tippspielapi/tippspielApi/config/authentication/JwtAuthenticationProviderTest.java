@@ -1,7 +1,9 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication;
 
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model.User;
-import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.persistence.UserRepository;
+import ch.fhnw.edu.wodss.tippspielapi.config.authentication.JwtAuthenticationProvider;
+import ch.fhnw.edu.wodss.tippspielapi.config.authentication.JwtAuthenticationToken;
+import ch.fhnw.edu.wodss.tippspielapi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
