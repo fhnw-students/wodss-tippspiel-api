@@ -3,11 +3,19 @@ insert into `user` (`username`, `email`, `password`, `is_admin`)
           ('davu', 'david.heimgartner@students.fhnw.ch', '1234', 1),
           ('ken', 'ken.iseli@students.fhnw.ch', '1234', 0);
 
+insert into `team` ( `id`, `name` )
+  values  ( 1, 'Studies');
+
+insert into `team_mate` ( `id`, `team_id`, `user_id`, `is_owner` )
+  values  ( 1, 1, 1, 0),
+          ( 2, 1, 2, 1),
+          ( 3, 1, 3, 0);
+
 insert into `tip_rule` ( `id`, `description`, `points` )
-values  ( 1, 'rule.name.winner', 10),
-        ( 2, 'rule.name.home.score', 2),
-        ( 3, 'rule.name.guest.score', 2),
-        ( 4, 'rule.name.balance.winner', 6);
+  values  ( 1, 'rule.name.winner', 10),
+          ( 2, 'rule.name.home.score', 2),
+          ( 3, 'rule.name.guest.score', 2),
+          ( 4, 'rule.name.balance.winner', 6);
 
 insert into `nation` ( `id`, `tournament_Group`, `code` )
   values  ( 'RUS', 'A', 'ru'),

@@ -13,14 +13,14 @@ public class TeamMate {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
+    @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'", name = "is_owner")
     private Boolean isOwner;
 
 }
