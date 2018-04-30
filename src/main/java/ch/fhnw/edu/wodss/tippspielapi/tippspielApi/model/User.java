@@ -2,12 +2,14 @@ package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Entity
 @Data
@@ -33,89 +35,88 @@ public class User {
   private String token;
 
   @Column
+  private String verificationToken;
+
+  @Column
+  private String resetToken;
+
+  @Column
   @Temporal(TemporalType.TIMESTAMP)
   private Date expiration;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
   Set<TeamMate> teamMates = new HashSet<>();
 
+
   /**
    * Creates a new token that expires in an hour.
    */
-  public void generateNewToken() {
-    this.token = UUID.randomUUID().toString();
+  public void generateNewAuthenticationToken() {
+    token = UUID.randomUUID().toString();
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.HOUR, 1);
-    this.expiration = calendar.getTime();
+    expiration = calendar.getTime();
   }
 
   /**
    * Determines whether this user's token has expired.
    */
-  public boolean hasTokenExpired() {
+  public boolean hasAuthenticationTokenExpired() {
     Calendar now = Calendar.getInstance();
     return expiration == null || expiration.before(now.getTime());
   }
 
   public void clearToken() {
-    this.token = null;
-    this.expiration = null;
+    token = null;
+    expiration = null;
   }
 
-  public Long getId() {
-    return id;
+  public void generateVerificationToken() {
+    verificationToken = UUID.randomUUID().toString();
   }
 
-  public void setId(Long id) {
-    this.id = id;
+  public void clearVerificationToken() {
+    verificationToken = null;
   }
 
-  public String getUsername() {
-    return username;
+  public boolean isNotVerified() {
+    return !isVerified();
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public boolean isVerified() {
+    return verificationToken == null || verificationToken.isEmpty();
   }
 
-  public String getEmail() {
-    return email;
+  public void generateResetToken() {
+    resetToken = UUID.randomUUID().toString();
   }
 
-  public void setEmail(String email) {
-    this.email = email;
+  public void clearResetToken() {
+    resetToken = null;
   }
 
-  public String getPassword() {
-    return password;
+  public boolean isNotResetting() {
+    return resetToken == null || resetToken.isEmpty();
   }
 
-  public void setPassword(String password) {
-    this.password = password;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof User)) {
+      return false;
+    }
+    User user = (User) o;
+    return Objects.equals(id, user.id) &&
+        Objects.equals(username, user.username) &&
+        Objects.equals(email, user.email) &&
+        Objects.equals(password, user.password) &&
+        Objects.equals(isAdmin, user.isAdmin);
   }
 
-  public Boolean getAdmin() {
-    return isAdmin;
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, username, email, password, isAdmin);
   }
-
-  public void setAdmin(Boolean admin) {
-    isAdmin = admin;
-  }
-
-  public Set<TeamMate> getTeamMates() {
-    return teamMates;
-  }
-
-  public void setTeamMates(Set<TeamMate> teamMates) {
-    this.teamMates = teamMates;
-  }
-
-  public String getToken() {
-    return token;
-  }
-
-  public Date getExpiration() {
-    return (Date) expiration.clone();
-  }
-
 }

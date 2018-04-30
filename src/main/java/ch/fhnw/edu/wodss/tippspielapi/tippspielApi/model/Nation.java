@@ -1,27 +1,29 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.model;
 
+import java.util.Locale;
 import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import org.springframework.beans.factory.annotation.Value;
 
 @Entity
 @Data
 public class Nation {
 
-    @Id
-    @Size(min = 2, max = 3)
-    @Column(length = 3)
-    private String id;
+  @Id
+  @Size(min = 2, max = 3)
+  @Column(length = 3)
+  private String id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+  @Column
+  private String code;
 
-    public enum TournamentGroup {
-        A, B, C, D, E, F, G, H
-    }
+  public enum TournamentGroup {
+    A, B, C, D, E, F, G, H
+  }
 
-    @Enumerated(EnumType.STRING)
-    private TournamentGroup tournamentGroup;
+  @Enumerated(EnumType.STRING)
+  private TournamentGroup tournamentGroup;
 
 }

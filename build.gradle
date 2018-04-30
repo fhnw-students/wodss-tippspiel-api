@@ -1,13 +1,13 @@
 buildscript {
-	ext {
-		springBootVersion = '2.0.0.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '2.0.0.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
 }
 
 apply plugin: 'java'
@@ -20,18 +20,24 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.boot:spring-boot-devtools')
-	compile('mysql:mysql-connector-java')
-	compileOnly('org.projectlombok:lombok')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('org.springframework.security:spring-security-test')
-	testCompile('org.jmockit:jmockit:1.39')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile('org.springframework.boot:spring-boot-devtools')
+    compile('mysql:mysql-connector-java')
+
+    compile('javax.mail:mail:1.4')
+    compile ('javax.mail:javax.mail-api:1.6.1')
+    compile('com.sun.mail:javax.mail:1.6.0')
+
+    compileOnly('org.projectlombok:lombok')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('org.springframework.security:spring-security-test')
+    testCompile('org.jmockit:jmockit:1.39')
 }

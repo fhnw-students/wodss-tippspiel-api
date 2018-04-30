@@ -1,6 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config;
 
 import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication.JwtAuthFilter;
+import ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service.ArgonPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
@@ -32,9 +37,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Bean
+  public WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurerAdapter() {
+      @Override
+      public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+      }
+    };
+  }
+
+
+  @Bean
   // TODO use argon to store passwords
-  public static NoOpPasswordEncoder passwordEncoder() {
-    return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+  public static PasswordEncoder passwordEncoder() {
+    return ArgonPasswordEncoder.getInstance();
   }
 
 }

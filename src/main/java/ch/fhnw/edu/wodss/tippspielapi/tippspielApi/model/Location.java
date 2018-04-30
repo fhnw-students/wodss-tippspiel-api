@@ -13,7 +13,7 @@ public class Location {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String name;
+    private String code;
 
     @Column(nullable = false)
     private Integer utcDiff;
