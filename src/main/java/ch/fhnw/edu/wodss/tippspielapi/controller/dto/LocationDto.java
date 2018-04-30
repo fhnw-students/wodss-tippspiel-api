@@ -1,7 +1,10 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller.dto;
 
 import ch.fhnw.edu.wodss.tippspielapi.model.Location;
+import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
 import lombok.Data;
+
+import java.util.Locale;
 
 @Data
 public class LocationDto {
@@ -10,11 +13,11 @@ public class LocationDto {
     private String name;
     private Integer utcDiff;
 
-    public LocationDto(Location location){
-        // TODO: Add translation
-        name = location.getCode();
+    public LocationDto(Location location, Locale locale, I18NService i18NService){
         id = location.getId();
         utcDiff = location.getUtcDiff();
+
+        name = i18NService.getLocalizedString(location.getCode(), locale);
     }
 
 }

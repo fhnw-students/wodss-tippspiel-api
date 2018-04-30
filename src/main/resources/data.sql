@@ -126,7 +126,7 @@ update game as g set g.host_score = 3, g.guest_score = 1 where g.id = 6;
 update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 7;
 update game as g set g.host_score = 2, g.guest_score = 3 where g.id = 8;
 
-insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `rule_host_score`, `rule_guest_score`, `rule_winner`, `rule_balance_and_winner`, `points` )
+insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `tipped_host_score_correctly`, `tipped_guest_score_correctly`, `tipped_winner_correctly`, `tipped_balance_and_winner_correctly`, `points` )
 values  (  1,  1, 1, 1, 1, 0, 1, 0, 0, 2 ),
         (  2,  2, 1, 2, 1, 0, 1, 0, 0, 2 ),
         (  3,  3, 1, 0, 2, 0, 0, 1, 0, 10 ),

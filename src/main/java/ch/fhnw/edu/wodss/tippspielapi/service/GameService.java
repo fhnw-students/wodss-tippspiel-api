@@ -1,11 +1,10 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TipDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserGameDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserGameTipDto;
 import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
 import ch.fhnw.edu.wodss.tippspielapi.model.Game;
 import ch.fhnw.edu.wodss.tippspielapi.model.Tip;
+import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.GameRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TipRepository;
@@ -25,12 +24,12 @@ public class GameService {
     @Autowired
     private TipRepository tipRepository;
 
-    public List<UserGameDto> getGamesByUserId(Long userId) {
-        List<UserGameDto> games = gameRepository.findAllUserGames(userId);
+    public List<TippedGame> getGamesByUserId(Long userId) {
+        List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(userId);
         return games;
     }
 
-    public UserGameDto enterTip(Long gameId, User user, TipDto newTip) {
+    public TippedGame enterTip(Long gameId, User user, TipDto newTip) {
         Tip tip = tipRepository.findByUserIdAndGameId(user.getId(), gameId);
         if(tip == null){
             tip = new Tip();
@@ -46,7 +45,7 @@ public class GameService {
             tip = tipRepository.save(tip);
         }
 
-        return gameRepository.findUserGameByTipId(tip.getId());
+        return gameRepository.findTippedGamesByUserId(tip.getId());
     }
 
 }

@@ -23,10 +23,10 @@ public class Tip {
     private Integer hostScore;
     private Integer guestScore;
 
-    private Boolean ruleHostScore;
-    private Boolean ruleGuestScore;
-    private Boolean ruleWinner;
-    private Boolean ruleBalanceAndWinner;
+    private boolean tippedHostScoreCorrectly;
+    private boolean tippedGuestScoreCorrectly;
+    private boolean tippedWinnerCorrectly;
+    private boolean tippedBalanceAndWinnerCorrectly;
 
     private Integer points;
 
