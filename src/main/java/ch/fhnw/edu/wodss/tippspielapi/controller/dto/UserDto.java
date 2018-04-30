@@ -15,7 +15,7 @@ public class UserDto {
     public UserDto(User user) {
         this.username = user.getUsername();
         this.email = user.getEmail();
-        this.isAdmin = user.getIsAdmin();
+        this.isAdmin = user.isAdmin();
     }
 
 

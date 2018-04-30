@@ -74,7 +74,7 @@ public class AuthenticationService {
     newUser.setUsername(newUserDto.getUsername());
     newUser.setPassword(ArgonPasswordEncoder.getInstance().encode(newUserDto.getPassword()));
     newUser.setEmail(newUserDto.getEmail());
-    newUser.setIsAdmin(false);
+    newUser.setAdmin(false);
     newUser.generateVerificationToken();
     return newUser;
   }

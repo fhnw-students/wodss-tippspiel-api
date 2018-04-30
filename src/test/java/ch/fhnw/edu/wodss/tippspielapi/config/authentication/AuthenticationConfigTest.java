@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication;
+package ch.fhnw.edu.wodss.tippspielapi.config.authentication;
 
 import ch.fhnw.edu.wodss.tippspielapi.config.authentication.AuthenticationConfig;
 import ch.fhnw.edu.wodss.tippspielapi.config.authentication.JwtAuthenticationProvider;

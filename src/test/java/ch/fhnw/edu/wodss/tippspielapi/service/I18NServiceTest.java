@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.service;
+package ch.fhnw.edu.wodss.tippspielapi.service;
 
 import java.util.Locale;
 

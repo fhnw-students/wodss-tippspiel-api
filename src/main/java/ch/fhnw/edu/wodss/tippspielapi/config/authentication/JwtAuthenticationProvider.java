@@ -25,7 +25,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     if (user != null && !user.hasAuthenticationTokenExpired()) {
       JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
       jwtAuthenticationToken.addAuthority(new SimpleGrantedAuthority(USER_ROLE_NAME));
-      if (user.getIsAdmin()) {
+      if (user.isAdmin()) {
         jwtAuthenticationToken.addAuthority(new SimpleGrantedAuthority(ADMIN_ROLE_NAME));
       }
       jwtAuthenticationToken.setPrincipal(user.getUsername());
