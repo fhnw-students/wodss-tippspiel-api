@@ -18,5 +18,6 @@ public class NationDto {
 
         // TODO: Add translation
         this.name = nation.getCode();
+
     }
 }

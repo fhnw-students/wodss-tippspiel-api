@@ -16,15 +16,11 @@ public class UserGameDto {
     private GameNationDto guest;
     private UserGameTipDto tip;
 
-
     public UserGameDto(Game game, Tip tip) {
         id = game.getId();
         date = game.getDate();
-
         phase = new GamePhaseDto(game.getPhase());
-
         location = new LocationDto(game.getLocation());
-
         host = new GameNationDto(game.getHost(), game.getHostScore());
         guest = new GameNationDto(game.getGuest(), game.getGuestScore());
 
