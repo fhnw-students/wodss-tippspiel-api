@@ -116,3 +116,89 @@ values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
         ( 31, '2018-06-24 21:00:00', 'POL', 'COL', 2, 8),
         ( 47, '2018-06-28 17:00:00', 'JPN', 'POL', 3, 6),
         ( 48, '2018-06-28 18:00:00', 'SEN', 'COL', 3, 5);
+
+update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
+update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 2;
+update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
+update game as g set g.host_score = 0, g.guest_score = 1 where g.id = 4;
+update game as g set g.host_score = 2, g.guest_score = 2 where g.id = 5;
+update game as g set g.host_score = 3, g.guest_score = 1 where g.id = 6;
+update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 7;
+update game as g set g.host_score = 2, g.guest_score = 3 where g.id = 8;
+
+
+insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score` )
+        values  ( 1, 1, 1, 1, 1 ),
+                ( 2, 2, 1, 2, 1 ),
+                ( 3, 3, 1, 0, 2 ),
+                ( 4, 4, 1, 3, 1 ),
+                ( 5, 5, 1, 4, 1 ),
+                ( 6, 6, 1, 2, 3 ),
+                ( 7, 7, 1, 1, 1 ),
+                ( 8, 8, 1, 1, 2 ),
+                ( 9, 9, 1, 2, 0 ),
+                ( 10, 10, 1, 2, 3 ),
+
+                ( 11, 1, 2, 1, 1 ),
+                ( 12, 2, 2, 2, 1 ),
+                ( 13, 3, 2, 0, 2 ),
+                ( 14, 4, 2, 3, 1 ),
+                ( 15, 5, 2, 4, 1 ),
+                ( 16, 6, 2, 2, 3 ),
+                ( 17, 7, 2, 1, 1 ),
+                ( 18, 8, 2, 1, 2 ),
+                ( 19, 9, 2, 2, 0 ),
+                ( 20, 10, 2, 2, 3 ),
+
+                ( 21, 1, 3, 1, 1 ),
+                ( 22, 2, 3, 2, 1 ),
+                ( 23, 3, 3, 0, 2 ),
+                ( 24, 4, 3, 3, 1 ),
+                ( 25, 5, 3, 4, 1 ),
+                ( 26, 6, 3, 2, 3 ),
+                ( 27, 7, 3, 1, 1 ),
+                ( 28, 8, 3, 1, 2 ),
+                ( 29, 9, 3, 2, 0 ),
+                ( 30, 10, 3, 2, 3 );
+
+insert into `user_tip_rule` ( `id`, `tip_id`, `tip_rule_id`, `points` )
+        values  ( 1, 1, 1, 0),
+                ( 2, 1, 2, 0),
+                ( 3, 1, 3, 2),
+                ( 4, 1, 4, 0),
+
+                ( 5, 2, 1, 0),
+                ( 6, 2, 2, 0),
+                ( 7, 2, 3, 2),
+                ( 8, 2, 4, 0),
+
+                ( 9, 3, 1, 10),
+                ( 10, 3, 2, 2),
+                ( 11, 3, 3, 0),
+                ( 12, 3, 4, 0),
+
+                ( 13, 4, 1, 0),
+                ( 14, 4, 2, 0),
+                ( 15, 4, 3, 2),
+                ( 16, 4, 4, 0),
+
+                ( 17, 5, 1, 0),
+                ( 18, 5, 2, 0),
+                ( 19, 5, 3, 0),
+                ( 20, 5, 4, 0),
+
+                ( 21, 6, 1, 0),
+                ( 22, 6, 2, 0),
+                ( 23, 6, 3, 0),
+                ( 24, 6, 4, 0),
+
+                ( 25, 7, 1, 10),
+                ( 26, 7, 2, 2),
+                ( 27, 7, 3, 2),
+                ( 28, 7, 4, 4),
+
+                ( 29, 8, 1, 10),
+                ( 30, 8, 2, 0),
+                ( 31, 8, 3, 0),
+                ( 32, 8, 4, 4);
+        
