@@ -27,7 +27,7 @@ public class Game {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "host_nation_id", nullable = false)
-    private Nation home;
+    private Nation host;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guest_nation_id", nullable = false)

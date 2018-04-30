@@ -26,7 +26,7 @@ public class GameService {
     private TipRepository tipRepository;
 
     public List<UserGameDto> getGamesByUserId(Long userId) {
-        List<UserGameDto> games = gameRepository.findAllUserGames();
+        List<UserGameDto> games = gameRepository.findAllUserGames(userId);
         return games;
     }
 

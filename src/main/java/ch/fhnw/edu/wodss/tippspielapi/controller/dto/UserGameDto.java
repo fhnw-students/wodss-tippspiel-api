@@ -10,27 +10,23 @@ public class UserGameDto {
 
     private Long id;
     private Date date;
-    private Location location;
-    private GamePhase phase;
-    private Nation home;
-    private Nation guest;
-    private Integer hostScore;
-    private Integer guestScore;
+    private LocationDto location;
+    private GamePhaseDto phase;
+    private GameNationDto host;
+    private GameNationDto guest;
     private UserGameTipDto tip;
 
-    public UserGameDto() {
-
-    }
 
     public UserGameDto(Game game, Tip tip) {
         id = game.getId();
         date = game.getDate();
-        location = game.getLocation();
-        phase = game.getPhase();
-        home = game.getHome();
-        guest = game.getGuest();
-        hostScore = game.getHostScore();
-        guestScore = game.getGuestScore();
+
+        phase = new GamePhaseDto(game.getPhase());
+
+        location = new LocationDto(game.getLocation());
+
+        host = new GameNationDto(game.getHost(), game.getHostScore());
+        guest = new GameNationDto(game.getGuest(), game.getGuestScore());
 
         if(tip != null) {
             this.tip = new UserGameTipDto(tip);
