@@ -128,7 +128,7 @@ public class AuthenticationServiceTest {
     user.setUsername("david");
     user.setPassword("1234");
     user.setEmail("david@students.ch");
-    user.setAdmin(true);
+    user.setIsAdmin(true);
     user.setId(27L);
     user.generateVerificationToken();
 
@@ -195,7 +195,7 @@ public class AuthenticationServiceTest {
     user.setEmail("davu@students.ch");
     user.setUsername("davu");
     user.setPassword("1234");
-    user.setAdmin(false);
+    user.setIsAdmin(false);
 
     new Expectations() {{
       userRepository.findByEmail("davu@students.ch");
@@ -230,7 +230,7 @@ public class AuthenticationServiceTest {
     user.setEmail("davu@students.ch");
     user.setUsername("davu");
     user.setPassword("1234");
-    user.setAdmin(false);
+    user.setIsAdmin(false);
 
     new Expectations() {{
       userRepository.findByEmail("davu@students.ch");
@@ -258,7 +258,7 @@ public class AuthenticationServiceTest {
     user.setEmail("davu@students.ch");
     user.setUsername("davu");
     user.setPassword("1234");
-    user.setAdmin(false);
+    user.setIsAdmin(false);
     user.generateVerificationToken();
 
     new Expectations() {{
@@ -297,7 +297,7 @@ public class AuthenticationServiceTest {
   public void testResetVerifiedUser() {
     User user = new User();
     user.setId(2947L);
-    user.setAdmin(false);
+    user.setIsAdmin(false);
     user.setEmail("any@email.com");
     user.setUsername("jimmyhendrix");
     Assert.assertNull(user.getVerificationToken());
@@ -328,7 +328,7 @@ public class AuthenticationServiceTest {
   public void testResetNotVerifiedUser() {
     User user = new User();
     user.setId(7045L);
-    user.setAdmin(false);
+    user.setIsAdmin(false);
     user.setEmail("tom@hanks.com");
     user.setUsername("tomhanks");
     user.generateVerificationToken();
@@ -388,7 +388,7 @@ public class AuthenticationServiceTest {
   public void testResetResettingUser() {
     User user = new User();
     user.setId(2947L);
-    user.setAdmin(false);
+    user.setIsAdmin(false);
     user.setEmail("any@email.com");
     user.setUsername("alicecooper");
     user.generateResetToken();
@@ -420,7 +420,7 @@ public class AuthenticationServiceTest {
   public void testNewPasswordOnExistingUser() {
     User user = new User();
     user.setId(2947L);
-    user.setAdmin(false);
+    user.setIsAdmin(false);
     user.setEmail("any@email.com");
     user.setUsername("jimmyhendrix");
     user.setPassword("thisIsAPassword");
@@ -455,7 +455,7 @@ public class AuthenticationServiceTest {
   public void testNewInvalidPasswordOnExistingUser() {
     User user = new User();
     user.setId(2947L);
-    user.setAdmin(false);
+    user.setIsAdmin(false);
     user.setEmail("any@email.com");
     user.setUsername("jimmyhendrix");
     user.setPassword("thisIsAPassword");

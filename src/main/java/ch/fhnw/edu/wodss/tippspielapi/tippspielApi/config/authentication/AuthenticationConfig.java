@@ -39,7 +39,7 @@ public class AuthenticationConfig extends GlobalAuthenticationConfigurerAdapter 
       if (user != null) {
         Collection<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
         grantedAuthorities.add(new SimpleGrantedAuthority(USER_ROLE_NAME));
-        if (user.getAdmin()) {
+        if (user.getIsAdmin()) {
           grantedAuthorities.add(new SimpleGrantedAuthority(ADMIN_ROLE_NAME));
         }
         UserDetails builtUser = org.springframework.security.core.userdetails.User.builder()
