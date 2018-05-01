@@ -13,6 +13,8 @@ public class LocationDto {
     private String name;
     private Integer utcDiff;
 
+    public LocationDto() {}
+
     public LocationDto(Location location, Locale locale, I18NService i18NService){
         id = location.getId();
         utcDiff = location.getUtcDiff();

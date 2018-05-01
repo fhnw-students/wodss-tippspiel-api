@@ -23,6 +23,8 @@ public class TippedGameDto {
 
     private TipDto tip;
 
+    public TippedGameDto() {}
+
     public TippedGameDto(TippedGame tippedGame, Locale locale, I18NService i18NService) {
         id = tippedGame.getId();
         date = tippedGame.getDate();

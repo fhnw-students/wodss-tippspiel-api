@@ -18,7 +18,6 @@ public class UserDto {
         this.isAdmin = user.isAdmin();
     }
 
-
     public UserDto(String username, String email, Boolean isAdmin) {
         this.username = username;
         this.email = email;

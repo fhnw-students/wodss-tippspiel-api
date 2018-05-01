@@ -12,6 +12,8 @@ public class GameNationDto {
     private NationDto nation;
     private Integer score;
 
+    public GameNationDto() {}
+
     public GameNationDto(Nation nation, Integer score, Locale locale, I18NService i18NService){
         this.nation = new NationDto(nation, locale, i18NService);
         this.score = score;
