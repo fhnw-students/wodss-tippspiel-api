@@ -16,6 +16,7 @@ public class TipDto {
 
     private Integer points;
 
+    public TipDto() {}
 
     public TipDto(Tip tip) {
         hostScore = tip.getHostScore();

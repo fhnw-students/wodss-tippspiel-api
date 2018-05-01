@@ -27,8 +27,9 @@ public class GameService {
         return games;
     }
 
-    public TippedGame enterTip(Long gameId, User user, TipDto newTip) {
+    public Tip enterTip(Long gameId, User user, TipDto newTip) {
         Tip tip = tipRepository.findByUserIdAndGameId(user.getId(), gameId);
+        
         if(tip == null){
             tip = new Tip();
             tip.setUser(user);
@@ -43,7 +44,7 @@ public class GameService {
             tip = tipRepository.save(tip);
         }
 
-        return gameRepository.findTippedGamesByUserId(tip.getId());
+        return tipRepository.findByUserIdAndGameId(user.getId(), gameId);
     }
 
 }

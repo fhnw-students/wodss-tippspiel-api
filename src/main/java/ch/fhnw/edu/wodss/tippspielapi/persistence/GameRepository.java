@@ -17,7 +17,8 @@ public interface GameRepository extends JpaRepository<Game, Long> {
     List<TippedGame> findAllTippedGamesByUserId(@Param("userId") Long userId);
 
     @Query("select new ch.fhnw.edu.wodss.tippspielapi.model.TippedGame(g, t) " +
-            "from Game g left join Tip t on t.game.id = g.id " +
+            "from Game g " +
+            "left join Tip t on t.game.id = g.id " +
             "where t.id = :tipId")
     TippedGame findTippedGamesByUserId(@Param("tipId") Long tipId);
 

@@ -2,6 +2,7 @@ package ch.fhnw.edu.wodss.tippspielapi.controller;
 
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TipDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TippedGameDto;
+import ch.fhnw.edu.wodss.tippspielapi.model.Tip;
 import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.AuthenticationService;
@@ -24,16 +25,13 @@ public class GameController {
     @Autowired
     private AuthenticationService authenticationService;
 
-    @Autowired
-    private I18NService i18NService;
-
     @PutMapping("/{gameId}/tip")
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity enterTip(@PathVariable String gameId, @RequestBody TipDto tip, Locale locale) {
+    public ResponseEntity enterTip(@PathVariable String gameId, @RequestBody TipDto tipDto) {
         User user = authenticationService.getCurrentUser();
-        TippedGame tippedGame = gameService.enterTip(Long.parseLong(gameId), user, tip);
-        return ResponseEntity.ok().body(new TippedGameDto(tippedGame, locale, i18NService));
+        Tip tip = gameService.enterTip(Long.parseLong(gameId), user, tipDto);
+        return ResponseEntity.ok().body(new TipDto(tip));
     }
 
 }
