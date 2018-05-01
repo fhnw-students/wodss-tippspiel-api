@@ -51,7 +51,7 @@ public class AuthenticationConfigTest {
     User user = new User();
     final String username = "hirsch";
     user.setUsername(username);
-    user.setIsAdmin(false);
+    user.setAdmin(false);
     user.setPassword("aNotSoSecurePassword");
 
     new Expectations() {{
@@ -83,7 +83,7 @@ public class AuthenticationConfigTest {
     User user = new User();
     final String username = "david";
     user.setUsername(username);
-    user.setIsAdmin(true);
+    user.setAdmin(true);
     user.setPassword("4$3cur3P4$$w0rd");
 
     new Expectations() {{

@@ -29,7 +29,7 @@ public class JwtAuthenticationProviderTest {
     User user = new User();
     user.setUsername("hirsch");
     user.generateNewAuthenticationToken();
-    user.setIsAdmin(false);
+    user.setAdmin(false);
 
     new Expectations() {{
       userRepositoryMock.findByToken("db25cf61-4597-4021-b4ee-0d2d9c45f");
@@ -52,7 +52,7 @@ public class JwtAuthenticationProviderTest {
   public void testAuthenticationWithStandardUserAndExpiredToken() {
     User user = new User();
     user.setUsername("hirsch");
-    user.setIsAdmin(false);
+    user.setAdmin(false);
 
     new Expectations() {{
       userRepositoryMock.findByToken("db25cf61-4597-4021-b4ee-0d2d9c45f");
@@ -69,7 +69,7 @@ public class JwtAuthenticationProviderTest {
     User user = new User();
     user.setUsername("david");
     user.generateNewAuthenticationToken();
-    user.setIsAdmin(true);
+    user.setAdmin(true);
 
     new Expectations() {{
       userRepositoryMock.findByToken("db25cf61-4597-4021-b4ee-0d2d9c45f");
