@@ -95,4 +95,8 @@ public class GameService {
 
         return tipRepository.findByUserIdAndGameId(user.getId(), gameId);
     }
+
+    public void delete(Long gameId) {
+        this.gameRepository.deleteById(gameId);
+    }
 }

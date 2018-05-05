@@ -67,4 +67,12 @@ public class GameController {
         return ResponseEntity.ok().body(new TipDto(tip));
     }
 
+    @DeleteMapping("/{gameId}")
+    @CrossOrigin
+    @Secured({"ROLE_ADMIN"})
+    public ResponseEntity delete(@PathVariable String gameId) {
+        gameService.delete(Long.parseLong(gameId));
+        return ResponseEntity.noContent().build();
+    }
+
 }
