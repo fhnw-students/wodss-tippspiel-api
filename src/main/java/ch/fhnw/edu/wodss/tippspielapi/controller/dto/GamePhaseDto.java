@@ -17,6 +17,8 @@ public class GamePhaseDto {
     private Long id;
     private String name;
 
+    public GamePhaseDto() {}
+
     public GamePhaseDto(GamePhase gamePhase, Locale locale, I18NService i18NService) {
         id = gamePhase.getId();
         name = i18NService.getLocalizedString(gamePhase.getCode(), locale)  ;

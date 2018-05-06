@@ -14,6 +14,8 @@ public class NationDto {
     private String name;
     private Nation.TournamentGroup tournamentGroup;
 
+    public NationDto() {}
+
     public NationDto(Nation nation, Locale locale, I18NService i18NService){
         id = nation.getId();
         code = nation.getCode();
