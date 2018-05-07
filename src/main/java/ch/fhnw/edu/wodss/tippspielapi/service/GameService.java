@@ -1,10 +1,7 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.GameDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewGameDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.ScoreDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TipDto;
-import ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException;
 import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
 import ch.fhnw.edu.wodss.tippspielapi.model.*;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.*;
@@ -26,6 +23,9 @@ public class GameService {
     private GamePhaseRepository gamePhaseRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private LocationRepository locationRepository;
 
     @Autowired
@@ -37,7 +37,8 @@ public class GameService {
     }
 
     public List<TippedGame> getGamesByUsername(String username) {
-        List<TippedGame> games = gameRepository.findAllTippedGamesByUsername(username);
+        User user = userRepository.findByUsername(username);
+        List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(user.getId());
         return games;
     }
 

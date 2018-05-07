@@ -41,7 +41,6 @@ public class UserController {
     @GetMapping(path = "/me/games")
     public ResponseEntity getGamesOfCurrentUser(Locale locale) {
         User user = authenticationService.getCurrentUser();
-
         List<TippedGame> games = gameService.getGamesByUserId(user.getId());
         List<TippedGameDto> tippedGameDtos = games.stream()
                 .map(game -> new TippedGameDto(game, locale, i18NService))
@@ -53,9 +52,13 @@ public class UserController {
     @Secured({"ROLE_USER"})
     @CrossOrigin
     @GetMapping(path = "/{username}/games")
-    public ResponseEntity getGamesOfUser(@PathVariable String username) {
+    public ResponseEntity getGamesOfUser(@PathVariable String username, Locale locale) {
         List<TippedGame> games = gameService.getGamesByUsername(username);
-        return ResponseEntity.ok().body(games);
+        List<TippedGameDto> tippedGameDtos = games.stream()
+                .map(game -> new TippedGameDto(game, locale, i18NService))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(tippedGameDtos);
     }
     
 }
