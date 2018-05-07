@@ -36,6 +36,11 @@ public class GameService {
         return games;
     }
 
+    public List<TippedGame> getGamesByUsername(String username) {
+        List<TippedGame> games = gameRepository.findAllTippedGamesByUsername(username);
+        return games;
+    }
+
     public List<Game> getAll() {
         return gameRepository.findAll();
     }

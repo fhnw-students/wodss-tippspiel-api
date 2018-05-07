@@ -52,9 +52,9 @@ public class UserController {
 
     @Secured({"ROLE_USER"})
     @CrossOrigin
-    @GetMapping(path = "/{userId}/games")
-    public ResponseEntity getGamesOfUser(@PathVariable String userId) {
-        List<TippedGame> games = gameService.getGamesByUserId(Long.parseLong(userId));
+    @GetMapping(path = "/{username}/games")
+    public ResponseEntity getGamesOfUser(@PathVariable String username) {
+        List<TippedGame> games = gameService.getGamesByUsername(username);
         return ResponseEntity.ok().body(games);
     }
     
