@@ -77,15 +77,18 @@ public class GameService {
 
     public Tip enterTip(Long gameId, User user, ScoreDto scoreDto) {
         Tip tip = tipRepository.findByUserIdAndGameId(user.getId(), gameId);
+        Game game = gameRepository.findById(gameId)
+                .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
+
+        if (game.getDate().before(new Date())) {
+            throw new ToLateException();
+        }
 
         if(tip == null){
             tip = new Tip();
             tip.setUser(user);
             tip.setHostScore(scoreDto.getHostScore());
             tip.setGuestScore(scoreDto.getGuestScore());
-            Game game = gameRepository.findById(gameId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
-
             tip.setGame(game);
             tip = tipRepository.save(tip);
         } else {
@@ -104,11 +107,7 @@ public class GameService {
     public Game enterScore(Long gameId, ScoreDto scoreDto) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
-
-        if (game.getDate().before(new Date())) {
-            throw new ToLateException();
-        }
-
+        
         game.setHostScore(scoreDto.getHostScore());
         game.setGuestScore(scoreDto.getGuestScore());
 
