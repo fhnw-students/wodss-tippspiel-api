@@ -31,8 +31,10 @@ public class TipService {
         this.tipBuilder = new TipBuilder();
     }
 
-    public TipService(TipBuilder tipBuilder) {
+    public TipService(TipBuilder tipBuilder, GameRepository gameRepository, TipRepository tipRepository) {
         this.tipBuilder = tipBuilder;
+        this.gameRepository = gameRepository;
+        this.tipRepository = tipRepository;
     }
 
     public Tip enterTip(Long gameId, User user, ScoreDto scoreDto) {
@@ -50,45 +52,46 @@ public class TipService {
 
         tip.setHostScore(scoreDto.getHostScore());
         tip.setGuestScore(scoreDto.getGuestScore());
-        System.out.println(tip.getPoints());
         tip = tipRepository.save(tip);
 
         return tipRepository.findByUserIdAndGameId(user.getId(), gameId);
     }
 
     public void calculatePointsOfTipsByGame(Game game) {
-        List<Tip> tips = this.tipRepository.findByGameId(game.getId());
+        List<Tip> tips = tipRepository.findByGameId(game.getId());
         for (Iterator<Tip> i = tips.iterator(); i.hasNext(); ) {
             Tip tip = i.next();
-
-            // 1. Correct host score
-            tip.setTippedHostScoreCorrectly(tip.getHostScore() == game.getHostScore());
-
-            // 2. Correct guest score
-            tip.setTippedGuestScoreCorrectly(tip.getGuestScore() == game.getGuestScore());
-
-            // 3. Correct winner
-            tip.setTippedWinnerCorrectly(
-                    (game.getHostScore() > game.getGuestScore() && tip.getHostScore() > tip.getGuestScore()) ||
-                            (game.getHostScore() < game.getGuestScore() && tip.getHostScore() < tip.getGuestScore()) ||
-                            (game.getHostScore() == game.getGuestScore() && tip.getHostScore() == tip.getGuestScore())
-            );
-
-            // 4. Correct winner & balance
-            tip.setTippedBalanceAndWinnerCorrectly(
-                    tip.isTippedWinnerCorrectly() && (game.getHostScore() - game.getGuestScore() == tip.getHostScore() - tip.getGuestScore())
-            );
-
-            // 5. Sum points for the given tip
-            tip.setPoints(
-                    (tip.isTippedHostScoreCorrectly() ? 2 : 0) +
-                            (tip.isTippedGuestScoreCorrectly() ? 2 : 0) +
-                            (tip.isTippedWinnerCorrectly() ? 10 : 0) +
-                            (tip.isTippedBalanceAndWinnerCorrectly() ? 6 : 0)
-            );
-
-            // Save altered tip
-            tipRepository.save(tip);
+            tipRepository.save(calculatePointsOfTip(tip, game));
         }
+    }
+
+    Tip calculatePointsOfTip(Tip tip, Game game) {
+        // 1. Correct host score
+        tip.setTippedHostScoreCorrectly(tip.getHostScore() == game.getHostScore());
+
+        // 2. Correct guest score
+        tip.setTippedGuestScoreCorrectly(tip.getGuestScore() == game.getGuestScore());
+
+        // 3. Correct winner
+        tip.setTippedWinnerCorrectly(
+                (game.getHostScore() > game.getGuestScore() && tip.getHostScore() > tip.getGuestScore()) ||
+                        (game.getHostScore() < game.getGuestScore() && tip.getHostScore() < tip.getGuestScore()) ||
+                        (game.getHostScore() == game.getGuestScore() && tip.getHostScore() == tip.getGuestScore())
+        );
+
+        // 4. Correct winner & balance
+        tip.setTippedBalanceAndWinnerCorrectly(
+                tip.isTippedWinnerCorrectly() && (game.getHostScore() - game.getGuestScore() == tip.getHostScore() - tip.getGuestScore())
+        );
+
+        // 5. Sum points for the given tip
+        tip.setPoints(
+                (tip.isTippedHostScoreCorrectly() ? 2 : 0) +
+                        (tip.isTippedGuestScoreCorrectly() ? 2 : 0) +
+                        (tip.isTippedWinnerCorrectly() ? 10 : 0) +
+                        (tip.isTippedBalanceAndWinnerCorrectly() ? 6 : 0)
+        );
+
+        return tip;
     }
 }
