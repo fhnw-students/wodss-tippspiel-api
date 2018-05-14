@@ -52,6 +52,11 @@ public class GameService {
     }
 
     public Game create(NewGameDto newGameDto) {
+        Game game = buildGame(newGameDto);
+        return gameRepository.save(game);
+    }
+
+    Game buildGame(NewGameDto newGameDto) {
         Game game = new Game();
         game.setDate(newGameDto.getDate());
 
@@ -71,8 +76,7 @@ public class GameService {
         game.setPhase(gamePhase);
         game.setHost(hostNation);
         game.setGuest(guestNation);
-
-        return gameRepository.save(game);
+        return game;
     }
 
     public Tip enterTip(Long gameId, User user, ScoreDto scoreDto) {
@@ -84,7 +88,7 @@ public class GameService {
             throw new ToLateException();
         }
 
-        if(tip == null){
+        if (tip == null) {
             tip = new Tip();
             tip.setUser(user);
             tip.setHostScore(scoreDto.getHostScore());
@@ -107,7 +111,7 @@ public class GameService {
     public Game enterScore(Long gameId, ScoreDto scoreDto) {
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
-        
+
         game.setHostScore(scoreDto.getHostScore());
         game.setGuestScore(scoreDto.getGuestScore());
 
@@ -120,7 +124,7 @@ public class GameService {
 
     private void calculatePointsOfTipsByGame(Game game) {
         List<Tip> tips = this.tipRepository.findByGameId(game.getId());
-        for (Iterator<Tip> i = tips.iterator(); i.hasNext();) {
+        for (Iterator<Tip> i = tips.iterator(); i.hasNext(); ) {
             Tip tip = i.next();
 
             // 1. Correct host score
@@ -132,8 +136,8 @@ public class GameService {
             // 3. Correct winner
             tip.setTippedWinnerCorrectly(
                     (game.getHostScore() > game.getGuestScore() && tip.getHostScore() > tip.getGuestScore()) ||
-                    (game.getHostScore() < game.getGuestScore() && tip.getHostScore() < tip.getGuestScore()) ||
-                    (game.getHostScore() == game.getGuestScore() && tip.getHostScore() == tip.getGuestScore())
+                            (game.getHostScore() < game.getGuestScore() && tip.getHostScore() < tip.getGuestScore()) ||
+                            (game.getHostScore() == game.getGuestScore() && tip.getHostScore() == tip.getGuestScore())
             );
 
             // 4. Correct winner & balance
@@ -144,9 +148,9 @@ public class GameService {
             // 5. Sum points for the given tip
             tip.setPoints(
                     (tip.isTippedHostScoreCorrectly() ? 2 : 0) +
-                    (tip.isTippedGuestScoreCorrectly() ? 2 : 0) +
-                    (tip.isTippedWinnerCorrectly() ? 10 : 0) +
-                    (tip.isTippedBalanceAndWinnerCorrectly() ? 6 : 0)
+                            (tip.isTippedGuestScoreCorrectly() ? 2 : 0) +
+                            (tip.isTippedWinnerCorrectly() ? 10 : 0) +
+                            (tip.isTippedBalanceAndWinnerCorrectly() ? 6 : 0)
             );
 
             // Save altered tip
