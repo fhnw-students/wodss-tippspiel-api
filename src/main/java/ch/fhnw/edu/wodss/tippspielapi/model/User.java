@@ -29,7 +29,7 @@ public class User {
   private String password;
 
   @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
-  private Boolean isAdmin;
+  private boolean admin;
 
   @Column(unique = true)
   private String token;
@@ -112,11 +112,11 @@ public class User {
         Objects.equals(username, user.username) &&
         Objects.equals(email, user.email) &&
         Objects.equals(password, user.password) &&
-        Objects.equals(isAdmin, user.isAdmin);
+        Objects.equals(admin, user.admin);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, username, email, password, isAdmin);
+    return Objects.hash(id, username, email, password, admin);
   }
 }

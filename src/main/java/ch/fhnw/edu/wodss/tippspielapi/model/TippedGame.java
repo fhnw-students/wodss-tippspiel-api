@@ -1,39 +1,35 @@
-package ch.fhnw.edu.wodss.tippspielapi.controller.dto;
+package ch.fhnw.edu.wodss.tippspielapi.model;
 
-import ch.fhnw.edu.wodss.tippspielapi.model.*;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class UserGameDto {
+public class TippedGame {
 
     private Long id;
     private Date date;
     private Location location;
     private GamePhase phase;
-    private Nation home;
+    private Nation host;
     private Nation guest;
     private Integer hostScore;
     private Integer guestScore;
-    private UserGameTipDto tip;
 
-    public UserGameDto() {
+    private Tip tip;
 
-    }
-
-    public UserGameDto(Game game, Tip tip) {
+    public TippedGame(Game game, Tip tip) {
         id = game.getId();
         date = game.getDate();
-        location = game.getLocation();
         phase = game.getPhase();
-        home = game.getHome();
+        location = game.getLocation();
+        host = game.getHost();
         guest = game.getGuest();
         hostScore = game.getHostScore();
         guestScore = game.getGuestScore();
 
         if(tip != null) {
-            this.tip = new UserGameTipDto(tip);
+            this.tip = tip;
         }
     }
 

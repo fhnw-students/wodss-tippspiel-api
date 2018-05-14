@@ -1,4 +1,4 @@
-package ch.fhnw.edu.wodss.tippspielapi.tippspielApi.config.authentication;
+package ch.fhnw.edu.wodss.tippspielapi.config.authentication;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;

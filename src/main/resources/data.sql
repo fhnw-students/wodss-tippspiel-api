@@ -1,4 +1,4 @@
-insert into `user` (`username`, `email`, `password`, `is_admin`)
+insert into `user` (`username`, `email`, `password`, `admin`)
   values  ('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '1234', 1),
           ('davu', 'david.heimgartner@students.fhnw.ch', '1234', 1),
           ('ken', 'ken.iseli@students.fhnw.ch', '1234', 0);
@@ -10,12 +10,6 @@ insert into `team_mate` ( `id`, `team_id`, `user_id`, `is_owner` )
   values  ( 1, 1, 1, 0),
           ( 2, 1, 2, 1),
           ( 3, 1, 3, 0);
-
-insert into `tip_rule` ( `id`, `description`, `points` )
-  values  ( 1, 'rule.name.winner', 10),
-          ( 2, 'rule.name.home.score', 2),
-          ( 3, 'rule.name.guest.score', 2),
-          ( 4, 'rule.name.balance.winner', 6);
 
 insert into `nation` ( `id`, `tournament_Group`, `code` )
   values  ( 'RUS', 'A', 'ru'),
@@ -124,3 +118,44 @@ values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
         ( 31, '2018-06-24 21:00:00', 'POL', 'COL', 2, 8),
         ( 47, '2018-06-28 17:00:00', 'JPN', 'POL', 3, 6),
         ( 48, '2018-06-28 18:00:00', 'SEN', 'COL', 3, 5);
+
+update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
+update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 2;
+update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
+update game as g set g.host_score = 0, g.guest_score = 1 where g.id = 4;
+update game as g set g.host_score = 2, g.guest_score = 2 where g.id = 5;
+update game as g set g.host_score = 3, g.guest_score = 1 where g.id = 6;
+update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 7;
+update game as g set g.host_score = 2, g.guest_score = 3 where g.id = 8;
+
+insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `tipped_host_score_correctly`, `tipped_guest_score_correctly`, `tipped_winner_correctly`, `tipped_balance_and_winner_correctly`, `points` )
+values  (  1,  1, 1, 1, 1, 0, 1, 0, 0, 2 ),
+        (  2,  2, 1, 2, 1, 0, 1, 0, 0, 2 ),
+        (  3,  3, 1, 0, 2, 0, 0, 1, 0, 10 ),
+        (  4,  4, 1, 3, 1, 0, 1, 0, 0, 2 ),
+        (  5,  5, 1, 4, 1, 0, 0, 0, 0, 0 ),
+        (  6,  6, 1, 2, 3, 0, 0, 0, 0, 0 ),
+        (  7,  7, 1, 1, 1, 1, 1, 1, 1, 20 ),
+        (  8,  8, 1, 1, 2, 0, 0, 1, 1, 16 ),
+        (  9,  9, 1, 2, 0, 0, 0, 0, 0, 0 ),
+        ( 10, 10, 1, 2, 3, 0, 0, 0, 0, 0 ),
+        ( 11,  1, 2, 1, 1, 0, 0, 0, 0, 0 ),
+        ( 12,  2, 2, 2, 1, 0, 0, 0, 0, 0 ),
+        ( 13,  3, 2, 0, 2, 0, 0, 0, 0, 0 ),
+        ( 14,  4, 2, 3, 1, 0, 0, 0, 0, 0 ),
+        ( 15,  5, 2, 4, 1, 0, 0, 0, 0, 0 ),
+        ( 16,  6, 2, 2, 3, 0, 0, 0, 0, 0 ),
+        ( 17,  7, 2, 1, 1, 0, 0, 0, 0, 0 ),
+        ( 18,  8, 2, 1, 2, 0, 0, 0, 0, 0 ),
+        ( 19,  9, 2, 2, 0, 0, 0, 0, 0, 0 ),
+        ( 20, 10, 2, 2, 3, 0, 0, 0, 0, 0 ),
+        ( 21,  1, 3, 1, 1, 0, 0, 0, 0, 0 ),
+        ( 22,  2, 3, 2, 1, 0, 0, 0, 0, 0 ),
+        ( 23,  3, 3, 0, 2, 0, 0, 0, 0, 0 ),
+        ( 24,  4, 3, 3, 1, 0, 0, 0, 0, 0 ),
+        ( 25,  5, 3, 4, 1, 0, 0, 0, 0, 0 ),
+        ( 26,  6, 3, 2, 3, 0, 0, 0, 0, 0 ),
+        ( 27,  7, 3, 1, 1, 0, 0, 0, 0, 0 ),
+        ( 28,  8, 3, 1, 2, 0, 0, 0, 0, 0 ),
+        ( 29,  9, 3, 2, 0, 0, 0, 0, 0, 0 ),
+        ( 30, 10, 3, 2, 3, 0, 0, 0, 0, 0 );

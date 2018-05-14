@@ -1,13 +1,11 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Locale;
-import java.util.stream.Collectors;
-
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.GamePhaseDto;
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NationDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.GamePhase;
+import ch.fhnw.edu.wodss.tippspielapi.model.Nation;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.GamePhaseRepository;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.NationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +15,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/game-phases")
-public class GamePhaseController {
+@RequestMapping("/nations")
+public class NationController {
 
     @Autowired
-    private GamePhaseRepository gamePhaseRepository;
+    private NationRepository nationRepository;
 
     @Autowired
     private I18NService i18NService;
@@ -30,10 +32,10 @@ public class GamePhaseController {
     @GetMapping
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity getAllGamePhases(Locale locale) {
-        List<GamePhase> gamePhases = gamePhaseRepository.findAll();
-        List<GamePhaseDto> body = gamePhases.stream()
-                .map(phase -> new GamePhaseDto(phase, locale, i18NService))
+    public ResponseEntity getAll(Locale locale) {
+        List<Nation> nations = nationRepository.findAll();
+        List<NationDto> body = nations.stream()
+                .map(nation -> new NationDto(nation, locale, i18NService))
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(body);
     }
