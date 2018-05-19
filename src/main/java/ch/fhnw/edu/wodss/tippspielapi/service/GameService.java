@@ -3,21 +3,27 @@ package ch.fhnw.edu.wodss.tippspielapi.service;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewGameDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.ScoreDto;
 import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
+import ch.fhnw.edu.wodss.tippspielapi.exception.ToLateException;
 import ch.fhnw.edu.wodss.tippspielapi.model.*;
+import ch.fhnw.edu.wodss.tippspielapi.model.builder.TipBuilder;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
+@Transactional
 public class GameService {
 
     @Autowired
-    private GameRepository gameRepository;
+    private TipService tipService;
 
     @Autowired
-    private TipRepository tipRepository;
+    private GameRepository gameRepository;
 
     @Autowired
     private GamePhaseRepository gamePhaseRepository;
@@ -30,6 +36,16 @@ public class GameService {
 
     @Autowired
     private NationRepository nationRepository;
+
+    private TipBuilder tipBuilder;
+
+    public GameService() {
+        this.tipBuilder = new TipBuilder();
+    }
+
+    public GameService(TipBuilder tipBuilder) {
+        this.tipBuilder = tipBuilder;
+    }
 
     public List<TippedGame> getGamesByUserId(Long userId) {
         List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(userId);
@@ -47,6 +63,11 @@ public class GameService {
     }
 
     public Game create(NewGameDto newGameDto) {
+        Game game = buildGame(newGameDto);
+        return gameRepository.save(game);
+    }
+
+    Game buildGame(NewGameDto newGameDto) {
         Game game = new Game();
         game.setDate(newGameDto.getDate());
 
@@ -66,8 +87,11 @@ public class GameService {
         game.setPhase(gamePhase);
         game.setHost(hostNation);
         game.setGuest(guestNation);
+        return game;
+    }
 
-        return gameRepository.save(game);
+    public void delete(Long gameId) {
+        this.gameRepository.deleteById(gameId);
     }
 
     public Game enterScore(Long gameId, ScoreDto scoreDto) {
@@ -77,32 +101,11 @@ public class GameService {
         game.setHostScore(scoreDto.getHostScore());
         game.setGuestScore(scoreDto.getGuestScore());
 
-        return gameRepository.save(game);
+        game = gameRepository.save(game);
+
+        tipService.calculatePointsOfTipsByGame(game);
+
+        return game;
     }
 
-    public Tip enterTip(Long gameId, User user, ScoreDto scoreDto) {
-        Tip tip = tipRepository.findByUserIdAndGameId(user.getId(), gameId);
-
-        if(tip == null){
-            tip = new Tip();
-            tip.setUser(user);
-            tip.setHostScore(scoreDto.getHostScore());
-            tip.setGuestScore(scoreDto.getGuestScore());
-            Game game = gameRepository.findById(gameId)
-                    .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
-
-            tip.setGame(game);
-            tip = tipRepository.save(tip);
-        } else {
-            tip.setHostScore(scoreDto.getHostScore());
-            tip.setGuestScore(scoreDto.getGuestScore());
-            tip = tipRepository.save(tip);
-        }
-
-        return tipRepository.findByUserIdAndGameId(user.getId(), gameId);
-    }
-
-    public void delete(Long gameId) {
-        this.gameRepository.deleteById(gameId);
-    }
 }
