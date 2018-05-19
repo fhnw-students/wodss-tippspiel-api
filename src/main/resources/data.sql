@@ -4,12 +4,15 @@ insert into `user` (`username`, `email`, `password`, `admin`)
           ('ken', 'ken.iseli@students.fhnw.ch', '1234', 0);
 
 insert into `team` ( `id`, `name` )
-  values  ( 1, 'Studies');
+  values  ( 1, 'Studies'),
+          ( 2, 'Hirschies');
 
-insert into `team_mate` ( `id`, `team_id`, `user_id`, `is_owner` )
+insert into `team_mate` ( `id`, `team_id`, `user_id`, `owner` )
   values  ( 1, 1, 1, 0),
           ( 2, 1, 2, 1),
-          ( 3, 1, 3, 0);
+          ( 3, 1, 3, 0),
+          ( 4, 2, 1, 1),
+          ( 5, 2, 2, 0);
 
 insert into `nation` ( `id`, `tournament_Group`, `code` )
   values  ( 'RUS', 'A', 'ru'),
@@ -119,7 +122,7 @@ values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
         ( 47, '2018-06-28 17:00:00', 'JPN', 'POL', 3, 6),
         ( 48, '2018-06-28 18:00:00', 'SEN', 'COL', 3, 5);
 
-update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
+/*update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
 update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 2;
 update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
 update game as g set g.host_score = 0, g.guest_score = 1 where g.id = 4;
@@ -158,4 +161,4 @@ values  (  1,  1, 1, 1, 1, 0, 1, 0, 0, 2 ),
         ( 27,  7, 3, 1, 1, 0, 0, 0, 0, 0 ),
         ( 28,  8, 3, 1, 2, 0, 0, 0, 0, 0 ),
         ( 29,  9, 3, 2, 0, 0, 0, 0, 0, 0 ),
-        ( 30, 10, 3, 2, 3, 0, 0, 0, 0, 0 );
+        ( 30, 10, 3, 2, 3, 0, 0, 0, 0, 0 );*/

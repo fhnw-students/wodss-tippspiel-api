@@ -2,9 +2,7 @@ package ch.fhnw.edu.wodss.tippspielapi.controller;
 
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TippedGameDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserGameDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserTeamDto;
-import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.*;
@@ -75,5 +73,16 @@ public class UserController {
         List<UserTeamDto> teams = teamService.getTeamsByUserId(user.getId());
         return ResponseEntity.ok().body(teams);
     }
+
+    // TODO: User/me/team_invitations
+    /*@Secured({"ROLE_USER"})
+    @CrossOrigin
+    @GetMapping("/me/teams/invitations")
+    public ResponseEntity getInvitationsOfTeamsOfCurrentUser() {
+        //User user = authenticationService.getCurrentUser();
+        //List<UserTeamDto> teams = teamService.getTeamsByUserId(user.getId());
+       // return ResponseEntity.ok().body(teams);
+    }
+    */
     
 }

@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Data
-public class TeamMate {
+public class TeamInvitation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,12 +16,6 @@ public class TeamMate {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'", name = "owner")
-    private boolean owner;
-
-
+    @Column(nullable = false)
+    private String email;
 }
