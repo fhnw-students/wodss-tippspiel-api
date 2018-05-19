@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -47,7 +48,7 @@ public class TeamController {
     @PostMapping
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity createTeam(@RequestBody NewTeamDto newTeamDto) {
+    public ResponseEntity createTeam(@Valid @RequestBody NewTeamDto newTeamDto) {
         TeamDto teamDto = teamService.create(newTeamDto);
         return ResponseEntity.ok().body(teamDto);
     }
