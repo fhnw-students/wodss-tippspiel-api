@@ -75,7 +75,7 @@ public class TeamService {
         TeamMate currentTeamMate = teamMateRepository.findByUserAndTeam(currentUser,team)
                 .orElseThrow(() -> new ResourceNotFoundException("TeamMate", "user", currentUser.getUsername()));
 
-        if(!currentTeamMate.isOwner() || currentUser.getId() != userID){
+        if(!currentTeamMate.isOwner() && !currentUser.getId().equals(userID) ){
             throw new ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException();
         }
 
@@ -83,6 +83,7 @@ public class TeamService {
         if( teamMates.size() == 1){
             teamMateRepository.deleteByTeam(team);
             teamRepository.delete(team);
+            return;
         }
 
         if(currentTeamMate.isOwner()){
