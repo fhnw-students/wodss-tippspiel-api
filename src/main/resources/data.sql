@@ -5,14 +5,25 @@ insert into `user` (`username`, `email`, `password`, `admin`)
 
 insert into `team` ( `id`, `name` )
   values  ( 1, 'Studies'),
-          ( 2, 'Hirschies');
+          ( 2, 'Hirschies'),
+          ( 3, 'Züri-West'),
+          ( 4, 'Aarau an de Aare');
 
 insert into `team_mate` ( `id`, `team_id`, `user_id`, `owner` )
   values  ( 1, 1, 1, 0),
           ( 2, 1, 2, 1),
           ( 3, 1, 3, 0),
           ( 4, 2, 1, 1),
-          ( 5, 2, 2, 0);
+          ( 6, 3, 2, 1),
+          ( 7, 4, 1, 1);
+
+insert into `team_invitation` ( `id`, `team_id`, `email` )
+  values ( 1, 2, 'david.heimgartner@students.fhnw.ch'),
+         ( 2, 2, 'ken.iseli@students.fhnw.ch'),
+         ( 3, 3, 'gerhard.hirschfeld@students.fhnw.ch'),
+         ( 4, 3, 'david.heimgartner@students.fhnw.ch'),
+         ( 5, 4, 'gerhard.hirschfeld@students.fhnw.ch'),
+         ( 6, 4, 'ken.iseli@students.fhnw.ch');
 
 insert into `nation` ( `id`, `tournament_Group`, `code` )
   values  ( 'RUS', 'A', 'ru'),

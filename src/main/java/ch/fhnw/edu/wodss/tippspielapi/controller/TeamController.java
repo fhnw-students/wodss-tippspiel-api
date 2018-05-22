@@ -1,15 +1,10 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
 
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewGameDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewTeamDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamMateDto;
-import ch.fhnw.edu.wodss.tippspielapi.model.Team;
-import ch.fhnw.edu.wodss.tippspielapi.model.TeamMate;
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.*;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.AuthenticationService;
-import ch.fhnw.edu.wodss.tippspielapi.service.GameService;
+import ch.fhnw.edu.wodss.tippspielapi.service.TeamInvitationService;
 import ch.fhnw.edu.wodss.tippspielapi.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("/teams")
@@ -25,6 +21,9 @@ public class TeamController {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private TeamInvitationService teamInvitationService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -70,6 +69,15 @@ public class TeamController {
         User user = authenticationService.getCurrentUser();
         teamService.deleteFromTeam(Long.parseLong(userId), Long.parseLong(teamId), user);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{teamId}/user")
+    @CrossOrigin
+    @Secured({"ROLE_USER"})
+    public ResponseEntity inviteUserToTeam(@PathVariable String teamId, @RequestParam("email") String email, Locale locale) {
+        User user = authenticationService.getCurrentUser();
+        TeamInvitationDto teamInvitationDto = teamInvitationService.create(Long.parseLong(teamId), email, user, locale);
+        return ResponseEntity.ok().body(teamInvitationDto);
     }
 
 }
