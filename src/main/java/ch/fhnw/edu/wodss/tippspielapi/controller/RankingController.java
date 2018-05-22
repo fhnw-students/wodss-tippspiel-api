@@ -1,6 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
-import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRanking;
+import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
 import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
 import ch.fhnw.edu.wodss.tippspielapi.service.RankingService;
 import java.util.List;
@@ -27,10 +27,20 @@ public class RankingController {
   @GetMapping("/users")
   @CrossOrigin
   @Secured({"ROLE_USER"})
-  public ResponseEntity getUserRankings(@RequestParam("offset") int offset,
+  public ResponseEntity getUserRanking(@RequestParam("offset") int offset,
       @RequestParam("limit") int limit, Locale locale) {
     List<UserRanking> body = rankingService.generateRanking(offset, limit);
     return ResponseEntity.ok().body(body);
   }
+
+  @GetMapping("/users/amount")
+  @CrossOrigin
+  @Secured({"ROLE_USER"})
+  public ResponseEntity getAmountOfUserRanking() {
+    int amountOfRankings = rankingService.countUserRankings();
+    return ResponseEntity.ok().body(amountOfRankings);
+  }
+
+
 
 }

@@ -1,11 +1,13 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository;
-import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRanking;
-import ch.fhnw.edu.wodss.tippspielapi.persistence.TipRepository;
-import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRankingInformation;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +22,20 @@ public class RankingService {
    * @return a {@link List<UserRanking>} containing the ranking of each user by its tips
    */
   public List<UserRanking> generateRanking(int offset, int limit) {
-    List<UserRanking> ranking = rankingRepository.getUserRanking(offset, limit);
-    return ranking;
+    Page<UserRankingInformation> rankingInformation = rankingRepository
+        .getUserRankingInformation(PageRequest.of(offset, limit));
+    List<UserRanking> rankings = new ArrayList<>();
+
+    List<UserRankingInformation> content = rankingInformation.getContent();
+    for (int i = 0; i < rankingInformation.getContent().size(); i++) {
+      int rank = (i + 1 ) + offset * limit;
+      UserRanking userRanking = new UserRanking(content.get(i), rank);
+      rankings.add(userRanking);
+    }
+    return rankings;
   }
 
+  public int countUserRankings() {
+    return rankingRepository.countUserRankings();
+  }
 }

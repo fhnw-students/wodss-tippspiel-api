@@ -1,10 +1,8 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
-import ch.fhnw.edu.wodss.tippspielapi.model.Tip;
-import ch.fhnw.edu.wodss.tippspielapi.model.User;
-import ch.fhnw.edu.wodss.tippspielapi.model.builder.TipBuilder;
-import ch.fhnw.edu.wodss.tippspielapi.model.builder.UserBuilder;
-import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRanking;
+import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRankingInformation;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TipRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
 import java.util.ArrayList;
@@ -17,6 +15,7 @@ import mockit.integration.junit4.JMockit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.data.domain.PageRequest;
 
 @RunWith(JMockit.class)
 public class RankingServiceTest {
@@ -30,57 +29,42 @@ public class RankingServiceTest {
   @Injectable
   private TipRepository tipRepository;
 
+  @Injectable
+  private RankingRepository rankingRepository;
+
   @Test
   public void testRankingWithoutUsers() {
     new Expectations() {{
-      userRepository.findAll();
-      result = new ArrayList<User>();
+      rankingRepository.getUserRankingInformation(PageRequest.of(5, 5));
+      result = new ArrayList<UserRanking>();
     }};
 
-    List<UserRanking> userRankings = rankingService.generateRanking(0, 5);
+    List<UserRanking> userRanking = rankingService.generateRanking(5, 5);
 
-    Assert.assertTrue(userRankings.isEmpty());
+    Assert.assertTrue(userRanking.isEmpty());
   }
 
   @Test
   public void testRankingHappyPath() {
-    List<User> users = new ArrayList<>();
-    users.add(createUser("gery@students.fhnw.ch", "hirsch", true, 2L));
-    users.add(createUser("david@students.fhnw.ch", "davu", true, 1L));
-    users.add(createUser("ken@students.fhnw.ch", "ken", false, 3L));
+    List<UserRankingInformation> userRankingInformation = new ArrayList<>();
+    userRankingInformation.add(createUserRankingInformation(2L, "hirsch", true, 50, 5));
+    userRankingInformation.add(createUserRankingInformation(1L, "davu", true, 44, 5));
+    userRankingInformation.add(createUserRankingInformation(3L, "ken", false, 35, 4));
 
-    List<Tip> gerysTips = new ArrayList<>();
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(4).build());
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(6).build());
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(6).build());
-
-    List<Tip> davusTips = new ArrayList<>();
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(6).build());
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(10).build());
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(0).build());
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(4).build());
-
-    List<Tip> kensTips = new ArrayList<>();
-    kensTips.add(new TipBuilder().withUser(users.get(2)).withPoints(10).build());
-    kensTips.add(new TipBuilder().withUser(users.get(2)).withPoints(0).build());
-
-    List<Integer> expectedScores = Arrays.asList(20, 16, 10);
+    List<Integer> expectedScores = Arrays.asList(50, 44, 35);
     List<String> expectedNames = Arrays.asList("davu", "hirsch", "ken");
-    List<Integer> expectedGames = Arrays.asList(4, 3, 2);
+    List<Integer> expectedGames = Arrays.asList(5, 5, 4);
 
     new Expectations() {{
-      userRepository.findAll();
-      this.result = users;
-
-      tipRepository.findByUserId(anyLong);
-      returns(gerysTips, davusTips, kensTips);
+      rankingRepository.getUserRankingInformation(PageRequest.of(5, 5));
+      this.result = userRankingInformation;
     }};
 
-    List<UserRanking> userRankings = rankingService.generateRanking(0, 5);
+    List<UserRanking> userRankings = rankingService.generateRanking(5, 5);
 
     for (int i = 0; i < userRankings.size(); i++) {
       UserRanking userRanking = userRankings.get(i);
-//      Assert.assertEquals(i + 1, userRanking.getRank());
+      Assert.assertEquals(i + 1, userRanking.getRank());
       Assert.assertEquals(expectedScores.get(i).intValue(), userRanking.getPoints());
       Assert.assertEquals(expectedNames.get(i), userRanking.getUsername());
       Assert.assertEquals(expectedGames.get(i).intValue(), userRanking.getGames());
@@ -89,58 +73,55 @@ public class RankingServiceTest {
 
   @Test
   public void testRankingWithSameScores() {
-    List<User> users = new ArrayList<>();
-    users.add(createUser("gery@students.fhnw.ch", "hirsch", true, 2L));
-    users.add(createUser("david@students.fhnw.ch", "davu", true, 1L));
-    users.add(createUser("ken@students.fhnw.ch", "ken", false, 3L));
+    List<UserRankingInformation> userRankingInformation = new ArrayList<>();
+    userRankingInformation.add(createUserRankingInformation(2L, "hirsch", true, 99, 9));
+    userRankingInformation.add(createUserRankingInformation(1L, "davu", true, 99, 10));
+    userRankingInformation.add(createUserRankingInformation(3L, "ken", false, 87, 10));
 
-    List<Tip> gerysTips = new ArrayList<>();
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(2).build());
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(8).build());
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(10).build());
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(0).build());
-    gerysTips.add(new TipBuilder().withUser(users.get(0)).withPoints(0).build());
-
-    List<Tip> davusTips = new ArrayList<>();
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(6).build());
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(10).build());
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(0).build());
-    davusTips.add(new TipBuilder().withUser(users.get(1)).withPoints(4).build());
-
-    List<Tip> kensTips = new ArrayList<>();
-    kensTips.add(new TipBuilder().withUser(users.get(2)).withPoints(10).build());
-    kensTips.add(new TipBuilder().withUser(users.get(2)).withPoints(0).build());
-
-    List<Integer> expectedScores = Arrays.asList(20, 20, 10);
-    List<String> expectedNames = Arrays.asList("davu", "hirsch", "ken");
-    List<Integer> expectedGames = Arrays.asList(4, 5, 2);
+    List<Integer> expectedScores = Arrays.asList(99, 99, 87);
+    List<String> expectedNames = Arrays.asList("hirsch", "davu", "ken");
+    List<Integer> expectedGames = Arrays.asList(9, 10, 10);
 
     new Expectations() {{
-      userRepository.findAll();
-      this.result = users;
-
-      tipRepository.findByUserId(anyLong);
-      returns(gerysTips, davusTips, kensTips);
+      rankingRepository.getUserRankingInformation(PageRequest.of(5, 5));
+      result = userRankingInformation;
     }};
 
     List<UserRanking> userRankings = rankingService.generateRanking(0, 1);
 
     for (int i = 0; i < userRankings.size(); i++) {
       UserRanking userRanking = userRankings.get(i);
-//      Assert.assertEquals(i + 1, userRanking.getRank());
+      Assert.assertEquals(i + 1, userRanking.getRank());
       Assert.assertEquals(expectedScores.get(i).intValue(), userRanking.getPoints());
       Assert.assertEquals(expectedNames.get(i), userRanking.getUsername());
       Assert.assertEquals(expectedGames.get(i).intValue(), userRanking.getGames());
     }
   }
 
-  private User createUser(String email, String username, boolean admin, Long id) {
-    return new UserBuilder()
-        .withEmail(email)
-        .withUsername(username)
-        .withAdmin(admin)
-        .withId(id)
-        .build();
+  private UserRankingInformation createUserRankingInformation(Long id, String username,
+      boolean admin,
+      int points, int games) {
+    return new UserRankingInformation() {
+      @Override
+      public String getUsername() {
+        return username;
+      }
+
+      @Override
+      public Long getUserId() {
+        return id;
+      }
+
+      @Override
+      public int getPoints() {
+        return points;
+      }
+
+      @Override
+      public int getGames() {
+        return games;
+      }
+    };
   }
 
 
