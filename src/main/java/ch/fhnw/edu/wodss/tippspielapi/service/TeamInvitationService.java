@@ -51,10 +51,8 @@ public class TeamInvitationService {
             newTeamInvitation.setEmail(email);
             newTeamInvitation.setTeam(team);
             teamInvitation = teamInvitationRepository.save(newTeamInvitation);
-
-            emailService.sendInvitationEmailTo(email, team, locale);
-
         }
+        emailService.sendInvitationEmailTo(email, team, locale);
         return new TeamInvitationDto(teamInvitation);
 
     }
