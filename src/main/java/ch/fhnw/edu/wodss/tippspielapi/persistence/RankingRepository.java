@@ -25,6 +25,7 @@ public interface RankingRepository extends JpaRepository<Tip, Long> {
   int countUserRankings();
 
 
+  // We only use this class in the service to build the actual dto.
   interface UserRankingInformation {
 
     String getUsername();
