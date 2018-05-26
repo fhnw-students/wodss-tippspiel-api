@@ -1,7 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
 import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
-import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
 import ch.fhnw.edu.wodss.tippspielapi.service.RankingService;
 import java.util.List;
 import java.util.Locale;
@@ -19,16 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class RankingController {
 
   @Autowired
-  private I18NService i18NService;
-
-  @Autowired
   private RankingService rankingService;
 
   @GetMapping("/users")
   @CrossOrigin
   @Secured({"ROLE_USER"})
   public ResponseEntity getUserRanking(@RequestParam("offset") int offset,
-      @RequestParam("limit") int limit, Locale locale) {
+      @RequestParam("limit") int limit) {
     List<UserRanking> body = rankingService.generateRanking(offset, limit);
     return ResponseEntity.ok().body(body);
   }
@@ -40,7 +36,6 @@ public class RankingController {
     int amountOfRankings = rankingService.countUserRankings();
     return ResponseEntity.ok().body(amountOfRankings);
   }
-
 
 
 }
