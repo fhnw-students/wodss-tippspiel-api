@@ -11,4 +11,6 @@ public interface TipRepository extends JpaRepository<Tip, Long> {
 
     List<Tip> findByGameId(Long gameId);
 
+    List<Tip> findByUserId(Long userId);
+
 }
