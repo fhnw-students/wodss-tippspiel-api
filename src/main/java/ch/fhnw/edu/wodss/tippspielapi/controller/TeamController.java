@@ -62,7 +62,7 @@ public class TeamController {
 
     }
 
-    @DeleteMapping("/{teamId}/user/{userId}")
+    @DeleteMapping("/{teamId}/users/{userId}")
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity deleteUserFromTeam(@PathVariable String teamId, @PathVariable String userId) {
@@ -71,7 +71,7 @@ public class TeamController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{teamId}/user")
+    @PutMapping("/{teamId}/users")
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity inviteUserToTeam(@PathVariable String teamId, @RequestParam("email") String email, Locale locale) {
