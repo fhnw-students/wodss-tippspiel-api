@@ -1,7 +1,9 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamInvitationDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TippedGameDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserDto;
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserTeamDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.*;
@@ -20,6 +22,12 @@ public class UserController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private TeamInvitationService teamInvitationService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -59,6 +67,24 @@ public class UserController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(tippedGameDtos);
+    }
+
+    @Secured({"ROLE_USER"})
+    @CrossOrigin
+    @GetMapping("/me/teams")
+    public ResponseEntity getTeamsOfCurrentUser() {
+        User user = authenticationService.getCurrentUser();
+        List<UserTeamDto> teams = teamService.getTeamsByUserId(user.getId());
+        return ResponseEntity.ok().body(teams);
+    }
+
+    @Secured({"ROLE_USER"})
+    @CrossOrigin
+    @GetMapping("/me/team-invitations")
+    public ResponseEntity getInvitationsOfTeamsOfCurrentUser() {
+        User user = authenticationService.getCurrentUser();
+        List<TeamInvitationDto> teamInvitationDtos = teamInvitationService.getMyInvitations(user);
+        return ResponseEntity.ok().body(teamInvitationDtos);
     }
     
 }

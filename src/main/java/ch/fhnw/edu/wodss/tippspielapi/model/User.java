@@ -44,10 +44,6 @@ public class User {
   @Temporal(TemporalType.TIMESTAMP)
   private Date expiration;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-  Set<TeamMate> teamMates = new HashSet<>();
-
-
   /**
    * Creates a new token that expires in an hour.
    */
@@ -118,5 +114,21 @@ public class User {
   @Override
   public int hashCode() {
     return Objects.hash(id, username, email, password, admin);
+  }
+
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", admin=" + admin +
+            ", token='" + token + '\'' +
+            ", verificationToken='" + verificationToken + '\'' +
+            ", resetToken='" + resetToken + '\'' +
+            ", expiration=" + expiration +
+            '}';
   }
 }

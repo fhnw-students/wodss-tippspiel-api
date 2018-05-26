@@ -1,9 +1,11 @@
 package ch.fhnw.edu.wodss.tippspielapi.model;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewTeamDto;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -17,7 +19,11 @@ public class Team {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "team", fetch = FetchType.LAZY)
-    private Set<TeamMate> teamMates = new HashSet<>();
+    public Team(NewTeamDto newTeamDto) {
+        name = newTeamDto.getName();
+    }
+
+    public Team() {
+    }
 
 }
