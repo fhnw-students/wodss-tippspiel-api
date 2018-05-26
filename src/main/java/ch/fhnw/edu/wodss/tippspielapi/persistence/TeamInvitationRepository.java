@@ -13,4 +13,5 @@ public interface TeamInvitationRepository extends JpaRepository<TeamInvitation, 
 
     List<TeamInvitation> findByEmail(String email);
 
+    void deleteByTeam(Team team);
 }

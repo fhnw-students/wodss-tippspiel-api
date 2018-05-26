@@ -2,10 +2,12 @@ package ch.fhnw.edu.wodss.tippspielapi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewTeamDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamDto;
+import ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException;
 import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
 import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamMate;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamInvitationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamMateRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamRepository;
 import mockit.Expectations;
@@ -35,6 +37,9 @@ public class TeamServiceTest {
 
     @Injectable
     TeamMateRepository teamMateRepository;
+
+    @Injectable
+    TeamInvitationRepository teamInvitationRepository;
 
     @Test(expected = ResourceNotFoundException.class)
     public void testFindTeamById_shouldThrowAResourceNotFoundExceptionBecauseOfUnknownTeamId(){
@@ -92,7 +97,7 @@ public class TeamServiceTest {
         teamService.update(team.getId(),new NewTeamDto(),user);
     }
 
-    @Test(expected = ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException.class)
+    @Test(expected = NotAllowedException.class)
     public void testUpdateTeam_shouldThrowANotAllowedExceptionBecauseTheCurrentUserIsNotOwner(){
         Team team = new Team();
         team.setId(1L);
@@ -169,7 +174,7 @@ public class TeamServiceTest {
         teamService.deleteFromTeam(user.getId(),team.getId(),user);
     }
 
-    @Test(expected = ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException.class)
+    @Test(expected = NotAllowedException.class)
     public void testDeleteFromTeam_shouldThrowANotAllowedExceptionBecauseTheCurrentUserIsNotOwner(){
         Team team = new Team();
         team.setId(1L);
@@ -194,7 +199,7 @@ public class TeamServiceTest {
         teamService.deleteFromTeam(user.getId(),team.getId(),deletingUser);
     }
 
-    @Test(expected = ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException.class)
+    @Test(expected = NotAllowedException.class)
     public void testDeleteFromTeam_shouldThrowANotAllowedExceptionBecauseUserToDeleteIsNotCurrentUser(){
         Team team = new Team();
         team.setId(1L);
@@ -237,10 +242,12 @@ public class TeamServiceTest {
             result = Optional.of(owner);
         }};
 
-
         teamService.deleteFromTeam(user.getId(),team.getId(),user);
 
         new Verifications(){{
+            teamInvitationRepository.deleteByTeam(team);
+            times = 1;
+
             teamRepository.delete(team);
             times = 1;
         }};
@@ -266,16 +273,16 @@ public class TeamServiceTest {
 
             teamMateRepository.findByUserAndTeam(user,team);
             result = Optional.of(owner);
-
         }};
 
         teamService.deleteFromTeam(user.getId(),team.getId(),user);
 
         new Verifications(){{
+            teamInvitationRepository.deleteByTeam(team);
+            times = 1;
 
             teamRepository.delete(team);
             times = 1;
-
         }};
     }
 
@@ -300,7 +307,6 @@ public class TeamServiceTest {
         teamMates.add(owner);
         teamMates.add(deletingTeamMate);
 
-
         new Expectations() {{
             teamRepository.findById(team.getId());
             result = Optional.of(team);
@@ -310,22 +316,22 @@ public class TeamServiceTest {
 
             teamMateRepository.findByTeam(team);
             result = teamMates;
-
         }};
 
         teamService.deleteFromTeam(deletingTeamMate.getUser().getId(),team.getId(),currentUser);
 
         new Verifications(){{
-
             teamMateRepository.findByTeam(team);
             times = 1;
+
+            teamInvitationRepository.deleteByTeam(team);
+            times = 0;
 
             teamRepository.delete(team);
             times = 0;
 
             teamMateRepository.findAll();
             times = 0;
-
         }};
 
     }
@@ -341,7 +347,6 @@ public class TeamServiceTest {
         TeamMate deletingTeamMate = new TeamMate();
         deletingTeamMate.setUser(currentUser);
         deletingTeamMate.setOwner(false);
-
 
         User additionalUser = new User();
         additionalUser.setId(2L);
@@ -362,13 +367,11 @@ public class TeamServiceTest {
 
             teamMateRepository.findByTeam(team);
             result = teamMates;
-
         }};
 
         teamService.deleteFromTeam(deletingTeamMate.getUser().getId(),team.getId(),currentUser);
 
         new Verifications(){{
-
             teamMateRepository.findByTeam(team);
             times = 1;
 
@@ -377,7 +380,6 @@ public class TeamServiceTest {
 
             teamMateRepository.findAll();
             times = 0;
-
         }};
 
     }
@@ -399,8 +401,6 @@ public class TeamServiceTest {
         List<TeamMate> teamMates = new ArrayList<>();
         teamMates.add(newOwner);
 
-        //newOwner.setOwner(true);
-
         new Expectations() {{
             teamRepository.findById(team.getId());
             result = Optional.of(team);
@@ -421,11 +421,7 @@ public class TeamServiceTest {
             teamMateRepository.save(newOwner);
             times = 1;
         }};
-        
 
     }
 
 }
-
-
-

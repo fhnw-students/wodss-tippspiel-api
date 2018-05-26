@@ -276,15 +276,6 @@ public class TeamInvitationServiceTest {
         }};
 
         teamInvitationService.accept(teamInvitation.getId(), currentUser);
-
-        new Verifications() {{
-            teamMateRepository.save(teamMate);
-            times = 0;
-
-            teamInvitationRepository.delete(teamInvitation);
-            times = 0;
-        }};
-
     }
 
     @Test(expected = NotAllowedException.class)
@@ -310,14 +301,6 @@ public class TeamInvitationServiceTest {
         }};
 
         teamInvitationService.accept(teamInvitation.getId(), currentUser);
-
-        new Verifications() {{
-            teamMateRepository.save(teamMate);
-            times = 0;
-
-            teamInvitationRepository.delete(teamInvitation);
-            times = 0;
-        }};
     }
 
     @Test
