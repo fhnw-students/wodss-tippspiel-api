@@ -28,7 +28,7 @@ public class RankingService {
     List<UserRanking> rankings = new ArrayList<>();
 
     List<UserRankingInformation> content = rankingInformation.getContent();
-    for (int i = 0; i < rankingInformation.getContent().size(); i++) {
+    for (int i = 0; i < content.size(); i++) {
       int rank = (i + 1 ) + offset * limit;
       UserRanking userRanking = new UserRanking(content.get(i), rank);
       rankings.add(userRanking);
