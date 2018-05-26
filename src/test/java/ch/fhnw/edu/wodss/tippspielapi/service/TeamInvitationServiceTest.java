@@ -254,4 +254,88 @@ public class TeamInvitationServiceTest {
             times = 1;
         }};
     }
+
+    @Test(expected = NotAllowedException.class)
+    public void testAccept_ShouldFailIfTeamIsNull() {
+        String email = "example@email.io";
+        User currentUser = new User();
+        currentUser.setEmail(email);
+        Team team = new Team();
+        TeamInvitation teamInvitation = new TeamInvitation();
+        teamInvitation.setId(1L);
+        teamInvitation.setEmail(email);
+
+        TeamMate teamMate = new TeamMate();
+        teamMate.setTeam(team);
+        teamMate.setUser(currentUser);
+        teamMate.setOwner(false);
+
+        new Expectations() {{
+            teamInvitationRepository.findById(1L);
+            result = Optional.of(teamInvitation);
+        }};
+
+        teamInvitationService.accept(teamInvitation.getId(), currentUser);
+    }
+
+    @Test(expected = NotAllowedException.class)
+    public void testAccept_ShouldFailIfInvitationIsNotFromTheCurrentUser() {
+        String email = "example@email.io";
+        String email2 = "example-2@email.io";
+        User currentUser = new User();
+        currentUser.setEmail(email2);
+        Team team = new Team();
+        TeamInvitation teamInvitation = new TeamInvitation();
+        teamInvitation.setId(1L);
+        teamInvitation.setEmail(email);
+        teamInvitation.setTeam(team);
+
+        TeamMate teamMate = new TeamMate();
+        teamMate.setTeam(team);
+        teamMate.setUser(currentUser);
+        teamMate.setOwner(false);
+
+        new Expectations() {{
+            teamInvitationRepository.findById(1L);
+            result = Optional.of(teamInvitation);
+        }};
+
+        teamInvitationService.accept(teamInvitation.getId(), currentUser);
+    }
+
+    @Test
+    public void testAccept_ShouldSaveTeamMateAndDeleteInvitation() {
+        String email = "example@email.io";
+        User currentUser = new User();
+        currentUser.setEmail(email);
+        Team team = new Team();
+        TeamInvitation teamInvitation = new TeamInvitation();
+        teamInvitation.setId(1L);
+        teamInvitation.setEmail(email);
+        teamInvitation.setTeam(team);
+
+        TeamMate teamMate = new TeamMate();
+        teamMate.setTeam(team);
+        teamMate.setUser(currentUser);
+        teamMate.setOwner(false);
+
+        new Expectations() {{
+            teamInvitationRepository.findById(1L);
+            result = Optional.of(teamInvitation);
+
+            teamMateRepository.save(teamMate);
+
+            teamInvitationRepository.delete(teamInvitation);
+        }};
+
+        teamInvitationService.accept(teamInvitation.getId(), currentUser);
+
+        new Verifications() {{
+            teamMateRepository.save(teamMate);
+            times = 1;
+
+            teamInvitationRepository.delete(teamInvitation);
+            times = 1;
+        }};
+    }
 }

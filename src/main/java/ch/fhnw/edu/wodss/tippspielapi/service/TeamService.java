@@ -8,6 +8,7 @@ import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
 import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamMate;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamInvitationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamMateRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TipRepository;
@@ -27,6 +28,9 @@ public class TeamService {
 
     @Autowired
     private TeamMateRepository teamMateRepository;
+
+    @Autowired
+    private TeamInvitationRepository teamInvitationRepository;
 
     public List<UserTeamDto> getTeamsByUserId(Long userId) {
         return teamRepository.findAllTeamsByUserId(userId);
@@ -83,6 +87,7 @@ public class TeamService {
 
         List<TeamMate> teamMates = teamMateRepository.findByTeam(team);
         if (teamMates.isEmpty()) {
+            teamInvitationRepository.deleteByTeam(team);
             teamRepository.delete(team);
         } else if (currentUser.getId().equals(userID) && currentTeamMate.isOwner()) {
             TeamMate newOwner = teamMates.get(0);
