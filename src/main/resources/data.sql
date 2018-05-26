@@ -152,7 +152,7 @@ values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
         ( 47, '2018-06-28 17:00:00', 'JPN', 'POL', 3, 6),
         ( 48, '2018-06-28 18:00:00', 'SEN', 'COL', 3, 5);
 
-/*update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
+update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
 update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 2;
 update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
 update game as g set g.host_score = 0, g.guest_score = 1 where g.id = 4;
@@ -243,4 +243,3 @@ insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `ti
                 (79,2,49,2,1,0,1,0,0,8),
                 (80,2,50,2,1,0,1,0,0,6),
                 (81,2,51,2,1,0,1,0,0,1);
-
