@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static junit.framework.TestCase.assertTrue;
+
 @RunWith(JMockit.class)
 public class TeamServiceTest {
 
@@ -224,7 +226,7 @@ public class TeamServiceTest {
         owner.setOwner(true);
         owner.setTeam(team);
 
-        List<TeamMate> teamMates = new ArrayList<TeamMate>();
+        List<TeamMate> teamMates = new ArrayList<>();
         teamMates.add(owner);
 
         new Expectations() {{
@@ -233,17 +235,12 @@ public class TeamServiceTest {
 
             teamMateRepository.findByUserAndTeam(user,team);
             result = Optional.of(owner);
-
-            teamMateRepository.findByTeam(team);
-            result = teamMates;
         }};
+
 
         teamService.deleteFromTeam(user.getId(),team.getId(),user);
 
         new Verifications(){{
-            teamMateRepository.deleteByTeam(team);
-            times = 1;
-
             teamRepository.delete(team);
             times = 1;
         }};
@@ -270,25 +267,163 @@ public class TeamServiceTest {
             teamMateRepository.findByUserAndTeam(user,team);
             result = Optional.of(owner);
 
-            teamMateRepository.findByTeam(team);
-            result = teamMates;
         }};
 
         teamService.deleteFromTeam(user.getId(),team.getId(),user);
 
         new Verifications(){{
-            teamMateRepository.deleteByTeam(team);
-            times = 1;
 
             teamRepository.delete(team);
             times = 1;
+
         }};
     }
 
-    public void testDeleteFromTeam_deleteAction_userDeletedByOwner(){}
-    public void testDeleteFromTeam_deleteAction_userDeletedByHimself(){}
+    @Test
+    public void testDeleteFromTeam_deleteAction_userDeletedByOwner(){
+        Team team = new Team();
+        team.setId(1L);
+
+        User currentUser = new User();
+        currentUser.setId(1L);
+        currentUser.setUsername("Test1");
+        TeamMate owner = new TeamMate();
+        owner.setUser(currentUser);
+        owner.setOwner(true);
+
+        User deletingUser = new User();
+        deletingUser.setId(2L);
+        TeamMate deletingTeamMate = new TeamMate();
+        deletingTeamMate.setUser(deletingUser);
+
+        List<TeamMate> teamMates = new ArrayList<TeamMate>();
+        teamMates.add(owner);
+        teamMates.add(deletingTeamMate);
 
 
+        new Expectations() {{
+            teamRepository.findById(team.getId());
+            result = Optional.of(team);
+
+            teamMateRepository.findByUserAndTeam(currentUser,team);
+            result = Optional.of(owner);
+
+            teamMateRepository.findByTeam(team);
+            result = teamMates;
+
+        }};
+
+        teamService.deleteFromTeam(deletingTeamMate.getUser().getId(),team.getId(),currentUser);
+
+        new Verifications(){{
+
+            teamMateRepository.findByTeam(team);
+            times = 1;
+
+            teamRepository.delete(team);
+            times = 0;
+
+            teamMateRepository.findAll();
+            times = 0;
+
+        }};
+
+    }
+
+    @Test
+    public void testDeleteFromTeam_deleteAction_userDeletedByHimself(){
+        Team team = new Team();
+        team.setId(1L);
+
+        User currentUser = new User();
+        currentUser.setId(1L);
+        currentUser.setUsername("Test1");
+        TeamMate deletingTeamMate = new TeamMate();
+        deletingTeamMate.setUser(currentUser);
+        deletingTeamMate.setOwner(false);
+
+
+        User additionalUser = new User();
+        additionalUser.setId(2L);
+        TeamMate owner = new TeamMate();
+        owner.setUser(additionalUser);
+        owner.setOwner(true);
+
+        List<TeamMate> teamMates = new ArrayList<TeamMate>();
+        teamMates.add(owner);
+        teamMates.add(deletingTeamMate);
+
+        new Expectations() {{
+            teamRepository.findById(team.getId());
+            result = Optional.of(team);
+
+            teamMateRepository.findByUserAndTeam(currentUser,team);
+            result = Optional.of(deletingTeamMate);
+
+            teamMateRepository.findByTeam(team);
+            result = teamMates;
+
+        }};
+
+        teamService.deleteFromTeam(deletingTeamMate.getUser().getId(),team.getId(),currentUser);
+
+        new Verifications(){{
+
+            teamMateRepository.findByTeam(team);
+            times = 1;
+
+            teamRepository.delete(team);
+            times = 0;
+
+            teamMateRepository.findAll();
+            times = 0;
+
+        }};
+
+    }
+
+    @Test
+    public void testDeleteFromTeam_deleteAction_ownerDeletedByHimself(){
+        Long userId = 1L;
+        Long teamId = 1L;
+        Team team = new Team();
+        TeamMate currentTeamMate = new TeamMate();
+        User currentUser = new User();
+
+        team.setId(teamId);
+        currentUser.setId(userId);
+        currentTeamMate.setOwner(true);
+
+        TeamMate newOwner = new TeamMate();
+        newOwner.setId(1L);
+        List<TeamMate> teamMates = new ArrayList<>();
+        teamMates.add(newOwner);
+
+        //newOwner.setOwner(true);
+
+        new Expectations() {{
+            teamRepository.findById(team.getId());
+            result = Optional.of(team);
+
+            teamMateRepository.findByUserAndTeam(currentUser,team);
+            result = Optional.of(currentTeamMate);
+
+            teamMateRepository.findByTeam(team);
+            result = teamMates;
+        }};
+
+        teamService.deleteFromTeam(userId, teamId, currentUser);
+
+        new Verifications() {{
+            teamMateRepository.deleteByUserIdAndTeam(userId, team);
+            times = 1;
+
+            teamMateRepository.save(newOwner);
+            times = 1;
+        }};
+        
+
+    }
 
 }
 

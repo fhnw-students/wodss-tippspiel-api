@@ -17,4 +17,5 @@ public interface TeamMateRepository extends JpaRepository<TeamMate, String> {
     List<TeamMate> findByTeam(Team team);
 
     void deleteByTeam(Team team);
+
 }

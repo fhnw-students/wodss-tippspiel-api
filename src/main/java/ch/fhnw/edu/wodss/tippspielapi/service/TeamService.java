@@ -28,7 +28,7 @@ public class TeamService {
     @Autowired
     private TeamMateRepository teamMateRepository;
 
-    public List<UserTeamDto> getTeamsByUserId(Long userId){
+    public List<UserTeamDto> getTeamsByUserId(Long userId) {
         return teamRepository.findAllTeamsByUserId(userId);
     }
 
@@ -55,10 +55,10 @@ public class TeamService {
         Team team = teamRepository.findById(teamID)
                 .orElseThrow(() -> new ResourceNotFoundException("Team", "id", teamID));
 
-        TeamMate teamMate = teamMateRepository.findByUserAndTeam(user,team)
+        TeamMate teamMate = teamMateRepository.findByUserAndTeam(user, team)
                 .orElseThrow(() -> new ResourceNotFoundException("TeamMate", "user", user.getUsername()));
 
-        if(!teamMate.isOwner()){
+        if (!teamMate.isOwner()) {
             throw new ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException();
         }
 
@@ -72,26 +72,22 @@ public class TeamService {
         Team team = teamRepository.findById(teamID)
                 .orElseThrow(() -> new ResourceNotFoundException("Team", "id", teamID));
 
-        TeamMate currentTeamMate = teamMateRepository.findByUserAndTeam(currentUser,team)
+        TeamMate currentTeamMate = teamMateRepository.findByUserAndTeam(currentUser, team)
                 .orElseThrow(() -> new ResourceNotFoundException("TeamMate", "user", currentUser.getUsername()));
 
-        if(!currentTeamMate.isOwner() && !currentUser.getId().equals(userID) ){
+        if (!currentTeamMate.isOwner() && !currentUser.getId().equals(userID)) {
             throw new ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException();
         }
 
-        List<TeamMate> teamMates = teamMateRepository.findByTeam(team);
-        if( teamMates.size() == 1){
-            teamMateRepository.deleteByTeam(team);
-            teamRepository.delete(team);
-            return;
-        }
+        teamMateRepository.deleteByUserIdAndTeam(userID, team);
 
-        if(currentTeamMate.isOwner()){
-            teamMateRepository.deleteByUserIdAndTeam(userID, team);
-            TeamMate newOwner = teamMateRepository.findAll().get(0);
+        List<TeamMate> teamMates = teamMateRepository.findByTeam(team);
+        if (teamMates.isEmpty()) {
+            teamRepository.delete(team);
+        } else if (currentUser.getId().equals(userID) && currentTeamMate.isOwner()) {
+            TeamMate newOwner = teamMates.get(0);
             newOwner.setOwner(true);
             teamMateRepository.save(newOwner);
         }
-
     }
 }
