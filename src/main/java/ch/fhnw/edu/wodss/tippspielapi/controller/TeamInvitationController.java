@@ -30,9 +30,18 @@ public class TeamInvitationController {
     @DeleteMapping("/{teamInvitationId}")
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity findById(@PathVariable String teamInvitationId) {
+    public ResponseEntity delete(@PathVariable String teamInvitationId) {
         User currentUser = authenticationService.getCurrentUser();
         teamInvitationService.delete(Long.parseLong(teamInvitationId), currentUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{teamInvitationId}")
+    @CrossOrigin
+    @Secured({"ROLE_USER"})
+    public ResponseEntity accept(@PathVariable String teamInvitationId) {
+        User currentUser = authenticationService.getCurrentUser();
+        teamInvitationService.accept(Long.parseLong(teamInvitationId), currentUser);
         return ResponseEntity.ok().build();
     }
 

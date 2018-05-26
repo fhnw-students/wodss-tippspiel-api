@@ -79,4 +79,23 @@ public class TeamInvitationService {
 
         teamInvitationRepository.delete(teamInvitation);
     }
+
+    public void accept(long teamInvitationId, User currentUser) {
+        TeamInvitation teamInvitation = teamInvitationRepository.findById(teamInvitationId)
+                .orElseThrow(() -> new ResourceNotFoundException("TeamInvitation", "id", teamInvitationId));
+
+        Team team = teamInvitation.getTeam();
+
+        if (!currentUser.getEmail().equals(teamInvitation.getEmail()) || team == null) {
+            throw new NotAllowedException();
+        }
+
+        TeamMate teamMate = new TeamMate();
+        teamMate.setTeam(team);
+        teamMate.setUser(currentUser);
+        teamMate.setOwner(false);
+        teamMateRepository.save(teamMate);
+
+        teamInvitationRepository.delete(teamInvitation);
+    }
 }
