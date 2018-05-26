@@ -1,5 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserRankingDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRankingInformation;
@@ -21,7 +22,7 @@ public class RankingService {
    *
    * @return a {@link List<UserRanking>} containing the ranking of each user by its tips
    */
-  public List<UserRanking> generateRanking(int offset, int limit) {
+  public UserRankingDto generateRanking(int offset, int limit) {
     Page<UserRankingInformation> rankingInformation = rankingRepository
         .getUserRankingInformation(PageRequest.of(offset, limit));
     List<UserRanking> rankings = new ArrayList<>();
@@ -32,7 +33,11 @@ public class RankingService {
       UserRanking userRanking = new UserRanking(content.get(i), rank);
       rankings.add(userRanking);
     }
-    return rankings;
+
+    UserRankingDto userRankingDto = new UserRankingDto();
+    userRankingDto.setRankings(rankings);
+    userRankingDto.setTotalPages(rankingInformation.getTotalPages());
+    return userRankingDto;
   }
 
   public int countUserRankings() {

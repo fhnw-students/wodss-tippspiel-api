@@ -1,5 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserRankingDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository.UserRankingInformation;
@@ -39,7 +40,8 @@ public class RankingServiceTest {
       result = new ArrayList<UserRanking>();
     }};
 
-    List<UserRanking> userRanking = rankingService.generateRanking(5, 5);
+    UserRankingDto userRankingDto = rankingService.generateRanking(5, 5);
+    List<UserRanking> userRanking = userRankingDto.getRankings();
 
     Assert.assertTrue(userRanking.isEmpty());
   }
@@ -60,7 +62,8 @@ public class RankingServiceTest {
       this.result = userRankingInformation;
     }};
 
-    List<UserRanking> userRankings = rankingService.generateRanking(5, 5);
+    UserRankingDto userRankingDto = rankingService.generateRanking(5, 5);
+    List<UserRanking> userRankings = userRankingDto.getRankings();
 
     for (int i = 0; i < userRankings.size(); i++) {
       UserRanking userRanking = userRankings.get(i);
@@ -87,7 +90,8 @@ public class RankingServiceTest {
       result = userRankingInformation;
     }};
 
-    List<UserRanking> userRankings = rankingService.generateRanking(0, 1);
+    UserRankingDto userRankingDto = rankingService.generateRanking(0, 1);
+    List<UserRanking> userRankings = userRankingDto.getRankings();
 
     for (int i = 0; i < userRankings.size(); i++) {
       UserRanking userRanking = userRankings.get(i);

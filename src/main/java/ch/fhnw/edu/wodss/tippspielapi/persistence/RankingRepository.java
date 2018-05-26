@@ -18,7 +18,7 @@ public interface RankingRepository extends JpaRepository<Tip, Long> {
       + " left join user on tip.user_id = user.id"
       + " group by username, user.id"
       + " order by points desc, games desc, username asc",
-      countQuery = "select count(tip.id) from tip tip left join user on tip.user_id = user.id")
+      countQuery = "select count(distinct user_id) from tip")
   Page<UserRankingInformation> getUserRankingInformation(Pageable pageable);
 
   @Query(value = "select count(distinct user_id) from tip", nativeQuery = true)

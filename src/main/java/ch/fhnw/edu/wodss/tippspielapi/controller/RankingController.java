@@ -1,5 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserRankingDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
 import ch.fhnw.edu.wodss.tippspielapi.service.RankingService;
 import java.util.List;
@@ -25,7 +26,7 @@ public class RankingController {
   @Secured({"ROLE_USER"})
   public ResponseEntity getUserRanking(@RequestParam("offset") int offset,
       @RequestParam("limit") int limit) {
-    List<UserRanking> body = rankingService.generateRanking(offset, limit);
+    UserRankingDto body = rankingService.generateRanking(offset, limit);
     return ResponseEntity.ok().body(body);
   }
 
