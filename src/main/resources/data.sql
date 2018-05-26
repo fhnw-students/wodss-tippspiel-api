@@ -22,6 +22,28 @@ insert into `user` (`username`, `email`, `password`, `admin`)
           ('hirsch17', 'gerhard.hirschfeld17@students.fhnw.ch', '1234', 1),	          ('davu17', 'david.heimgartner17@students.fhnw.ch', '1234', 1),	          ('ken17', 'ken.iseli17@students.fhnw.ch', '1234', 0);
 
 
+insert into `team` ( `id`, `name` )
+  values  ( 1, 'Studies'),
+          ( 2, 'Hirschies'),
+          ( 3, 'Züri-West'),
+          ( 4, 'Aarau an de Aare');
+
+insert into `team_mate` ( `id`, `team_id`, `user_id`, `owner` )
+  values  ( 1, 1, 1, 0),
+          ( 2, 1, 2, 1),
+          ( 3, 1, 3, 0),
+          ( 4, 2, 1, 1),
+          ( 6, 3, 2, 1),
+          ( 7, 4, 1, 1);
+
+insert into `team_invitation` ( `id`, `team_id`, `email` )
+  values ( 1, 2, 'david.heimgartner@students.fhnw.ch'),
+         ( 2, 2, 'ken.iseli@students.fhnw.ch'),
+         ( 3, 3, 'gerhard.hirschfeld@students.fhnw.ch'),
+         ( 4, 3, 'david.heimgartner@students.fhnw.ch'),
+         ( 5, 4, 'gerhard.hirschfeld@students.fhnw.ch'),
+         ( 6, 4, 'ken.iseli@students.fhnw.ch');
+
 insert into `nation` ( `id`, `tournament_Group`, `code` )
   values  ( 'RUS', 'A', 'ru'),
           ( 'KSA', 'A', 'sa'),
@@ -130,7 +152,7 @@ values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
         ( 47, '2018-06-28 17:00:00', 'JPN', 'POL', 3, 6),
         ( 48, '2018-06-28 18:00:00', 'SEN', 'COL', 3, 5);
 
-update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
+/*update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
 update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 2;
 update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
 update game as g set g.host_score = 0, g.guest_score = 1 where g.id = 4;
@@ -221,3 +243,4 @@ insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `ti
                 (79,2,49,2,1,0,1,0,0,8),
                 (80,2,50,2,1,0,1,0,0,6),
                 (81,2,51,2,1,0,1,0,0,1);
+

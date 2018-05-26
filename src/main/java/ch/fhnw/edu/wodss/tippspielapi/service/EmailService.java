@@ -1,5 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.service.exception.EmailSendingException;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import com.sun.mail.smtp.SMTPTransport;
@@ -26,6 +27,8 @@ public class EmailService {
   public static final String VERIFICATION_EMAIL_CONTENT = "email.verification.content";
   private static final String RESET_EMAIL_SUBJECT = "email.reset.subject";
   private static final String RESET_EMAIL_CONTENT = "email.reset.content";
+  private static final String TEAM_INVITATION_EMAIL_SUBJECT = "email.team-invitation.subject";
+  private static final String TEAM_INVITATION_EMAIL_CONTENT = "email.team-invitation.content";
   public static final String CONTENT_TYPE = "text/html; charset=ISO-8859-1";
 
   @Autowired
@@ -77,6 +80,20 @@ public class EmailService {
     sendMessage(session, message);
     LOGGER.info("Sent password reset email with reset token [" + user.getResetToken()
         + "] to user [" + user.getEmail() + "].");
+  }
+
+  /**
+   * Sends a team invitation message to the given email in the given language.
+   */
+  public void sendInvitationEmailTo(String email, Team team, Locale locale) {
+    Session session = prepareSession();
+    MimeMessage message = createMessage(email, locale, session,
+            TEAM_INVITATION_EMAIL_SUBJECT, TEAM_INVITATION_EMAIL_CONTENT, team.getName(), frontendHost);
+    LOGGER.info("Sending team-invitation email [" + team.getName()
+            + "] to user [" + email + "].");
+    sendMessage(session, message);
+    LOGGER.info("Sent team-invitation email [" + team.getName()
+            + "] to user [" + email + "].");
   }
 
   private Session prepareSession() {
