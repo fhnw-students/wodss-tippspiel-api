@@ -78,10 +78,10 @@ public class UserController {
 
     @Secured({"ROLE_USER"})
     @CrossOrigin
-    @GetMapping(path = "/me/team-invitations", params = {"offset", "size"})
-    public ResponseEntity getInvitationsOfTeamsOfCurrentUser(@RequestParam("offset") int offset, @RequestParam("size") int size) {
+    @GetMapping(path = "/me/team-invitations", params = {"page", "size"})
+    public ResponseEntity getInvitationsOfTeamsOfCurrentUser(@RequestParam("page") int page, @RequestParam("size") int size) {
         User user = authenticationService.getCurrentUser();
-        PageDto pageDto = teamInvitationService.getMyInvitations(user, offset, size);
+        PageDto pageDto = teamInvitationService.getMyInvitations(user, page, size);
         return ResponseEntity.ok().body(pageDto);
     }
 

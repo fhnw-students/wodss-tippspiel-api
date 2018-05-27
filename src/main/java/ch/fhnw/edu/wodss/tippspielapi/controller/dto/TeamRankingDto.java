@@ -7,15 +7,15 @@ import java.util.List;
 
 public class TeamRankingDto {
 
-    private List<TeamRanking> rankings;
+    private List<TeamRanking> content;
     private int totalPages;
 
-    public List<TeamRanking> getRankings() {
-        return rankings;
+    public List<TeamRanking> getContent() {
+        return content;
     }
 
-    public void setRankings(List<TeamRanking> rankings) {
-        this.rankings = rankings;
+    public void setContent(List<TeamRanking> content) {
+        this.content = content;
     }
 
     public int getTotalPages() {

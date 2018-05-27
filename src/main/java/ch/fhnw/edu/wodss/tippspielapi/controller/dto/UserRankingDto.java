@@ -5,15 +5,15 @@ import java.util.List;
 
 public class UserRankingDto {
 
-    private List<UserRanking> rankings;
+    private List<UserRanking> content;
     private int totalPages;
 
-    public List<UserRanking> getRankings() {
-        return rankings;
+    public List<UserRanking> getContent() {
+        return content;
     }
 
-    public void setRankings(List<UserRanking> rankings) {
-        this.rankings = rankings;
+    public void setContent(List<UserRanking> content) {
+        this.content = content;
     }
 
     public int getTotalPages() {

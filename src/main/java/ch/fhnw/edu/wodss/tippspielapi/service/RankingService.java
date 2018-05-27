@@ -33,11 +33,11 @@ public class RankingService {
         if (username != null) {
             List<UserRankingInformation> allRankingInformation = rankingRepository.getAllUserRankingInformation();
 
-            List<UserRanking> userRankings = generateRanking(allRankingInformation, 0, 0, limit).getRankings().stream()
+            List<UserRanking> userRankings = generateRanking(allRankingInformation, 0, 0, limit).getContent().stream()
                     .filter(u -> u.getUsername().contains(username)).collect(Collectors.toList());
 
             UserRankingDto userRankingDto = new UserRankingDto();
-            userRankingDto.setRankings(getListOfPage(userRankings, offset, limit));
+            userRankingDto.setContent(getListOfPage(userRankings, offset, limit));
             userRankingDto.setTotalPages(getTotalPages(userRankings.size(), limit));
             return userRankingDto;
         } else {
@@ -89,7 +89,7 @@ public class RankingService {
         }
 
         UserRankingDto userRankingDto = new UserRankingDto();
-        userRankingDto.setRankings(rankings);
+        userRankingDto.setContent(rankings);
         userRankingDto.setTotalPages(totalPages);
         return userRankingDto;
     }
@@ -106,7 +106,7 @@ public class RankingService {
         }
 
         TeamRankingDto teamRankingDto = new TeamRankingDto();
-        teamRankingDto.setRankings(rankings);
+        teamRankingDto.setContent(rankings);
         teamRankingDto.setTotalPages(rankingInformation.getTotalPages());
         return teamRankingDto;
     }

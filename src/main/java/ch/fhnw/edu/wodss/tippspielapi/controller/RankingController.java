@@ -18,10 +18,10 @@ public class RankingController {
     @GetMapping("/users")
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity getUserRanking(@RequestParam("offset") int offset,
-                                         @RequestParam("limit") int limit,
+    public ResponseEntity getUserRanking(@RequestParam("page") int page,
+                                         @RequestParam("size") int size,
                                          @RequestParam("username") String username) {
-        UserRankingDto body = rankingService.generateUserRanking(username, offset, limit);
+        UserRankingDto body = rankingService.generateUserRanking(username, page, size);
         return ResponseEntity.ok().body(body);
     }
 
@@ -29,18 +29,18 @@ public class RankingController {
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity getTeamUserRanking(@PathVariable String teamId,
-                                             @RequestParam("offset") int offset,
-                                             @RequestParam("limit") int limit) {
-        UserRankingDto body = rankingService.generateTeamUserRanking(Long.parseLong(teamId), offset, limit);
+                                             @RequestParam("page") int page,
+                                             @RequestParam("size") int size) {
+        UserRankingDto body = rankingService.generateTeamUserRanking(Long.parseLong(teamId), page, size);
         return ResponseEntity.ok().body(body);
     }
 
     @GetMapping("/teams")
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity getTeamRanking(@RequestParam("offset") int offset,
-                                         @RequestParam("limit") int limit) {
-        TeamRankingDto body = rankingService.generateTeamRanking(offset, limit);
+    public ResponseEntity getTeamRanking(@RequestParam("page") int page,
+                                         @RequestParam("size") int size) {
+        TeamRankingDto body = rankingService.generateTeamRanking(page, size);
         return ResponseEntity.ok().body(body);
     }
 
