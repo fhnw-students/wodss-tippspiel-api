@@ -30,7 +30,7 @@ public class RankingService {
      * @return a {@link List<UserRanking>} containing the ranking of each user by its tips
      */
     public UserRankingDto generateUserRanking(String username, int offset, int limit) {
-        if (username != null) {
+        if (username != null && username.length() > 0) {
             List<UserRankingInformation> allRankingInformation = rankingRepository.getAllUserRankingInformation();
 
             List<UserRanking> userRankings = generateRanking(allRankingInformation, 0, 0, limit).getContent().stream()

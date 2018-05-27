@@ -20,7 +20,7 @@ public class RankingController {
     @Secured({"ROLE_USER"})
     public ResponseEntity getUserRanking(@RequestParam("page") int page,
                                          @RequestParam("size") int size,
-                                         @RequestParam("username") String username) {
+                                         @RequestParam(value = "username", required = false) String username) {
         UserRankingDto body = rankingService.generateUserRanking(username, page, size);
         return ResponseEntity.ok().body(body);
     }
