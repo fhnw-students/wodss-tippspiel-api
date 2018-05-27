@@ -22,8 +22,6 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
-
-
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.springframework.boot:spring-boot-starter-security')
@@ -32,8 +30,10 @@ dependencies {
     compile('mysql:mysql-connector-java')
 
     compile('javax.mail:mail:1.4')
-    compile ('javax.mail:javax.mail-api:1.6.1')
+    compile('javax.mail:javax.mail-api:1.6.1')
     compile('com.sun.mail:javax.mail:1.6.0')
+
+    compile('de.mkammerer:argon2-jvm:2.4')
 
     compileOnly('org.projectlombok:lombok')
 
@@ -41,3 +41,5 @@ dependencies {
     testCompile('org.springframework.security:spring-security-test')
     testCompile('org.jmockit:jmockit:1.39')
 }
+
+

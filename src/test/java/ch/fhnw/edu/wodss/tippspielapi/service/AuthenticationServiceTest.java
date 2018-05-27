@@ -7,6 +7,9 @@ import ch.fhnw.edu.wodss.tippspielapi.service.exception.IllegalPasswordException
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+import de.mkammerer.argon2.Argon2Helper;
 import java.util.Locale;
 import java.util.UUID;
 import mockit.Expectations;
