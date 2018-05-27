@@ -6,15 +6,20 @@ import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamMateDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserTeamDto;
 import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
 import ch.fhnw.edu.wodss.tippspielapi.exception.TeamQuotaIsAchievedException;
+import ch.fhnw.edu.wodss.tippspielapi.exception.UniqueTeamNameException;
 import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamMate;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamInvitationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamMateRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamRepository;
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.RollbackException;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -48,7 +53,7 @@ public class TeamService {
 
     public void checkIfUserIsInMoreThan4Teams(User user) {
         int amount = teamMateRepository.countByUser(user);
-        if(amount > 4) {
+        if (amount > 4) {
             throw new TeamQuotaIsAchievedException();
         }
     }
@@ -56,7 +61,19 @@ public class TeamService {
     public TeamDto create(NewTeamDto newTeamDto, User user) {
         checkIfUserIsInMoreThan4Teams(user);
         Team team = new Team(newTeamDto);
-        team = teamRepository.save(team);
+
+        try {
+            team = teamRepository.save(team);
+        } catch(DataIntegrityViolationException e) {
+            throw new UniqueTeamNameException();
+        }
+
+        TeamMate teamMate = new TeamMate();
+        teamMate.setTeam(team);
+        teamMate.setUser(user);
+        teamMate.setOwner(true);
+        teamMateRepository.save(teamMate);
+
         return new TeamDto(team);
     }
 
