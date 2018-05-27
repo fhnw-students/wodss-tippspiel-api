@@ -1,5 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamRankingDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserRankingDto;
 import ch.fhnw.edu.wodss.tippspielapi.service.RankingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,9 @@ public class RankingController {
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity getUserRanking(@RequestParam("offset") int offset,
-                                         @RequestParam("limit") int limit) {
-        UserRankingDto body = rankingService.generateUserRanking(offset, limit);
+                                         @RequestParam("limit") int limit,
+                                         @RequestParam("username") String username) {
+        UserRankingDto body = rankingService.generateUserRanking(username, offset, limit);
         return ResponseEntity.ok().body(body);
     }
 
@@ -33,13 +35,13 @@ public class RankingController {
         return ResponseEntity.ok().body(body);
     }
 
-//    @GetMapping("/teams")
-//    @CrossOrigin
-//    @Secured({"ROLE_USER"})
-//    public ResponseEntity getTeamRanking(@RequestParam("offset") int offset,
-//                                         @RequestParam("limit") int limit) {
-//        UserRankingDto body = rankingService.generateTeamRanking(offset, limit);
-//        return ResponseEntity.ok().body(body);
-//    }
+    @GetMapping("/teams")
+    @CrossOrigin
+    @Secured({"ROLE_USER"})
+    public ResponseEntity getTeamRanking(@RequestParam("offset") int offset,
+                                         @RequestParam("limit") int limit) {
+        TeamRankingDto body = rankingService.generateTeamRanking(offset, limit);
+        return ResponseEntity.ok().body(body);
+    }
 
 }
