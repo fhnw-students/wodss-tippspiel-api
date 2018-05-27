@@ -194,7 +194,8 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void testRegisterNewUser(@Mocked SecurityContextHolder anyInstance) {
+  public void testRegisterNewUser(@Mocked SecurityContextHolder anyInstance,
+      @Mocked ArgonPasswordEncoder instance) {
     User user = new User();
     user.setId(27L);
     user.setEmail("davu@students.ch");
@@ -209,6 +210,11 @@ public class AuthenticationServiceTest {
       userRepository.save((User) any);
       result = user;
 
+      ArgonPasswordEncoder.getInstance();
+      result = instance;
+
+      instance.encode("1234");
+      result = "1234";
     }};
 
     NewUserDto newUserDto = new NewUserDto();
