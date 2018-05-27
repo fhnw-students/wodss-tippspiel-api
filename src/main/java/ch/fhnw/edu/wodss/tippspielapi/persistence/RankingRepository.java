@@ -21,10 +21,6 @@ public interface RankingRepository extends JpaRepository<Tip, Long> {
       countQuery = "select count(distinct user_id) from tip")
   Page<UserRankingInformation> getUserRankingInformation(Pageable pageable);
 
-  @Query(value = "select count(distinct user_id) from tip", nativeQuery = true)
-  int countUserRankings();
-
-
   // We only use this class in the service to build the actual dto.
   interface UserRankingInformation {
 

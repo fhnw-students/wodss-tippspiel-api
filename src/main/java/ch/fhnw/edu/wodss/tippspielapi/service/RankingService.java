@@ -40,7 +40,4 @@ public class RankingService {
     return userRankingDto;
   }
 
-  public int countUserRankings() {
-    return rankingRepository.countUserRankings();
-  }
 }
