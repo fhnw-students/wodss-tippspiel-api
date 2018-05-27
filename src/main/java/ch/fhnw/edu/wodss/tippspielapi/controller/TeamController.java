@@ -48,7 +48,8 @@ public class TeamController {
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity createTeam(@Valid @RequestBody NewTeamDto newTeamDto) {
-        TeamDto teamDto = teamService.create(newTeamDto);
+        User user = authenticationService.getCurrentUser();
+        TeamDto teamDto = teamService.create(newTeamDto, user);
         return ResponseEntity.ok().body(teamDto);
     }
 

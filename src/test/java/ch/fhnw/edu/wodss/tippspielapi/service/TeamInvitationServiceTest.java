@@ -2,7 +2,6 @@ package ch.fhnw.edu.wodss.tippspielapi.service;
 
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamInvitationDto;
 import ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException;
-import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
 import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamInvitation;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamMate;
@@ -18,8 +17,8 @@ import mockit.integration.junit4.JMockit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +41,9 @@ public class TeamInvitationServiceTest {
 
     @Injectable
     private EmailService emailService;
+
+    @Injectable
+    private TeamService teamService;
 
     @Test(expected = NotAllowedException.class)
     public void testCreate_shouldFailIfTheCurrentUserIsNotTheOwner() {

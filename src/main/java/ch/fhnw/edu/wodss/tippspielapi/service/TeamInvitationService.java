@@ -34,6 +34,9 @@ public class TeamInvitationService {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private TeamService teamService;
+
     public TeamInvitationDto create(long teamId, String email, User currentUser, Locale locale) {
         Team team = teamRepository.findById(teamId)
                 .orElseThrow(() -> new ResourceNotFoundException("Team", "id", teamId));
@@ -81,6 +84,8 @@ public class TeamInvitationService {
     }
 
     public void accept(long teamInvitationId, User currentUser) {
+        teamService.checkIfUserIsInMoreThan4Teams(currentUser);
+
         TeamInvitation teamInvitation = teamInvitationRepository.findById(teamInvitationId)
                 .orElseThrow(() -> new ResourceNotFoundException("TeamInvitation", "id", teamInvitationId));
 
