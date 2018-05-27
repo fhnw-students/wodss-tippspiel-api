@@ -1,28 +1,30 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.PageDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamInvitationDto;
 import ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException;
 import ch.fhnw.edu.wodss.tippspielapi.model.Team;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamInvitation;
 import ch.fhnw.edu.wodss.tippspielapi.model.TeamMate;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
+import ch.fhnw.edu.wodss.tippspielapi.persistence.RankingRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamInvitationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamMateRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamRepository;
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Tested;
-import mockit.Verifications;
+import mockit.*;
 import mockit.integration.junit4.JMockit;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RunWith(JMockit.class)
 public class TeamInvitationServiceTest {
@@ -145,7 +147,7 @@ public class TeamInvitationServiceTest {
     }
 
     @Test
-    public void testGetMyInvitations_ShouldReturnAListOfInvitations() {
+    public void testGetMyInvitations_ShouldReturnAListOfInvitations(@Mocked Page<TeamInvitationDto> pageMock) {
         User currentUser = new User();
         currentUser.setEmail("example@email.io");
         Team team = new Team();
@@ -159,15 +161,23 @@ public class TeamInvitationServiceTest {
         teamInvitationB.setEmail("");
         teamInvitationB.setTeam(team);
         List<TeamInvitation> teamInvitations = Arrays.asList(teamInvitationA, teamInvitationB);
+        List<TeamInvitationDto> teamInvitationDtos = teamInvitations.stream()
+                .map(TeamInvitationDto::new).collect(Collectors.toList());
 
         new Expectations() {{
-            teamInvitationRepository.findByEmail(currentUser.getEmail());
-            result = teamInvitations;
+            teamInvitationRepository.findByEmail(currentUser.getEmail(), PageRequest.of(0, 10));
+            result = pageMock;
+
+            pageMock.getContent();
+            result = teamInvitationDtos;
+
+            pageMock.getTotalPages();
+            result = 1;
         }};
 
-        List<TeamInvitationDto> teamInvitationDtos = teamInvitationService.getMyInvitations(currentUser);
+        PageDto<TeamInvitationDto> pageDto = teamInvitationService.getMyInvitations(currentUser, 0, 10);
 
-        Assert.assertEquals(teamInvitations.size(), teamInvitationDtos.size());
+        Assert.assertEquals(teamInvitations.size(), pageDto.getContent().size());
     }
 
     @Test(expected = NotAllowedException.class)

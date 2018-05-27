@@ -1,13 +1,11 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamInvitationDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TippedGameDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserTeamDto;
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.*;
 import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -80,11 +78,11 @@ public class UserController {
 
     @Secured({"ROLE_USER"})
     @CrossOrigin
-    @GetMapping("/me/team-invitations")
-    public ResponseEntity getInvitationsOfTeamsOfCurrentUser() {
+    @GetMapping(path = "/me/team-invitations", params = {"offset", "size"})
+    public ResponseEntity getInvitationsOfTeamsOfCurrentUser(@RequestParam("offset") int offset, @RequestParam("size") int size) {
         User user = authenticationService.getCurrentUser();
-        List<TeamInvitationDto> teamInvitationDtos = teamInvitationService.getMyInvitations(user);
-        return ResponseEntity.ok().body(teamInvitationDtos);
+        PageDto pageDto = teamInvitationService.getMyInvitations(user, offset, size);
+        return ResponseEntity.ok().body(pageDto);
     }
-    
+
 }
