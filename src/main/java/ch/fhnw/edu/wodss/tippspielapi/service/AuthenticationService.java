@@ -5,6 +5,7 @@ import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
 import ch.fhnw.edu.wodss.tippspielapi.service.exception.IllegalPasswordException;
+import java.util.List;
 import java.util.Locale;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
@@ -60,9 +61,10 @@ public class AuthenticationService {
   }
 
   public User register(NewUserDto newUserDto, Locale locale) {
-    User newUser = userRepository.findByEmail(newUserDto.getEmail());
-    if (newUser == null) {
-      newUser = mapDtoToUser(newUserDto);
+    List<User> existingUsers = userRepository
+        .findByEmailOrUsername(newUserDto.getEmail(), newUserDto.getUsername());
+    if (existingUsers == null || existingUsers.isEmpty()) {
+      User newUser = mapDtoToUser(newUserDto);
       newUser = userRepository.save(newUser);
       emailService.sendVerificationEmail(newUser, locale);
       return newUser;
