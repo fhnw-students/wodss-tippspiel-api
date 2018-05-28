@@ -1,7 +1,44 @@
 insert into `user` (`username`, `email`, `password`, `admin`)
-  values  ('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '1234', 1),
-          ('davu', 'david.heimgartner@students.fhnw.ch', '1234', 1),
-          ('ken', 'ken.iseli@students.fhnw.ch', '1234', 0);
+  values
+          ('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
+          ('davu', 'heimgartner.david@gmail.com', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
+          ('ken', 'ken.iseli@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('hutschi', 'hoang.tran@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('kevin', 'kevin.kirn@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('gabu', 'gabriel.brunner@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('hirsch88', 'gery.hirschfeld@w3tec.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('david', 'david.weber@w3tec.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0);
+
+insert into `team` ( `id`, `name` )
+  values  ( 1, 'Studies'),
+          ( 2, 'Hirschies'),
+          ( 3, 'Züri-West'),
+          ( 4, 'Aarau an de Aare'),
+          ( 5, 'A Team'),
+          ( 6, 'B Team'),
+          ( 7, 'C Team'),
+          ( 8, 'w3tec');
+
+insert into `team_mate` ( `id`, `team_id`, `user_id`, `owner` )
+  values  ( 1, 1, 1, 0),
+          ( 2, 1, 2, 1),
+          ( 3, 1, 3, 0),
+          ( 4, 2, 1, 1),
+          ( 6, 3, 2, 1),
+          ( 7, 4, 1, 1),
+          ( 8, 5, 4, 1),
+          ( 9, 6, 5, 1),
+          ( 10, 7, 6, 1),
+          ( 11, 8, 7, 1),
+          ( 12, 8, 8, 0);
+
+insert into `team_invitation` ( `id`, `team_id`, `email` )
+  values ( 1, 2, 'david.heimgartner@students.fhnw.ch'),
+         ( 2, 2, 'ken.iseli@students.fhnw.ch'),
+         ( 3, 3, 'gerhard.hirschfeld@students.fhnw.ch'),
+         ( 4, 3, 'david.heimgartner@students.fhnw.ch'),
+         ( 5, 4, 'gerhard.hirschfeld@students.fhnw.ch'),
+         ( 6, 4, 'ken.iseli@students.fhnw.ch');
 
 insert into `nation` ( `id`, `tournament_Group`, `code` )
   values  ( 'RUS', 'A', 'ru'),
@@ -114,40 +151,17 @@ values  ( 1,  '2018-06-14 18:00:00', 'RUS', 'KSA', 1, 1),
 update game as g set g.host_score = 2, g.guest_score = 1 where g.id = 1;
 update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 2;
 update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
-update game as g set g.host_score = 0, g.guest_score = 1 where g.id = 4;
-update game as g set g.host_score = 2, g.guest_score = 2 where g.id = 5;
-update game as g set g.host_score = 3, g.guest_score = 1 where g.id = 6;
-update game as g set g.host_score = 1, g.guest_score = 1 where g.id = 7;
-update game as g set g.host_score = 2, g.guest_score = 3 where g.id = 8;
 
 insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `tipped_host_score_correctly`, `tipped_guest_score_correctly`, `tipped_winner_correctly`, `tipped_balance_and_winner_correctly`, `points` )
-values  (  1,  1, 1, 1, 1, 0, 1, 0, 0, 2 ),
-        (  2,  2, 1, 2, 1, 0, 1, 0, 0, 2 ),
-        (  3,  3, 1, 0, 2, 0, 0, 1, 0, 10 ),
-        (  4,  4, 1, 3, 1, 0, 1, 0, 0, 2 ),
-        (  5,  5, 1, 4, 1, 0, 0, 0, 0, 0 ),
-        (  6,  6, 1, 2, 3, 0, 0, 0, 0, 0 ),
-        (  7,  7, 1, 1, 1, 1, 1, 1, 1, 20 ),
-        (  8,  8, 1, 1, 2, 0, 0, 1, 1, 16 ),
-        (  9,  9, 1, 2, 0, 0, 0, 0, 0, 0 ),
-        ( 10, 10, 1, 2, 3, 0, 0, 0, 0, 0 ),
-        ( 11,  1, 2, 1, 1, 0, 0, 0, 0, 0 ),
-        ( 12,  2, 2, 2, 1, 0, 0, 0, 0, 0 ),
-        ( 13,  3, 2, 0, 2, 0, 0, 0, 0, 0 ),
-        ( 14,  4, 2, 3, 1, 0, 0, 0, 0, 0 ),
-        ( 15,  5, 2, 4, 1, 0, 0, 0, 0, 0 ),
-        ( 16,  6, 2, 2, 3, 0, 0, 0, 0, 0 ),
-        ( 17,  7, 2, 1, 1, 0, 0, 0, 0, 0 ),
-        ( 18,  8, 2, 1, 2, 0, 0, 0, 0, 0 ),
-        ( 19,  9, 2, 2, 0, 0, 0, 0, 0, 0 ),
-        ( 20, 10, 2, 2, 3, 0, 0, 0, 0, 0 ),
-        ( 21,  1, 3, 1, 1, 0, 0, 0, 0, 0 ),
-        ( 22,  2, 3, 2, 1, 0, 0, 0, 0, 0 ),
-        ( 23,  3, 3, 0, 2, 0, 0, 0, 0, 0 ),
-        ( 24,  4, 3, 3, 1, 0, 0, 0, 0, 0 ),
-        ( 25,  5, 3, 4, 1, 0, 0, 0, 0, 0 ),
-        ( 26,  6, 3, 2, 3, 0, 0, 0, 0, 0 ),
-        ( 27,  7, 3, 1, 1, 0, 0, 0, 0, 0 ),
-        ( 28,  8, 3, 1, 2, 0, 0, 0, 0, 0 ),
-        ( 29,  9, 3, 2, 0, 0, 0, 0, 0, 0 ),
-        ( 30, 10, 3, 2, 3, 0, 0, 0, 0, 0 );
+    values ( 1, 1, 1, 1, 1, 0, 1, 0, 0, 2 ),
+           ( 2, 1, 2, 2, 1, 1, 1, 1, 1, 20 ),
+           ( 3, 1, 3, 1, 0, 0, 0, 1, 1, 16 ),
+           ( 4, 2, 1, 1, 1, 1, 1, 1, 1, 20 ),
+           ( 5, 2, 2, 2, 1, 0, 1, 0, 0, 2 ),
+           ( 6, 2, 3, 3, 0, 0, 0, 0, 0, 0 ),
+           ( 7, 3, 1, 0, 2, 1, 0, 1, 0, 12 ),
+           ( 8, 3, 4, 0, 3, 1, 0, 1, 0, 12 ),
+           ( 9, 3, 5, 4, 4, 0, 1, 0, 0, 2 ),
+           ( 10, 1, 6, 1, 1, 0, 1, 0, 0, 2 ),
+           ( 11, 1, 7, 2, 1, 1, 1, 1, 1, 20 ),
+           ( 12, 1, 8, 2, 1, 1, 1, 1, 1, 20 );

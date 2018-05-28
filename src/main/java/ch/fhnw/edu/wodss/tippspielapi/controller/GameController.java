@@ -7,6 +7,7 @@ import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.AuthenticationService;
 import ch.fhnw.edu.wodss.tippspielapi.service.GameService;
 import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
+import ch.fhnw.edu.wodss.tippspielapi.service.TipService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -22,6 +23,9 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private TipService tipService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -63,7 +67,7 @@ public class GameController {
     @Secured({"ROLE_USER"})
     public ResponseEntity enterTip(@PathVariable String gameId, @RequestBody ScoreDto scoreDto) {
         User user = authenticationService.getCurrentUser();
-        Tip tip = gameService.enterTip(Long.parseLong(gameId), user, scoreDto);
+        Tip tip = tipService.enterTip(Long.parseLong(gameId), user, scoreDto);
         return ResponseEntity.ok().body(new TipDto(tip));
     }
 

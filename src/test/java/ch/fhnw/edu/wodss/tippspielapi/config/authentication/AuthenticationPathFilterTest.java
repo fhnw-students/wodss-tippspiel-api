@@ -107,7 +107,6 @@ public class AuthenticationPathFilterTest {
     Assert.assertEquals(HttpServletResponse.SC_OK, response.getStatus());
   }
 
-
   @Test
   public void testFilterApiPathWithBasicAuth() throws IOException, ServletException {
     MockHttpServletRequest request = new MockHttpServletRequest();

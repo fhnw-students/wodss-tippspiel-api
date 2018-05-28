@@ -20,7 +20,8 @@ public class TeamMate {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
-    private Boolean isOwner;
+    @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'", name = "owner")
+    private boolean owner;
+
 
 }

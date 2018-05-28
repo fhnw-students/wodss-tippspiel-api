@@ -1,11 +1,11 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller;
 
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TippedGameDto;
-import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserDto;
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.*;
 import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +20,12 @@ public class UserController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private TeamInvitationService teamInvitationService;
 
     @Autowired
     private AuthenticationService authenticationService;
@@ -38,11 +44,9 @@ public class UserController {
 
     @Secured({"ROLE_USER"})
     @CrossOrigin
-    @GetMapping(path = "/me/games")
-    public ResponseEntity getGamesOfCurrentUser(Locale locale) {
-        User user = authenticationService.getCurrentUser();
-
-        List<TippedGame> games = gameService.getGamesByUserId(user.getId());
+    @GetMapping(path = "/{username}/games")
+    public ResponseEntity getGamesOfUser(@PathVariable String username, Locale locale) {
+        List<TippedGame> games = gameService.getGamesByUsername(username);
         List<TippedGameDto> tippedGameDtos = games.stream()
                 .map(game -> new TippedGameDto(game, locale, i18NService))
                 .collect(Collectors.toList());
@@ -52,10 +56,20 @@ public class UserController {
 
     @Secured({"ROLE_USER"})
     @CrossOrigin
-    @GetMapping(path = "/{userId}/games")
-    public ResponseEntity getGamesOfUser(@PathVariable String userId) {
-        List<TippedGame> games = gameService.getGamesByUserId(Long.parseLong(userId));
-        return ResponseEntity.ok().body(games);
+    @GetMapping("/me/teams")
+    public ResponseEntity getTeamsOfCurrentUser() {
+        User user = authenticationService.getCurrentUser();
+        List<UserTeamDto> teams = teamService.getTeamsByUserId(user.getId());
+        return ResponseEntity.ok().body(teams);
     }
-    
+
+    @Secured({"ROLE_USER"})
+    @CrossOrigin
+    @GetMapping(path = "/me/team-invitations", params = {"page", "size"})
+    public ResponseEntity getInvitationsOfTeamsOfCurrentUser(@RequestParam("page") int page, @RequestParam("size") int size) {
+        User user = authenticationService.getCurrentUser();
+        PageDto pageDto = teamInvitationService.getMyInvitations(user, page, size);
+        return ResponseEntity.ok().body(pageDto);
+    }
+
 }

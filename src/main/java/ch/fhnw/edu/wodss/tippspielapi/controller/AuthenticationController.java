@@ -51,14 +51,6 @@ public class AuthenticationController {
     }
   }
 
-  @Secured({"ROLE_USER"})
-  @CrossOrigin
-  @PostMapping(path = "/logout")
-  public ResponseEntity logout() {
-    authenticationService.logout();
-    return ResponseEntity.ok().build();
-  }
-
   @CrossOrigin
   @PostMapping(path = "/register")
   public ResponseEntity<RegistrationResponse> register(Locale locale,
@@ -118,13 +110,9 @@ public class AuthenticationController {
   private class LoginResponse {
 
     private String token;
-    private String expiration;
 
     public LoginResponse(User user) {
       token = user.getToken();
-      final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
-      Date expirationDate = user.getExpiration();
-      expiration = simpleDateFormat.format(expirationDate);
     }
   }
 

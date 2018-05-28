@@ -19,7 +19,7 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, unique = true)
+  @Column(nullable = false, unique = true, length = 25)
   private String username;
 
   @Column(nullable = false, unique = true)
@@ -31,7 +31,7 @@ public class User {
   @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
   private boolean admin;
 
-  @Column(unique = true)
+  @Transient
   private String token;
 
   @Column
@@ -40,35 +40,8 @@ public class User {
   @Column
   private String resetToken;
 
-  @Column
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date expiration;
-
-  @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-  Set<TeamMate> teamMates = new HashSet<>();
-
-
-  /**
-   * Creates a new token that expires in an hour.
-   */
-  public void generateNewAuthenticationToken() {
-    token = UUID.randomUUID().toString();
-    Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.HOUR, 1);
-    expiration = calendar.getTime();
-  }
-
-  /**
-   * Determines whether this user's token has expired.
-   */
-  public boolean hasAuthenticationTokenExpired() {
-    Calendar now = Calendar.getInstance();
-    return expiration == null || expiration.before(now.getTime());
-  }
-
   public void clearToken() {
     token = null;
-    expiration = null;
   }
 
   public void generateVerificationToken() {
@@ -118,5 +91,20 @@ public class User {
   @Override
   public int hashCode() {
     return Objects.hash(id, username, email, password, admin);
+  }
+
+
+  @Override
+  public String toString() {
+    return "User{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
+            ", admin=" + admin +
+            ", token='" + token + '\'' +
+            ", verificationToken='" + verificationToken + '\'' +
+            ", resetToken='" + resetToken + '\'' +
+            '}';
   }
 }
