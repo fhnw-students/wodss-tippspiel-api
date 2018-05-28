@@ -1,13 +1,10 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller.dto;
 
-import ch.fhnw.edu.wodss.tippspielapi.model.Game;
-import ch.fhnw.edu.wodss.tippspielapi.model.Tip;
 import ch.fhnw.edu.wodss.tippspielapi.model.TippedGame;
 import ch.fhnw.edu.wodss.tippspielapi.service.I18NService;
-import lombok.Data;
-
 import java.util.Date;
 import java.util.Locale;
+import lombok.Data;
 
 @Data
 public class TippedGameDto {

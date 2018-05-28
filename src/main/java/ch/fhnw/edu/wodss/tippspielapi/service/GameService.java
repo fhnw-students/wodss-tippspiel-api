@@ -19,93 +19,121 @@ import java.util.List;
 @Transactional
 public class GameService {
 
-    @Autowired
-    private TipService tipService;
+  @Autowired
+  private TipService tipService;
 
-    @Autowired
-    private GameRepository gameRepository;
+  @Autowired
+  private GameRepository gameRepository;
 
-    @Autowired
-    private GamePhaseRepository gamePhaseRepository;
+  @Autowired
+  private GamePhaseRepository gamePhaseRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
-    @Autowired
-    private LocationRepository locationRepository;
+  @Autowired
+  private TipRepository tipRepository;
 
-    @Autowired
-    private NationRepository nationRepository;
+  @Autowired
+  private LocationRepository locationRepository;
 
-    private TipBuilder tipBuilder;
+  @Autowired
+  private NationRepository nationRepository;
 
-    public GameService() {
-        this.tipBuilder = new TipBuilder();
-    }
+  private TipBuilder tipBuilder;
 
-    public GameService(TipBuilder tipBuilder) {
-        this.tipBuilder = tipBuilder;
-    }
+  public GameService() {
+    this.tipBuilder = new TipBuilder();
+  }
 
-    public List<TippedGame> getGamesByUserId(Long userId) {
-        List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(userId);
-        return games;
-    }
+  public GameService(TipBuilder tipBuilder) {
+    this.tipBuilder = tipBuilder;
+  }
 
-    public List<TippedGame> getGamesByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(user.getId());
-        return games;
-    }
+  public List<TippedGame> getGamesByUserId(Long userId) {
+    List<TippedGame> tippedGames = gameRepository.findAllTippedGamesByUserId(userId);
+    List<Tip> allTips = tipRepository.findAll();
+    tippedGames.stream().forEach(tippedGame -> {
+      allTips.stream()
+          .filter(tip -> tippedGame.getId().equals(tip.getGame().getId()))
+          .forEach(tip -> {
+            if (tip.guestWins()) {
+              tippedGame.increaseGuestWinsPercentage();
+            } else if (tip.hostWins()) {
+              tippedGame.increaseHostWinsPercentage();
+            } else {
+              tippedGame.increaseDrawPercentage();
+            }
+          });
 
-    public List<Game> getAll() {
-        return gameRepository.findAll();
-    }
+      int amountOfFilledTips = Math.max((int) allTips.stream().filter(Tip::isFilledTip).count(), 1);
+      int hostWinsPercentage = (tippedGame.getHostWinsPercentage() * 100) / amountOfFilledTips;
+      tippedGame.setHostWinsPercentage(hostWinsPercentage);
+      int guestWinsPercentage = (tippedGame.getGuestWinsPercentage() * 100) / amountOfFilledTips;
+      tippedGame.setGuestWinsPercentage(guestWinsPercentage);
+      tippedGame.setDrawPercentage(100 - guestWinsPercentage - hostWinsPercentage);
+    });
+    return tippedGames;
+  }
 
-    public Game create(NewGameDto newGameDto) {
-        Game game = buildGame(newGameDto);
-        return gameRepository.save(game);
-    }
+  public List<TippedGame> getGamesByUsername(String username) {
+    User user = userRepository.findByUsername(username);
+    List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(user.getId());
+    return games;
+  }
 
-    Game buildGame(NewGameDto newGameDto) {
-        Game game = new Game();
-        game.setDate(newGameDto.getDate());
+  public List<Game> getAll() {
+    return gameRepository.findAll();
+  }
 
-        Location location = locationRepository.findById(newGameDto.getLocation().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Location", "id", newGameDto.getLocation().getId()));
+  public Game create(NewGameDto newGameDto) {
+    Game game = buildGame(newGameDto);
+    return gameRepository.save(game);
+  }
 
-        GamePhase gamePhase = gamePhaseRepository.findById(newGameDto.getPhase().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Phase", "id", newGameDto.getPhase().getId()));
+  Game buildGame(NewGameDto newGameDto) {
+    Game game = new Game();
+    game.setDate(newGameDto.getDate());
 
-        Nation hostNation = nationRepository.findById(newGameDto.getHost().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nation", "id", newGameDto.getHost().getId()));
+    Location location = locationRepository.findById(newGameDto.getLocation().getId())
+        .orElseThrow(() -> new ResourceNotFoundException("Location", "id",
+            newGameDto.getLocation().getId()));
 
-        Nation guestNation = nationRepository.findById(newGameDto.getGuest().getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Nation", "id", newGameDto.getGuest().getId()));
+    GamePhase gamePhase = gamePhaseRepository.findById(newGameDto.getPhase().getId())
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Phase", "id", newGameDto.getPhase().getId()));
 
-        game.setLocation(location);
-        game.setPhase(gamePhase);
-        game.setHost(hostNation);
-        game.setGuest(guestNation);
-        return game;
-    }
+    Nation hostNation = nationRepository.findById(newGameDto.getHost().getId())
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Nation", "id", newGameDto.getHost().getId()));
 
-    public void delete(Long gameId) {
-        this.gameRepository.deleteById(gameId);
-    }
+    Nation guestNation = nationRepository.findById(newGameDto.getGuest().getId())
+        .orElseThrow(
+            () -> new ResourceNotFoundException("Nation", "id", newGameDto.getGuest().getId()));
 
-    public Game enterScore(Long gameId, ScoreDto scoreDto) {
-        Game game = gameRepository.findById(gameId)
-                .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
+    game.setLocation(location);
+    game.setPhase(gamePhase);
+    game.setHost(hostNation);
+    game.setGuest(guestNation);
+    return game;
+  }
 
-        game.setHostScore(scoreDto.getHostScore());
-        game.setGuestScore(scoreDto.getGuestScore());
+  public void delete(Long gameId) {
+    this.gameRepository.deleteById(gameId);
+  }
 
-        game = gameRepository.save(game);
+  public Game enterScore(Long gameId, ScoreDto scoreDto) {
+    Game game = gameRepository.findById(gameId)
+        .orElseThrow(() -> new ResourceNotFoundException("Game", "id", gameId));
 
-        tipService.calculatePointsOfTipsByGame(game);
+    game.setHostScore(scoreDto.getHostScore());
+    game.setGuestScore(scoreDto.getGuestScore());
 
-        return game;
-    }
+    game = gameRepository.save(game);
+
+    tipService.calculatePointsOfTipsByGame(game);
+
+    return game;
+  }
 
 }
