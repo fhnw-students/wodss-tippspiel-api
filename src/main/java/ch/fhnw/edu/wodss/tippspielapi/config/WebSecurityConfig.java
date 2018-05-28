@@ -47,7 +47,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
   @Bean
-  // TODO use argon to store passwords
   public static PasswordEncoder passwordEncoder() {
     return ArgonPasswordEncoder.getInstance();
   }
