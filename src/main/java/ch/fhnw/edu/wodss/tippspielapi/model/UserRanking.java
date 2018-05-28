@@ -16,7 +16,7 @@ public class UserRanking {
     username = userRankingInformation.getUsername();
     email = userRankingInformation.getEmail();
     userId = userRankingInformation.getUserId();
-    points = userRankingInformation.getPoints();
+    points = userRankingInformation.getPoints() == null ? 0: userRankingInformation.getPoints();
     games = userRankingInformation.getGames();
     this.rank = rank;
   }

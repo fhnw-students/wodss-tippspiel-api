@@ -45,14 +45,15 @@ public interface RankingRepository extends JpaRepository<Tip, Long> {
             + " user.id AS userId,"
             + " sum(tip.points) AS points,"
             + " count(tip.points) AS games"
-            + " FROM tip tip"
-            + " INNER JOIN user ON tip.user_id = user.id"
+            + " FROM user user"
+            + " LEFT JOIN tip ON tip.user_id = user.id"
             + " INNER JOIN team_mate ON team_mate.user_id = user.id"
             + " WHERE team_mate.team_id = :teamId"
             + " GROUP BY username, user.id"
             + " ORDER BY points DESC, games DESC, username ASC",
-            countQuery = "SELECT count(DISTINCT tip.user_id)"
-                    + " FROM tip"
+            countQuery = "SELECT count(DISTINCT user.id)"
+                    + " FROM user user"
+                    + " LEFT JOIN tip ON tip.user_id = user.id"
                     + " INNER JOIN team_mate ON team_mate.user_id = tip.user_id"
                     + " WHERE team_mate.team_id = :teamId")
     Page<UserRankingInformation> getTeamUserRankingInformation(@Param("teamId") long teamId, Pageable pageable);
@@ -66,7 +67,7 @@ public interface RankingRepository extends JpaRepository<Tip, Long> {
 
         Long getUserId();
 
-        int getPoints();
+        Integer getPoints();
 
         int getGames();
     }
