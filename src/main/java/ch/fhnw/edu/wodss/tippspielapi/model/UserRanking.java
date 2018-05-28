@@ -20,4 +20,9 @@ public class UserRanking {
     games = userRankingInformation.getGames();
     this.rank = rank;
   }
+
+  public boolean contains(String username) {
+    return this.username.toUpperCase().contains(username.toUpperCase());
+  }
+
 }

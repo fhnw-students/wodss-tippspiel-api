@@ -39,8 +39,9 @@ public class RankingController {
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity getTeamRanking(@RequestParam("page") int page,
-                                         @RequestParam("size") int size) {
-        TeamRankingDto body = rankingService.generateTeamRanking(page, size);
+                                         @RequestParam("size") int size,
+                                         @RequestParam(value = "teamname", required = false) String teamname) {
+        TeamRankingDto body = rankingService.generateTeamRankingWithTeamname(teamname, page, size);
         return ResponseEntity.ok().body(body);
     }
 

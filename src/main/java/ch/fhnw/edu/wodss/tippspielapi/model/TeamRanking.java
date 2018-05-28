@@ -19,4 +19,9 @@ public class TeamRanking {
     games = teamRankingInformation.getGames();
     this.rank = rank;
   }
+
+  public boolean contains(String name) {
+    return this.name.toUpperCase().contains(name.toUpperCase());
+  }
+
 }

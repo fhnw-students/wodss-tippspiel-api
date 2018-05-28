@@ -34,7 +34,7 @@ public class RankingService {
             List<UserRankingInformation> allRankingInformation = rankingRepository.getAllUserRankingInformation();
 
             List<UserRanking> userRankings = generateRanking(allRankingInformation, 0, 0, limit).getContent().stream()
-                    .filter(u -> u.getUsername().contains(username)).collect(Collectors.toList());
+                    .filter(u -> u.contains(username)).collect(Collectors.toList());
 
             UserRankingDto userRankingDto = new UserRankingDto();
             userRankingDto.setContent(getListOfPage(userRankings, offset, limit));
@@ -54,7 +54,7 @@ public class RankingService {
         return pageSize + ((size % limit == 0) ? 0 : 1);
     }
 
-    public List<UserRanking> getListOfPage(List<UserRanking> userRankings, int offset, int limit) {
+    public <T> List<T> getListOfPage(List<T> userRankings, int offset, int limit) {
         int totalPages = getTotalPages(userRankings.size(), limit);
 
         if (offset > totalPages || offset < 0 || totalPages == 0) {
@@ -94,6 +94,20 @@ public class RankingService {
         return userRankingDto;
     }
 
+    public TeamRankingDto generateTeamRanking(List<RankingRepository.TeamRankingInformation> content, int totalPages, int offset, int limit) {
+        List<TeamRanking> rankings = new ArrayList<>();
+        for (int i = 0; i < content.size(); i++) {
+            int rank = (i + 1) + offset * limit;
+            TeamRanking teamRanking = new TeamRanking(content.get(i), rank);
+            rankings.add(teamRanking);
+        }
+
+        TeamRankingDto teamRankingDto = new TeamRankingDto();
+        teamRankingDto.setContent(rankings);
+        teamRankingDto.setTotalPages(totalPages);
+        return teamRankingDto;
+    }
+
     public TeamRankingDto generateTeamRanking(int offset, int limit) {
         Page<RankingRepository.TeamRankingInformation> rankingInformation = rankingRepository.getTeamRankingInformation(PageRequest.of(offset, limit));
         List<TeamRanking> rankings = new ArrayList<>();
@@ -109,5 +123,21 @@ public class RankingService {
         teamRankingDto.setContent(rankings);
         teamRankingDto.setTotalPages(rankingInformation.getTotalPages());
         return teamRankingDto;
+    }
+
+    public TeamRankingDto generateTeamRankingWithTeamname(String teamname, int offset, int limit) {
+        if (teamname != null && teamname.length() > 0) {
+            List<RankingRepository.TeamRankingInformation> allRankingInformation = rankingRepository.getAllTeamRankingInformation();
+
+            List<TeamRanking> teamRankings = generateTeamRanking(allRankingInformation, 0, 0, limit).getContent().stream()
+                    .filter(t -> t.contains(teamname)).collect(Collectors.toList());
+
+            TeamRankingDto teamRankingDto = new TeamRankingDto();
+            teamRankingDto.setContent(getListOfPage(teamRankings, offset, limit));
+            teamRankingDto.setTotalPages(getTotalPages(teamRankings.size(), limit));
+            return teamRankingDto;
+        } else {
+            return generateTeamRanking(offset, limit);
+        }
     }
 }

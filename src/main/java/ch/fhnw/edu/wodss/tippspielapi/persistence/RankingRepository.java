@@ -89,6 +89,24 @@ public interface RankingRepository extends JpaRepository<Tip, Long> {
                     + " GROUP BY team.id")
     Page<TeamRankingInformation> getTeamRankingInformation(Pageable pageable);
 
+    @Query(nativeQuery = true, value = "SELECT"
+            + " team.name AS name,"
+            + " team.id AS teamId,"
+            + " sum(tip.points) AS points,"
+            + " count(tip.points) AS games"
+            + " FROM tip tip"
+            + " INNER JOIN user ON tip.user_id = user.id"
+            + " INNER JOIN team_mate ON team_mate.user_id = user.id"
+            + " INNER JOIN team ON team_mate.team_id = team.id"
+            + " GROUP BY team.id"
+            + " ORDER BY points DESC, games DESC, team.name ASC",
+            countQuery = "SELECT count(DISTINCT tip.user_id)"
+                    + " FROM tip"
+                    + " INNER JOIN team_mate ON team_mate.user_id = tip.user_id"
+                    + " INNER JOIN team ON team_mate.team_id = team.id"
+                    + " GROUP BY team.id")
+    List<TeamRankingInformation> getAllTeamRankingInformation();
+
     // We only use this class in the service to build the actual dto.
     interface TeamRankingInformation {
 
