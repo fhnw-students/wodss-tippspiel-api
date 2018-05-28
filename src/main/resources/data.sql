@@ -1,32 +1,23 @@
 insert into `user` (`username`, `email`, `password`, `admin`)
   values
           ('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
-          ('davu', 'david.heimgartner@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
+          ('davu', 'heimgartner.david@gmail.com', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
           ('ken', 'ken.iseli@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch1', 'gerhard.hirschfeld1@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu1', 'david.heimgartner1@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken1', 'ken.iseli1@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch2', 'gerhard.hirschfeld2@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu2', 'david.heimgartner2@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken2', 'ken.iseli2@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch3', 'gerhard.hirschfeld3@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu3', 'david.heimgartner3@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken3', 'ken.iseli3@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch4', 'gerhard.hirschfeld4@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu4', 'david.heimgartner4@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken4', 'ken.iseli4@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch5', 'gerhard.hirschfeld5@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu5', 'david.heimgartner5@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken5', 'ken.iseli5@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch6', 'gerhard.hirschfeld6@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu6', 'david.heimgartner6@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken6', 'ken.iseli6@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch7', 'gerhard.hirschfeld7@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu7', 'david.heimgartner7@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken7', 'ken.iseli7@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch8', 'gerhard.hirschfeld8@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu8', 'david.heimgartner8@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken8', 'ken.iseli8@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch9', 'gerhard.hirschfeld9@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu9', 'david.heimgartner9@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken9', 'ken.iseli9@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch10', 'gerhard.hirschfeld10@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu10', 'david.heimgartner10@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken10', 'ken.iseli10@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch11', 'gerhard.hirschfeld11@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu11', 'david.heimgartner11@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken11', 'ken.iseli11@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch12', 'gerhard.hirschfeld12@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu12', 'david.heimgartner12@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken12', 'ken.iseli12@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch13', 'gerhard.hirschfeld13@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu13', 'david.heimgartner13@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken13', 'ken.iseli13@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch14', 'gerhard.hirschfeld14@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu14', 'david.heimgartner14@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken14', 'ken.iseli14@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch15', 'gerhard.hirschfeld15@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu15', 'david.heimgartner15@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken15', 'ken.iseli15@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch16', 'gerhard.hirschfeld16@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu16', 'david.heimgartner16@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken16', 'ken.iseli16@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
-          ('hirsch17', 'gerhard.hirschfeld17@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu17', 'david.heimgartner17@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken17', 'ken.iseli17@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0);
-
+          ('hutschi', 'hoang.tran@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('kevin', 'kevin.kirn@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('gabu', 'gabriel.brunner@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('hirsch88', 'gery.hirschfeld@w3tec.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
+          ('david', 'david.weber@w3tec.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0);
 
 insert into `team` ( `id`, `name` )
   values  ( 1, 'Studies'),
           ( 2, 'Hirschies'),
           ( 3, 'Züri-West'),
-          ( 4, 'Aarau an de Aare');
+          ( 4, 'Aarau an de Aare'),
+          ( 5, 'A Team'),
+          ( 6, 'B Team'),
+          ( 7, 'C Team'),
+          ( 8, 'w3tec');
 
 insert into `team_mate` ( `id`, `team_id`, `user_id`, `owner` )
   values  ( 1, 1, 1, 0),
@@ -34,7 +25,12 @@ insert into `team_mate` ( `id`, `team_id`, `user_id`, `owner` )
           ( 3, 1, 3, 0),
           ( 4, 2, 1, 1),
           ( 6, 3, 2, 1),
-          ( 7, 4, 1, 1);
+          ( 7, 4, 1, 1),
+          ( 8, 5, 4, 1),
+          ( 9, 6, 5, 1),
+          ( 10, 7, 6, 1),
+          ( 11, 8, 7, 1),
+          ( 12, 8, 8, 0);
 
 insert into `team_invitation` ( `id`, `team_id`, `email` )
   values ( 1, 2, 'david.heimgartner@students.fhnw.ch'),
@@ -159,10 +155,13 @@ update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
 insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `tipped_host_score_correctly`, `tipped_guest_score_correctly`, `tipped_winner_correctly`, `tipped_balance_and_winner_correctly`, `points` )
     values ( 1, 1, 1, 1, 1, 0, 1, 0, 0, 2 ),
            ( 2, 1, 2, 2, 1, 1, 1, 1, 1, 20 ),
-           ( 3, 1, 3, 1, 0, 0, 0, 1, 1, 16 ),
+           ( 3, 1, 3, 1, 0, 0, 0, 1, 1, 16 ), 
            ( 4, 2, 1, 1, 1, 1, 1, 1, 1, 20 ),
            ( 5, 2, 2, 2, 1, 0, 1, 0, 0, 2 ),
            ( 6, 2, 3, 3, 0, 0, 0, 0, 0, 0 ),
            ( 7, 3, 1, 0, 2, 1, 0, 1, 0, 12 ),
-           ( 8, 3, 2, 0, 3, 1, 0, 1, 0, 12 ),
-           ( 9, 3, 3, 4, 4, 0, 1, 0, 0, 2 );
+           ( 8, 3, 4, 0, 3, 1, 0, 1, 0, 12 ),
+           ( 9, 3, 5, 4, 4, 0, 1, 0, 0, 2 ),
+           ( 10, 1, 6, 1, 1, 0, 1, 0, 0, 2 ),
+           ( 11, 1, 7, 2, 1, 1, 1, 1, 1, 20 ),
+           ( 12, 1, 8, 2, 1, 1, 1, 1, 1, 20 );
