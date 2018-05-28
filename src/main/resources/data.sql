@@ -1,6 +1,6 @@
 insert into `user` (`username`, `email`, `password`, `admin`)
   values
-          ('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
+          --('hirsch', 'gerhard.hirschfeld@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
           ('davu', 'david.heimgartner@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),
           ('ken', 'ken.iseli@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),
           ('hirsch1', 'gerhard.hirschfeld1@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('davu1', 'david.heimgartner1@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 1),	          ('ken1', 'ken.iseli1@students.fhnw.ch', '$argon2i$v=19$m=131072,t=5,p=1$7VlX7y1qEsOTU0iSCW5ngw$T5xq+N2LF6ny5tKoTRt56G242F0oa5B3ky5CMxCd6Ro', 0),

@@ -26,6 +26,9 @@ public class AuthenticationService {
   @Autowired
   private EmailService emailService;
 
+  @Autowired
+  private TokenHelper tokenHelper;
+
   public User getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Object principal = authentication.getPrincipal();
@@ -38,11 +41,11 @@ public class AuthenticationService {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
     User user = userRepository.findByUsername(username);
+    String token = tokenHelper.generateToken(username);
     if (user.isNotVerified()) {
       throw new IllegalStateException("User [" + user.getUsername() + "] has not been verified.");
-    } else if (user.hasAuthenticationTokenExpired()) {
-      user.generateNewAuthenticationToken();
-      user = userRepository.save(user);
+    } else {
+      user.setToken(token);
     }
     return user;
   }

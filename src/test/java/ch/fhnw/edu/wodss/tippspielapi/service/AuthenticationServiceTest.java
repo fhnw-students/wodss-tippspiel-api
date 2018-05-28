@@ -44,6 +44,9 @@ public class AuthenticationServiceTest {
   @Injectable
   User user;
 
+  @Injectable
+  TokenHelper tokenHelper;
+
   @Test
   public void testLoginWithExpiredToken(@Mocked SecurityContextHolder anyInstance) {
     UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
@@ -61,12 +64,6 @@ public class AuthenticationServiceTest {
 
       userRepository.findByUsername("david");
       result = user;
-
-      user.hasAuthenticationTokenExpired();
-      result = true;
-
-      userRepository.save(user);
-      result = user;
     }};
 
     authenticationService.login();
@@ -76,9 +73,6 @@ public class AuthenticationServiceTest {
       times = 1;
 
       userRepository.findByUsername("david");
-      times = 1;
-
-      userRepository.save((User) any);
       times = 1;
     }};
   }
@@ -100,9 +94,6 @@ public class AuthenticationServiceTest {
 
       userRepository.findByUsername("david");
       result = user;
-
-      user.hasAuthenticationTokenExpired();
-      result = false;
 
       user.getToken();
       result = "dba4d610-8113-4a40-81d4-e5d53d1f55d9";
