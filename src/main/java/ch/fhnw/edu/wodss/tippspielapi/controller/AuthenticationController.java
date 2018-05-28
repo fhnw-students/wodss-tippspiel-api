@@ -118,13 +118,9 @@ public class AuthenticationController {
   private class LoginResponse {
 
     private String token;
-    private String expiration;
 
     public LoginResponse(User user) {
       token = user.getToken();
-      final SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
-//      Date expirationDate = user.getExpiration();
-//      expiration = simpleDateFormat.format(expirationDate);
     }
   }
 
