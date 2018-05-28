@@ -153,40 +153,6 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void testLogoutLoggedInUser(@Mocked SecurityContextHolder anyInstance) {
-
-    new Expectations() {{
-      SecurityContextHolder.getContext();
-      result = securityContextMock;
-
-      JwtAuthenticationToken jwtAuthenticationToken = new JwtAuthenticationToken(
-          "dba4d610-8113-4a40-81d4-e5d53d1f55d9");
-      jwtAuthenticationToken.setPrincipal("hirsch");
-      securityContextMock.getAuthentication();
-      this.result = jwtAuthenticationToken;
-
-      userRepository.findByUsername("hirsch");
-      this.result = user;
-    }};
-
-    authenticationService.logout();
-
-    new Verifications() {{
-      securityContextMock.getAuthentication();
-      times = 1;
-
-      userRepository.findByUsername("hirsch");
-      times = 1;
-
-      user.clearToken();
-      times = 1;
-
-      userRepository.save(user);
-      times = 1;
-    }};
-  }
-
-  @Test
   public void testRegisterNewUser(@Mocked SecurityContextHolder anyInstance,
       @Mocked ArgonPasswordEncoder instance) {
     User user = new User();

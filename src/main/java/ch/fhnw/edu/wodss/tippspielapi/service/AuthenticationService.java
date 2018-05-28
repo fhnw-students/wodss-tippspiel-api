@@ -51,15 +51,6 @@ public class AuthenticationService {
     return user;
   }
 
-  public void logout() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    Object principal = authentication.getPrincipal();
-    String username = principal.toString();
-    User user = userRepository.findByUsername(username);
-    user.clearToken();
-    userRepository.save(user);
-  }
-
   public User register(NewUserDto newUserDto, Locale locale) {
     List<User> existingUsers = userRepository
         .findByEmailOrUsername(newUserDto.getEmail(), newUserDto.getUsername());

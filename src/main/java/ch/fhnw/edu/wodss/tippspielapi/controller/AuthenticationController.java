@@ -51,14 +51,6 @@ public class AuthenticationController {
     }
   }
 
-  @Secured({"ROLE_USER"})
-  @CrossOrigin
-  @PostMapping(path = "/logout")
-  public ResponseEntity logout() {
-    authenticationService.logout();
-    return ResponseEntity.ok().build();
-  }
-
   @CrossOrigin
   @PostMapping(path = "/register")
   public ResponseEntity<RegistrationResponse> register(Locale locale,
