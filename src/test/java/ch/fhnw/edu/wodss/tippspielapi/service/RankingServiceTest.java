@@ -147,7 +147,7 @@ public class RankingServiceTest {
             }
 
             @Override
-            public int getPoints() {
+            public Integer getPoints() {
                 return points;
             }
 

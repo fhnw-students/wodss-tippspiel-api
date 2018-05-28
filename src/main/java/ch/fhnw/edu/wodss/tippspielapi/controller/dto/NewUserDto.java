@@ -1,8 +1,14 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller.dto;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
 public class NewUserDto {
 
+  @Min(3)
+  @Max(25)
   private String username;
+
   private String email;
   private String password;
 
