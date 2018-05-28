@@ -53,33 +53,16 @@ public class GameService {
   public List<TippedGame> getGamesByUserId(Long userId) {
     List<TippedGame> tippedGames = gameRepository.findAllTippedGamesByUserId(userId);
     List<Tip> allTips = tipRepository.findAll();
-    tippedGames.stream().forEach(tippedGame -> {
-      allTips.stream()
-          .filter(tip -> tippedGame.getId().equals(tip.getGame().getId()))
-          .forEach(tip -> {
-            if (tip.guestWins()) {
-              tippedGame.increaseGuestWinsPercentage();
-            } else if (tip.hostWins()) {
-              tippedGame.increaseHostWinsPercentage();
-            } else {
-              tippedGame.increaseDrawPercentage();
-            }
-          });
-
-      int amountOfFilledTips = Math.max((int) allTips.stream().filter(Tip::isFilledTip).count(), 1);
-      int hostWinsPercentage = (tippedGame.getHostWinsPercentage() * 100) / amountOfFilledTips;
-      tippedGame.setHostWinsPercentage(hostWinsPercentage);
-      int guestWinsPercentage = (tippedGame.getGuestWinsPercentage() * 100) / amountOfFilledTips;
-      tippedGame.setGuestWinsPercentage(guestWinsPercentage);
-      tippedGame.setDrawPercentage(100 - guestWinsPercentage - hostWinsPercentage);
-    });
+    populateStats(tippedGames, allTips);
     return tippedGames;
   }
 
   public List<TippedGame> getGamesByUsername(String username) {
     User user = userRepository.findByUsername(username);
-    List<TippedGame> games = gameRepository.findAllTippedGamesByUserId(user.getId());
-    return games;
+    List<TippedGame> tippedGames = gameRepository.findAllTippedGamesByUserId(user.getId());
+    List<Tip> allTips = tipRepository.findAll();
+    populateStats(tippedGames, allTips);
+    return tippedGames;
   }
 
   public List<Game> getAll() {
@@ -134,6 +117,29 @@ public class GameService {
     tipService.calculatePointsOfTipsByGame(game);
 
     return game;
+  }
+
+  private void populateStats(List<TippedGame> tippedGames, List<Tip> allTips) {
+    tippedGames.stream().forEach(tippedGame -> {
+      allTips.stream()
+              .filter(tip -> tippedGame.getId().equals(tip.getGame().getId()))
+              .forEach(tip -> {
+                if (tip.guestWins()) {
+                  tippedGame.increaseGuestWinsPercentage();
+                } else if (tip.hostWins()) {
+                  tippedGame.increaseHostWinsPercentage();
+                } else {
+                  tippedGame.increaseDrawPercentage();
+                }
+              });
+
+      int amountOfFilledTips = Math.max((int) allTips.stream().filter(Tip::isFilledTip).count(), 1);
+      int hostWinsPercentage = (tippedGame.getHostWinsPercentage() * 100) / amountOfFilledTips;
+      tippedGame.setHostWinsPercentage(hostWinsPercentage);
+      int guestWinsPercentage = (tippedGame.getGuestWinsPercentage() * 100) / amountOfFilledTips;
+      tippedGame.setGuestWinsPercentage(guestWinsPercentage);
+      tippedGame.setDrawPercentage(100 - guestWinsPercentage - hostWinsPercentage);
+    });
   }
 
 }

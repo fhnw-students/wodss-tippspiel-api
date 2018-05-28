@@ -155,7 +155,7 @@ update game as g set g.host_score = 0, g.guest_score = 4 where g.id = 3;
 insert into `tip` ( `id`, `game_id`, `user_id`, `host_score`, `guest_score`, `tipped_host_score_correctly`, `tipped_guest_score_correctly`, `tipped_winner_correctly`, `tipped_balance_and_winner_correctly`, `points` )
     values ( 1, 1, 1, 1, 1, 0, 1, 0, 0, 2 ),
            ( 2, 1, 2, 2, 1, 1, 1, 1, 1, 20 ),
-           ( 3, 1, 3, 1, 0, 0, 0, 1, 1, 16 ), 
+           ( 3, 1, 3, 1, 0, 0, 0, 1, 1, 16 ),
            ( 4, 2, 1, 1, 1, 1, 1, 1, 1, 20 ),
            ( 5, 2, 2, 2, 1, 0, 1, 0, 0, 2 ),
            ( 6, 2, 3, 3, 0, 0, 0, 0, 0, 0 ),

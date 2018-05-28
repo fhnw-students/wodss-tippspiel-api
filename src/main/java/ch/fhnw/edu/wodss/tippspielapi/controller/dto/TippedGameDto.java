@@ -20,11 +20,19 @@ public class TippedGameDto {
 
     private TipDto tip;
 
+    private Integer hostWinsPercentage;
+    private Integer guestWinsPercentage;
+    private Integer drawPercentage;
+
     public TippedGameDto() {}
 
     public TippedGameDto(TippedGame tippedGame, Locale locale, I18NService i18NService) {
         id = tippedGame.getId();
         date = tippedGame.getDate();
+
+        hostWinsPercentage = tippedGame.getHostWinsPercentage();
+        guestWinsPercentage = tippedGame.getGuestWinsPercentage();
+        drawPercentage = tippedGame.getDrawPercentage();
 
         phase = new GamePhaseDto(tippedGame.getPhase(), locale, i18NService);
         location = new LocationDto(tippedGame.getLocation(), locale, i18NService);
