@@ -31,7 +31,7 @@ public class User {
   @Column(nullable = false, columnDefinition = "bit(1) DEFAULT b'0'")
   private boolean admin;
 
-  @Column(unique = true)
+  @Transient
   private String token;
 
   @Column
@@ -40,31 +40,8 @@ public class User {
   @Column
   private String resetToken;
 
-  @Column
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date expiration;
-
-  /**
-   * Creates a new token that expires in an hour.
-   */
-  public void generateNewAuthenticationToken() {
-    token = UUID.randomUUID().toString();
-    Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.HOUR, 1);
-    expiration = calendar.getTime();
-  }
-
-  /**
-   * Determines whether this user's token has expired.
-   */
-  public boolean hasAuthenticationTokenExpired() {
-    Calendar now = Calendar.getInstance();
-    return expiration == null || expiration.before(now.getTime());
-  }
-
   public void clearToken() {
     token = null;
-    expiration = null;
   }
 
   public void generateVerificationToken() {
@@ -128,7 +105,6 @@ public class User {
             ", token='" + token + '\'' +
             ", verificationToken='" + verificationToken + '\'' +
             ", resetToken='" + resetToken + '\'' +
-            ", expiration=" + expiration +
             '}';
   }
 }

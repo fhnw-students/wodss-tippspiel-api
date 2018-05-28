@@ -5,6 +5,7 @@ import ch.fhnw.edu.wodss.tippspielapi.controller.dto.UserDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
 import ch.fhnw.edu.wodss.tippspielapi.service.exception.IllegalPasswordException;
+import java.util.List;
 import java.util.Locale;
 import javax.transaction.Transactional;
 import org.slf4j.Logger;
@@ -26,6 +27,9 @@ public class AuthenticationService {
   @Autowired
   private EmailService emailService;
 
+  @Autowired
+  private TokenHelper tokenHelper;
+
   public User getCurrentUser() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     Object principal = authentication.getPrincipal();
@@ -38,11 +42,11 @@ public class AuthenticationService {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String username = authentication.getName();
     User user = userRepository.findByUsername(username);
+    String token = tokenHelper.generateToken(username);
     if (user.isNotVerified()) {
       throw new IllegalStateException("User [" + user.getUsername() + "] has not been verified.");
-    } else if (user.hasAuthenticationTokenExpired()) {
-      user.generateNewAuthenticationToken();
-      user = userRepository.save(user);
+    } else {
+      user.setToken(token);
     }
     return user;
   }
@@ -57,9 +61,10 @@ public class AuthenticationService {
   }
 
   public User register(NewUserDto newUserDto, Locale locale) {
-    User newUser = userRepository.findByEmail(newUserDto.getEmail());
-    if (newUser == null) {
-      newUser = mapDtoToUser(newUserDto);
+    List<User> existingUsers = userRepository
+        .findByEmailOrUsername(newUserDto.getEmail(), newUserDto.getUsername());
+    if (existingUsers == null || existingUsers.isEmpty()) {
+      User newUser = mapDtoToUser(newUserDto);
       newUser = userRepository.save(newUser);
       emailService.sendVerificationEmail(newUser, locale);
       return newUser;

@@ -7,6 +7,11 @@ import ch.fhnw.edu.wodss.tippspielapi.service.exception.IllegalPasswordException
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.NewUserDto;
 import ch.fhnw.edu.wodss.tippspielapi.model.User;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.UserRepository;
+import de.mkammerer.argon2.Argon2;
+import de.mkammerer.argon2.Argon2Factory;
+import de.mkammerer.argon2.Argon2Helper;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import mockit.Expectations;
@@ -41,6 +46,9 @@ public class AuthenticationServiceTest {
   @Injectable
   User user;
 
+  @Injectable
+  TokenHelper tokenHelper;
+
   @Test
   public void testLoginWithExpiredToken(@Mocked SecurityContextHolder anyInstance) {
     UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
@@ -58,12 +66,6 @@ public class AuthenticationServiceTest {
 
       userRepository.findByUsername("david");
       result = user;
-
-      user.hasAuthenticationTokenExpired();
-      result = true;
-
-      userRepository.save(user);
-      result = user;
     }};
 
     authenticationService.login();
@@ -73,9 +75,6 @@ public class AuthenticationServiceTest {
       times = 1;
 
       userRepository.findByUsername("david");
-      times = 1;
-
-      userRepository.save((User) any);
       times = 1;
     }};
   }
@@ -97,9 +96,6 @@ public class AuthenticationServiceTest {
 
       userRepository.findByUsername("david");
       result = user;
-
-      user.hasAuthenticationTokenExpired();
-      result = false;
 
       user.getToken();
       result = "dba4d610-8113-4a40-81d4-e5d53d1f55d9";
@@ -191,7 +187,8 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void testRegisterNewUser(@Mocked SecurityContextHolder anyInstance) {
+  public void testRegisterNewUser(@Mocked SecurityContextHolder anyInstance,
+      @Mocked ArgonPasswordEncoder instance) {
     User user = new User();
     user.setId(27L);
     user.setEmail("davu@students.ch");
@@ -200,12 +197,17 @@ public class AuthenticationServiceTest {
     user.setAdmin(false);
 
     new Expectations() {{
-      userRepository.findByEmail("davu@students.ch");
+      userRepository.findByEmailOrUsername("davu@students.ch", "davu");
       result = null;
 
       userRepository.save((User) any);
       result = user;
 
+      ArgonPasswordEncoder.getInstance();
+      result = instance;
+
+      instance.encode("1234");
+      result = "1234";
     }};
 
     NewUserDto newUserDto = new NewUserDto();
@@ -217,7 +219,7 @@ public class AuthenticationServiceTest {
     Assert.assertEquals(user, registeredUser);
 
     new Verifications() {{
-      userRepository.findByEmail("davu@students.ch");
+      userRepository.findByEmailOrUsername("davu@students.ch", "davu");
       times = 1;
 
       userRepository.save((User) any);
@@ -226,29 +228,30 @@ public class AuthenticationServiceTest {
   }
 
   @Test
-  public void testRegisterUserWithExistingEmail() {
+  public void testRegisterUserWithExistingEmail(@Mocked ArgonPasswordEncoder instance) {
     User user = new User();
     user.setId(27L);
     user.setEmail("davu@students.ch");
-    user.setUsername("davu");
-    user.setPassword("1234");
+    user.setUsername("nonExistingUsername");
+    user.setPassword("1234abcd");
     user.setAdmin(false);
+    List<User> foundUsers = Arrays.asList(user);
 
     new Expectations() {{
-      userRepository.findByEmail("davu@students.ch");
-      result = user;
+      userRepository.findByEmailOrUsername("davu@students.ch", "nonExistingUsername");
+      result = foundUsers;
     }};
 
     NewUserDto newUserDto = new NewUserDto();
     newUserDto.setEmail("davu@students.ch");
-    newUserDto.setUsername("davu");
-    newUserDto.setPassword("1234");
+    newUserDto.setUsername("nonExistingUsername");
+    newUserDto.setPassword("1234abcd");
     User registeredUser = authenticationService.register(newUserDto, Locale.ENGLISH);
 
     Assert.assertNull(registeredUser);
 
     new Verifications() {{
-      userRepository.findByEmail("davu@students.ch");
+      userRepository.findByEmailOrUsername("davu@students.ch", "nonExistingUsername");
       times = 1;
     }};
   }
