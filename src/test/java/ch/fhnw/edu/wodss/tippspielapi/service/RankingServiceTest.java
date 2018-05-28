@@ -51,7 +51,7 @@ public class RankingServiceTest {
         List<Integer> expectedGames = Arrays.asList(5, 5, 4);
 
         UserRankingDto userRankingDto = rankingService.generateRanking(userRankingInformation, 0, 3, 9);
-        List<UserRanking> userRankings = userRankingDto.getRankings();
+        List<UserRanking> userRankings = userRankingDto.getContent();
 
         for (int i = 0; i < userRankings.size(); i++) {
             UserRanking userRanking = userRankings.get(i);
@@ -65,7 +65,7 @@ public class RankingServiceTest {
     @Test
     public void testRankingWithoutUsers(@Mocked Page<UserRankingInformation> pageMock) {
         UserRankingDto userRankingDto = rankingService.generateRanking(Arrays.asList(), 0,5, 5);
-        List<UserRanking> userRanking = userRankingDto.getRankings();
+        List<UserRanking> userRanking = userRankingDto.getContent();
 
         Assert.assertTrue(userRanking.isEmpty());
     }
@@ -82,7 +82,7 @@ public class RankingServiceTest {
         List<Integer> expectedGames = Arrays.asList(9, 10, 10);
 
         UserRankingDto result = rankingService.generateRanking(userRankingInformation, 3, 0, 3);
-        List<UserRanking> userRankings = result.getRankings();
+        List<UserRanking> userRankings = result.getContent();
 
         for (int i = 0; i < userRankings.size(); i++) {
             UserRanking userRanking = userRankings.get(i);
