@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Calendar;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -12,16 +13,15 @@ import java.util.Date;
 @Component
 public class TokenHelper {
 
-  //  @Value("${app.name}")
-  private String APP_NAME = "tippspiel";
+  @Value("${app.name}")
+  private String APP_NAME;
 
-  //  @Value("${jwt.secret}")
-  private String SECRET = "4v3ryS4f3S3cre7";
+  @Value("${security.jwt.secret}")
+  private String SECRET;
 
-  //  @Value("${jwt.expires_in}")
   private int EXPIRES_IN = 60 * 60;
 
-    private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
+  private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 
   public String getUsernameFromToken(String token) {
     String username;
