@@ -1,18 +1,20 @@
 package ch.fhnw.edu.wodss.tippspielapi.controller.dto;
 
+import ch.fhnw.edu.wodss.tippspielapi.model.TeamRanking;
 import ch.fhnw.edu.wodss.tippspielapi.model.UserRanking;
+
 import java.util.List;
 
-public class UserRankingDto {
+public class TeamRankingDto {
 
-    private List<UserRanking> content;
+    private List<TeamRanking> content;
     private int totalPages;
 
-    public List<UserRanking> getContent() {
+    public List<TeamRanking> getContent() {
         return content;
     }
 
-    public void setContent(List<UserRanking> content) {
+    public void setContent(List<TeamRanking> content) {
         this.content = content;
     }
 

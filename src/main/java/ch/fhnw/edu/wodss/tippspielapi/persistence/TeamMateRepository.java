@@ -18,4 +18,5 @@ public interface TeamMateRepository extends JpaRepository<TeamMate, String> {
 
     void deleteByTeam(Team team);
 
+    int countByUser(User user);
 }

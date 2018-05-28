@@ -9,10 +9,12 @@ public class TeamMateDto {
 
     private Long id;
     private String username;
+    private String email;
     private boolean owner;
 
     public TeamMateDto(User user, TeamMate teamMate) {
         id = user.getId();
+        email = user.getEmail();
         username = user.getUsername();
         owner = teamMate.isOwner();
     }

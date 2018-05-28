@@ -1,5 +1,6 @@
 package ch.fhnw.edu.wodss.tippspielapi.service;
 
+import ch.fhnw.edu.wodss.tippspielapi.controller.dto.PageDto;
 import ch.fhnw.edu.wodss.tippspielapi.controller.dto.TeamInvitationDto;
 import ch.fhnw.edu.wodss.tippspielapi.exception.NotAllowedException;
 import ch.fhnw.edu.wodss.tippspielapi.exception.ResourceNotFoundException;
@@ -11,6 +12,8 @@ import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamInvitationRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamMateRepository;
 import ch.fhnw.edu.wodss.tippspielapi.persistence.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,6 +36,9 @@ public class TeamInvitationService {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private TeamService teamService;
 
     public TeamInvitationDto create(long teamId, String email, User currentUser, Locale locale) {
         Team team = teamRepository.findById(teamId)
@@ -57,11 +63,11 @@ public class TeamInvitationService {
 
     }
 
-    public List<TeamInvitationDto> getMyInvitations(User currentUser) {
-        List<TeamInvitation> teamInvitations = teamInvitationRepository.findByEmail(currentUser.getEmail());
-        return teamInvitations.stream()
-                .map(TeamInvitationDto::new)
-                .collect(Collectors.toList());
+    public PageDto<TeamInvitationDto> getMyInvitations(User currentUser, int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<TeamInvitation> pageTeamInvitation = teamInvitationRepository.findByEmail(currentUser.getEmail(), pageRequest);
+        Page<TeamInvitationDto> pageTeamInvitationDto = pageTeamInvitation.map(TeamInvitationDto::new);
+        return new PageDto<>(pageTeamInvitationDto);
     }
 
     public void delete(long teamInvitationId, User currentUser) {
@@ -81,6 +87,8 @@ public class TeamInvitationService {
     }
 
     public void accept(long teamInvitationId, User currentUser) {
+        teamService.checkIfUserIsInMoreThan4Teams(currentUser);
+
         TeamInvitation teamInvitation = teamInvitationRepository.findById(teamInvitationId)
                 .orElseThrow(() -> new ResourceNotFoundException("TeamInvitation", "id", teamInvitationId));
 

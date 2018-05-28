@@ -12,6 +12,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,14 +50,15 @@ public class TeamController {
     @CrossOrigin
     @Secured({"ROLE_USER"})
     public ResponseEntity createTeam(@Valid @RequestBody NewTeamDto newTeamDto) {
-        TeamDto teamDto = teamService.create(newTeamDto);
+        User user = authenticationService.getCurrentUser();
+        TeamDto teamDto = teamService.create(newTeamDto, user);
         return ResponseEntity.ok().body(teamDto);
     }
 
     @PutMapping("/{teamId}")
     @CrossOrigin
     @Secured({"ROLE_USER"})
-    public ResponseEntity updateTeam(@PathVariable String teamId,@RequestBody NewTeamDto newTeamDto) {
+    public ResponseEntity updateTeam(@PathVariable String teamId, @RequestBody NewTeamDto newTeamDto) {
         User user = authenticationService.getCurrentUser();
         TeamDto teamDto = teamService.update(Long.parseLong(teamId), newTeamDto, user);
         return ResponseEntity.ok().body(teamDto);
